@@ -1,0 +1,8 @@
+[gd_resource type="Theme" format=3 uid="uid://c54g80843t7ci"]
+
+[resource]
+/colors/color = Color(0, 0, 0, 1)
+/font_sizes/Headline = 60
+/font_sizes/Standard = 16
+RichTextLabel/colors/default_color = Color(0, 0, 0, 1)
+RichTextLabel/font_sizes/bold_font_size = 45
