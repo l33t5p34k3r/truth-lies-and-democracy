@@ -86,7 +86,7 @@ visible = false
 unique_name_in_owner = true
 visible = false
 
-[node name="Button" type="Button" parent="."]
+[node name="exit_game" type="Button" parent="."]
 offset_left = 636.0
 offset_top = -488.0
 offset_right = 902.0
@@ -96,4 +96,4 @@ text = "EXIT"
 [connection signal="pressed" from="write_news" to="." method="_on_write_news_pressed"]
 [connection signal="pressed" from="call_someone" to="." method="_on_call_someone_pressed"]
 [connection signal="pressed" from="check_internet" to="." method="_on_check_internet_pressed"]
-[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="exit_game" to="." method="_on_exit_pressed"]
