@@ -23,3 +23,7 @@ func _on_check_internet_pressed() -> void:
 
 func _on_write_news_pressed() -> void:
 	incoming_news.show()
+
+
+func _on_button_pressed() -> void:
+	get_tree().quit()
