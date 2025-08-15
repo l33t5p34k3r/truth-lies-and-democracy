@@ -4,25 +4,13 @@ extends Node2D
 @export var paper_textures: Array[Texture2D]
 @export var paper_count: int = 5
 
+@onready var paper_scene = preload("res://Scenes/paper.tscn")
+
 var papers: Array[Paper] = []
 
 func _ready():
-	setup_camera()
-	#create_background()
 	spawn_papers()
 
-func setup_camera():
-	var camera = Camera2D.new()
-	camera.position = Vector2(640, 360)
-	camera.zoom = Vector2(0.8, 0.8)
-	add_child(camera)
-
-func create_background():
-	var background = ColorRect.new()
-	background.size = Vector2(2000, 1500)
-	background.position = Vector2(-360, -390)
-	background.color = Color(0.2, 0.15, 0.1, 1.0)
-	add_child(background)
 
 func spawn_papers():
 	var container = Node2D.new()
@@ -32,10 +20,11 @@ func spawn_papers():
 	print("Spawning ", paper_count, " papers")
 	
 	for i in range(paper_count):
-		var paper = Paper.new()
-		
-		if paper_textures.size() > 0:
-			paper.paper_texture = paper_textures[i % paper_textures.size()]
+		var paper = paper_scene.instantiate()
+		#var paper = Paper.new()
+		#
+		#if paper_textures.size() > 0:
+			#paper.paper_texture = paper_textures[i % paper_textures.size()]
 		
 		paper.paper_color = Color(
 			randf_range(0.9, 1.0),

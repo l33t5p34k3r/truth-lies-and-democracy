@@ -1,0 +1,56 @@
+[gd_scene load_steps=5 format=3 uid="uid://1sxa4t2y7xkv"]
+
+[ext_resource type="Script" uid="uid://bq64warrfgu6a" path="res://Scenes/paper.gd" id="1_c7gsp"]
+[ext_resource type="Texture2D" uid="uid://dr4y7sl7qxejj" path="res://Assets/images/1-04851-00_BL_Notebook_Paper_Punch_G.jpg" id="2_322pb"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yox0v"]
+size = Vector2(83, 99)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4sl6c"]
+size = Vector2(169, 218)
+
+[node name="Paper" type="RigidBody2D"]
+input_pickable = true
+gravity_scale = 0.0
+inertia = 1.76
+linear_damp = 12.051
+angular_damp = 24.225
+script = ExtResource("1_c7gsp")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.305, 0.305)
+texture = ExtResource("2_322pb")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-0.5, -0.5)
+shape = SubResource("RectangleShape2D_yox0v")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(0.5, -1)
+shape = SubResource("RectangleShape2D_4sl6c")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -81.0
+offset_top = -106.0
+offset_right = 82.0
+offset_bottom = 101.0
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="Control"]
+layout_mode = 0
+offset_right = 164.0
+offset_bottom = 42.0
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Control"]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 62.0
+offset_right = 164.0
+offset_bottom = 207.0
+mouse_filter = 2
+
+[connection signal="input_event" from="Area2D" to="." method="_on_area_2d_input_event"]
