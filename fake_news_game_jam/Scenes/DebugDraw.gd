@@ -1,7 +1,7 @@
 # DebugDraw.gd - Global debug drawing system
 extends Node
 
-const DEBUG_ENABLED = true
+const DEBUG_ENABLED = false
 const VELOCITY_COLOR = Color.CYAN
 const FORCE_COLOR = Color.RED
 const IMPULSE_COLOR = Color.YELLOW

@@ -16,14 +16,19 @@ extends RigidBody2D
 @export var paper_color: Color = Color.WHITE
 
 var is_being_dragged = false
+static var currently_dragging_paper: Paper = null
+static var all_papers: Array[Paper] = []
+static var paper_stack_order: Array[Paper] = []  # Bottom to top order
+
 var drag_offset = Vector2.ZERO
 var glob_pos = Vector2.ZERO
 var mouse_pos_ = Vector2.ZERO
 var original_gravity_scale: float
 var input_area: Area2D
 var paper_size: Vector2
+var original_z_index: int = 0
 
-var boundary_rect: Rect2 = Rect2(50, 50, 1180, 620)  # x, y, width, height
+var boundary_rect: Rect2 = Rect2(50, 50, 1680, 920)  # x, y, width, height
 var boundary_margin: float = 10.0  # Extra space for half paper size
 
 var news_headlines = [
@@ -48,49 +53,24 @@ var news_content = [
 	"Groundbreaking meta-analysis confirms that research studies are indeed studies, revolutionizing the field of study identification and classification."
 ]
 
+func _exit_tree() -> void:
+	all_papers.erase(self)
+	paper_stack_order.erase(self)
+	update_all_z_indices()
+
+func register_paper():
+	all_papers.append(self)
+	paper_stack_order.append(self)
+	update_all_z_indices()
 
 func _ready():
+	register_paper()
 	print("Paper created at position: ", position)
 	paper_size = $Sprite2D.texture.get_size() * $Sprite2D.scale.x
 	add_news_content()
 	
+	original_z_index = z_index
 	
-	
-	
-	#original_gravity_scale = gravity_scale
-	#gravity_scale = 0
-	
-	#var sprite = Sprite2D.new()
-	#sprite.texture = paper_texture
-	#sprite.modulate = paper_color
-	#add_child(sprite)
-	
-	#var collision_shape = CollisionShape2D.new()
-	#var rect_shape = RectangleShape2D.new()
-	#
-	#if paper_texture:
-		#rect_shape.size = paper_texture.get_size()
-		#print("Using texture size: ", rect_shape.size)
-	#else:
-		#rect_shape.size = Vector2(100, 140)
-		#print("Using default size: ", rect_shape.size)
-	
-	#collision_shape.shape = rect_shape
-	#add_child(collision_shape)
-	
-	# Create Area2D for input detection
-	#input_area = Area2D.new()
-	#var area_collision = CollisionShape2D.new()
-	#var area_shape = RectangleShape2D.new()
-	#area_shape.size = rect_shape.size
-	#area_collision.shape = area_shape
-	#input_area.add_child(area_collision)
-	#add_child(input_area)
-	
-	#input_area.input_event.connect(_on_area_input_event)
-	
-	#linear_damp = 1.0
-	#angular_damp = 0.1
 	
 	print("Paper setup complete with Area2D input detection")
 
@@ -108,7 +88,7 @@ func add_news_content():
 	headline.text = news_headlines[article_index]
 	#headline.position = Vector2(8, 8)
 	#headline.size = Vector2(paper_size.x - 16, 25)
-	headline.add_theme_font_size_override("font_size", 11)
+	headline.add_theme_font_size_override("font_size", 16)
 	headline.add_theme_color_override("font_color", Color.BLACK)
 	headline.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	headline.add_theme_stylebox_override("normal", create_headline_style())
@@ -119,7 +99,7 @@ func add_news_content():
 	content.text = news_content[article_index]
 	#content.position = Vector2(8, 38)
 	#content.size = Vector2(paper_size.x - 16, paper_size.y - 46)
-	content.add_theme_font_size_override("normal_font_size", 8)
+	content.add_theme_font_size_override("normal_font_size", 12)
 	content.add_theme_color_override("default_color", Color(0.2, 0.2, 0.2))
 	content.fit_content = true
 	content.bbcode_enabled = false
@@ -140,10 +120,34 @@ func _on_area_input_event(viewport, event, shape_idx):
 		#print("Mouse button left detected!")
 		glob_pos = global_position
 		mouse_pos_ = event.global_position
-		if event.pressed:
+		if event.pressed and currently_dragging_paper == null and is_topmost_paper_at_position(event.global_position):
 			start_drag(event.global_position)
 		#else:
 			#stop_drag()
+			
+func is_topmost_paper_at_position(pos: Vector2) -> bool:
+	# Check all papers at this position and see if this one is on top
+	var papers_at_pos: Array[Paper] = []
+	
+	for paper in all_papers:
+		if paper.is_position_inside_paper(pos):
+			papers_at_pos.append(paper)
+	
+	if papers_at_pos.is_empty():
+		return false
+	
+	# Find the paper with highest z-index (last in stack order)
+	var topmost_paper = papers_at_pos[0]
+	for paper in papers_at_pos:
+		if paper_stack_order.find(paper) > paper_stack_order.find(topmost_paper):
+			topmost_paper = paper
+	
+	return topmost_paper == self
+			
+func is_position_inside_paper(pos: Vector2) -> bool:
+	var half_size = paper_size * 0.5
+	var paper_rect = Rect2(global_position - half_size, paper_size)
+	return paper_rect.has_point(pos)
 			
 func _unhandled_input(event):
 	if is_being_dragged and event is InputEventMouseButton:
@@ -155,10 +159,31 @@ func start_drag(mouse_pos: Vector2):
 	print("Starting drag at: ", mouse_pos)
 	is_being_dragged = true
 	drag_offset = global_position - mouse_pos
+	currently_dragging_paper = self
+	
+	z_index = 100  # High z-index to appear on top
 
 func stop_drag():
 	print("Stopping drag")
 	is_being_dragged = false
+	currently_dragging_paper = null
+	#z_index = original_z_index
+	
+	
+	bring_to_top()
+
+func bring_to_top():
+	# Remove from current position and add to end (top)
+	paper_stack_order.erase(self)
+	paper_stack_order.append(self)
+	update_all_z_indices()
+
+static func update_all_z_indices():
+	# Assign z-indices based on position in stack (0 = bottom, higher = top)
+	for i in range(paper_stack_order.size()):
+		var paper = paper_stack_order[i]
+		if paper != currently_dragging_paper:  # Don't change z-index while dragging
+			paper.z_index = i
 
 func _process(_delta):
 	if is_being_dragged:
@@ -183,12 +208,48 @@ func _process(_delta):
 		DebugDraw.draw_point(mouse_pos_, Color.GREEN)
 		DebugDraw.draw_point(glob_pos, Color.CHARTREUSE)
 
+var overlapping_papers: Array[Paper] = []
+
+func _physics_process(delta):
+	# Apply drag effect to overlapping papers
+	if is_being_dragged and overlapping_papers.size() > 0:
+		for other_paper in overlapping_papers:
+			if is_instance_valid(other_paper) and other_paper != self:
+				other_paper.apply_paper_drag(linear_velocity, global_position)
+
+func _on_area_overlap(area):
+	var other_paper = area.get_parent()
+	if other_paper is Paper and other_paper != self:
+		if not overlapping_papers.has(other_paper):
+			overlapping_papers.append(other_paper)
+
+func _on_area_exit(area):
+	var other_paper = area.get_parent()
+	if other_paper is Paper and overlapping_papers.has(other_paper):
+		overlapping_papers.erase(other_paper)
+
+func apply_paper_drag(drag_velocity: Vector2, drag_source_pos: Vector2):
+	if is_being_dragged:  # Don't affect papers being actively dragged
+		return
+	
+	var drag_strength = 0.45  # How much the other paper gets dragged
+	var distance = global_position.distance_to(drag_source_pos)
+	var max_distance = 350.0
+	
+	# Reduce effect based on distance
+	var distance_factor = max(0.0, 1.0 - (distance / max_distance))
+	var final_strength = drag_strength * distance_factor
+	
+	# Apply gentle impulse in direction of drag
+	var drag_impulse = drag_velocity * final_strength * 0.05
+	apply_central_impulse(drag_impulse)
+
 func _on_area_2d_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
 	_on_area_input_event(viewport, event, shape_idx)
 
 func rotate_to_zero(delta: float):
 	var target_rotation = 0.0
-	var rotation_strength = 40.0
+	var rotation_strength = 50.0
 	
 	var angle_diff = target_rotation - rotation
 	
@@ -206,14 +267,12 @@ func rotate_to_zero(delta: float):
 		var torque = angle_diff * rotation_strength
 		print("Applying torque: ", torque)
 		apply_torque(torque)
+		#TODO: consider current rotation speed when calculating torque
 	else:
 		# Apply damping when close to target to prevent oscillation
-		#var damping_torque = -angular_velocity * 10.0
-		#print("Applying damping torque: ", damping_torque)
-		#apply_torque(damping_torque)
-		var torque = angle_diff * (rotation_strength / 5)
-		print("Applying torque: ", torque)
-		apply_torque(torque)
+		var damping_torque = -angular_velocity * 10.0
+		print("Applying damping torque: ", damping_torque)
+		apply_torque(damping_torque)
 		
 
 
@@ -256,3 +315,10 @@ func apply_boundary_constraints():
 		global_position = new_position
 		if not is_being_dragged:  # Only bounce when not being dragged
 			linear_velocity += bounce_force
+
+func _on_overlap_area_area_entered(area: Area2D) -> void:
+	_on_area_overlap(area)
+
+
+func _on_overlap_area_area_exited(area: Area2D) -> void:
+	_on_area_exit(area)
