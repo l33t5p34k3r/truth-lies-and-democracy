@@ -1,13 +1,11 @@
 [gd_scene load_steps=2 format=3 uid="uid://btqc78apitl7k"]
 
-[ext_resource type="Texture2D" uid="uid://dftbw3a5uy7o" path="res://Assets/images/2114882.svg" id="1_alp52"]
+[ext_resource type="Texture2D" uid="uid://ci31qa50nbru2" path="res://Assets/images/Approved.png" id="1_alp52"]
 
 [node name="Sprite2D" type="Sprite2D"]
 
 [node name="approved" type="Sprite2D" parent="."]
 clip_children = 2
 position = Vector2(0.999992, 0)
-scale = Vector2(0.3, 0.3)
 texture = ExtResource("1_alp52")
-region_enabled = true
 region_rect = Rect2(39, 67, 774, 446)

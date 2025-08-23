@@ -1,0 +1,47 @@
+[gd_scene load_steps=3 format=3 uid="uid://bggrq4msf8afc"]
+
+[ext_resource type="Script" uid="uid://cn4bx1o62k4gx" path="res://Scenes/stamp.gd" id="2_bqj8j"]
+[ext_resource type="Texture2D" uid="uid://h3ax3v44vbm0" path="res://Assets/images/Stamp_approved.png" id="2_rucql"]
+
+[node name="stamp_approved" type="Node2D"]
+script = ExtResource("2_bqj8j")
+
+[node name="Stamp" type="Sprite2D" parent="."]
+texture = ExtResource("2_rucql")
+
+[node name="Button" type="Button" parent="Stamp"]
+self_modulate = Color(1, 1, 1, 0)
+anchors_preset = -1
+anchor_right = 0.994
+anchor_bottom = 1.003
+offset_left = -87.0
+offset_top = -96.0
+offset_right = -86.956
+offset_bottom = -95.573
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="InputHelp" type="RichTextLabel" parent="Stamp"]
+anchors_preset = -1
+anchor_left = -0.043
+anchor_top = -0.26
+anchor_right = 1.043
+anchor_bottom = -0.01
+offset_left = -87.475
+offset_top = -96.08
+offset_right = -87.525
+offset_bottom = -96.08
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+text = "Lclick pick up & stamp
+Rclick to release"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="stamping" from="." to="." method="_on_stamping"]
+[connection signal="button_down" from="Stamp/Button" to="." method="_on_button_button_down"]

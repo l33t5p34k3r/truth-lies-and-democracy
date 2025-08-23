@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://h7tbhkc1wx08"]
+
+[ext_resource type="Texture2D" uid="uid://gqot12yk6m07" path="res://Assets/images/Declined.png" id="1_gme7h"]
+
+[node name="Declined" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_gme7h")
+region_rect = Rect2(893, 67, 774, 446)

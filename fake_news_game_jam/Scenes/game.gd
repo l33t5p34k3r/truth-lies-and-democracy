@@ -4,7 +4,7 @@ extends Node2D
 @onready var calling_someone = %calling_someone
 @onready var internet = %internet
 
-var approved = preload("res://Scenes/approved.tscn")
+#var approved = preload("res://Scenes/approved.tscn")
 var dragging_stamp = false
 
 
@@ -13,17 +13,17 @@ var dragging_stamp = false
 	#if dragging:
 		#position = get_global_mouse_position()
 #
-func inst(pos):
-	var instance = approved.instantiate()
-	instance.position = pos
-	add_child(instance)
+#func inst(pos):
+	#var instance = approved.instantiate()
+	#instance.position = pos
+	#add_child(instance)
 
 func _on_stamp_approved_dragging_stamp() -> void:
 	dragging_stamp = true
 	print("Player is dragging stamp!")
 
-func _on_stamp_approved_stamping() -> void:
-	inst(get_global_mouse_position())
+#func _on_stamp_approved_stamping() -> void:
+	#inst(get_global_mouse_position())
 
 #---------------------------Buttons------------------------------------------
 func _on_call_someone_pressed() -> void:
