@@ -3,16 +3,29 @@ extends Node2D
 @onready var incoming_news = %incoming_news
 @onready var calling_someone = %calling_someone
 @onready var internet = %internet
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
+
+var approved = preload("res://Scenes/approved.tscn")
+var dragging_stamp = false
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+#------------------------- stamping action --------------------------------
+#func _process(delta: float) -> void:
+	#if dragging:
+		#position = get_global_mouse_position()
+#
+func inst(pos):
+	var instance = approved.instantiate()
+	instance.position = pos
+	add_child(instance)
 
+func _on_stamp_approved_dragging_stamp() -> void:
+	dragging_stamp = true
+	print("Player is dragging stamp!")
 
+func _on_stamp_approved_stamping() -> void:
+	inst(get_global_mouse_position())
+
+#---------------------------Buttons------------------------------------------
 func _on_call_someone_pressed() -> void:
 	calling_someone.show()
 
