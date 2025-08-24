@@ -98,6 +98,7 @@ offset_bottom = -412.0
 text = "EXIT"
 
 [node name="paper_simple" type="Sprite2D" parent="."]
+position = Vector2(-655, -160)
 texture = ExtResource("8_v158k")
 script = ExtResource("8_h4fw4")
 
