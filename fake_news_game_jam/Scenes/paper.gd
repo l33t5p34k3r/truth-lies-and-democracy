@@ -28,6 +28,9 @@ var input_area: Area2D
 var paper_size: Vector2
 var original_z_index: int = 0
 
+# keeps checked if paper has been stamped
+var is_stamped = false
+
 var boundary_rect: Rect2 = Rect2(50, 50, 1680, 920)  # x, y, width, height
 var boundary_margin: float = 10.0  # Extra space for half paper size
 
@@ -323,6 +326,8 @@ func _on_overlap_area_area_entered(area: Area2D) -> void:
 func _on_overlap_area_area_exited(area: Area2D) -> void:
 	_on_area_exit(area)
 
+
+# does all the stamping
 func add_stamp_sprite(texture: Texture2D, position: Vector2):
 	var stamp = Sprite2D.new()
 	stamp.texture = texture
@@ -331,3 +336,4 @@ func add_stamp_sprite(texture: Texture2D, position: Vector2):
 	#stamp.rotation_degrees = randf_range(-10, 10)  # Optional: add some variation
 	#stamp.scale = Vector2.ONE * randf_range(0.9, 1.1)  # Optional: slight scale variation
 	$StampMask.add_child(stamp)
+	is_stamped=true
