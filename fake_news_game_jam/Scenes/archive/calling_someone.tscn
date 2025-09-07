@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://bi8n5noow0084"]
 
-[ext_resource type="Script" uid="uid://d3uq6ob7fseil" path="res://Scenes/archive/calling_someone.gd" id="1_gg63r"]
-[ext_resource type="Theme" uid="uid://d08ry3kmkbtce" path="res://Assets/Themes/Buttons_Game.tres" id="2_8sofu"]
+[ext_resource type="Script" uid="uid://d3uq6ob7fseil" path="res://scenes/archive/calling_someone.gd" id="1_gg63r"]
+[ext_resource type="Theme" uid="uid://d08ry3kmkbtce" path="res://assets/themes/Buttons_Game.tres" id="2_8sofu"]
 
 [node name="calling_someone" type="Control"]
 layout_mode = 3

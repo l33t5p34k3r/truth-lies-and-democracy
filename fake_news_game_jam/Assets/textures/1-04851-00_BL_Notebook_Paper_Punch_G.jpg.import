@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dmhm07lmdhmak"
-path="res://.godot/imported/TEST_image_News.png-acb5932c4371a9a54dd6328991f9c2e3.ctex"
+uid="uid://dr4y7sl7qxejj"
+path="res://.godot/imported/1-04851-00_BL_Notebook_Paper_Punch_G.jpg-4350b2e50f4a287aea148af9e702a41e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/images/TEST_image_News.png"
-dest_files=["res://.godot/imported/TEST_image_News.png-acb5932c4371a9a54dd6328991f9c2e3.ctex"]
+source_file="res://assets/textures/1-04851-00_BL_Notebook_Paper_Punch_G.jpg"
+dest_files=["res://.godot/imported/1-04851-00_BL_Notebook_Paper_Punch_G.jpg-4350b2e50f4a287aea148af9e702a41e.ctex"]
 
 [params]
 

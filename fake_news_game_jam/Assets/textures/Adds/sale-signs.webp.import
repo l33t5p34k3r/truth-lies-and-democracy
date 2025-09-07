@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://4bwoj03webqv"
-path="res://.godot/imported/TEST_image.png-db8271afd91f31aaf6d15955cfab41ad.ctex"
+uid="uid://bqxlpk6glsur4"
+path="res://.godot/imported/sale-signs.webp-159cba383c872c35091d12ffc7a11f2e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/images/TEST_image.png"
-dest_files=["res://.godot/imported/TEST_image.png-db8271afd91f31aaf6d15955cfab41ad.ctex"]
+source_file="res://assets/textures/Adds/sale-signs.webp"
+dest_files=["res://.godot/imported/sale-signs.webp-159cba383c872c35091d12ffc7a11f2e.ctex"]
 
 [params]
 

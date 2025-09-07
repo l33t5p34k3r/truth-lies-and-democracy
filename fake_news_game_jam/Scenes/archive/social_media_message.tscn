@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://depviawpyn3jn"]
 
-[ext_resource type="Script" uid="uid://cc15sdh6yec2q" path="res://Scenes/archive/social_media_message.gd" id="1_4cyox"]
+[ext_resource type="Script" uid="uid://cc15sdh6yec2q" path="res://scenes/archive/social_media_message.gd" id="1_4cyox"]
 
 [sub_resource type="Theme" id="Theme_ox2ne"]
 Label/colors/font_color = Color(0, 0, 0, 1)

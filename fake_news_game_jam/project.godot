@@ -13,17 +13,22 @@ config_version=5
 config/name="Fake_News_Game_Jam"
 run/main_scene="uid://33frnk6f5jem"
 config/features=PackedStringArray("4.4", "GL Compatibility")
-config/icon="res://Scenes/archive/icon.svg"
+config/icon="res://scenes/archive/icon.svg"
 
 [autoload]
 
-DebugDraw="*res://Scenes/archive/DebugDraw.gd"
+DebugDraw="*res://scenes/archive/DebugDraw.gd"
 
 [display]
 
 window/size/viewport_width=1920
 window/size/viewport_height=1080
 window/size/mode=3
+
+[editor]
+
+version_control/plugin_name="GitPlugin"
+version_control/autoload_on_startup=true
 
 [input]
 

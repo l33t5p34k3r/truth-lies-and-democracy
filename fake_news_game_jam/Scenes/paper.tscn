@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://1sxa4t2y7xkv"]
 
-[ext_resource type="Script" uid="uid://bq64warrfgu6a" path="res://Scenes/paper.gd" id="1_c7gsp"]
-[ext_resource type="Texture2D" uid="uid://dr4y7sl7qxejj" path="res://Assets/images/1-04851-00_BL_Notebook_Paper_Punch_G.jpg" id="2_322pb"]
+[ext_resource type="Script" uid="uid://bq64warrfgu6a" path="res://scenes/paper.gd" id="1_c7gsp"]
+[ext_resource type="Texture2D" uid="uid://dr4y7sl7qxejj" path="res://assets/textures/1-04851-00_BL_Notebook_Paper_Punch_G.jpg" id="2_322pb"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_c7gsp"]
 radius = 9.61769

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://h3ax3v44vbm0"
-path="res://.godot/imported/Stamp_approved.png-056f3169511c689ee6395c3139b9dad8.ctex"
+uid="uid://b3gmcohlum5gm"
+path="res://.godot/imported/arrow_r.svg-1d2b6cd8c409fa1158894617c4b219cb.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/images/Stamp_approved.png"
-dest_files=["res://.godot/imported/Stamp_approved.png-056f3169511c689ee6395c3139b9dad8.ctex"]
+source_file="res://assets/textures/arrow_r.svg"
+dest_files=["res://.godot/imported/arrow_r.svg-1d2b6cd8c409fa1158894617c4b219cb.ctex"]
 
 [params]
 
@@ -32,3 +32,6 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
+svg/scale=1.0
+editor/scale_with_editor_scale=false
+editor/convert_colors_with_editor_theme=false

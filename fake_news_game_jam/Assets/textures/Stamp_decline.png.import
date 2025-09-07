@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dr4y7sl7qxejj"
-path="res://.godot/imported/1-04851-00_BL_Notebook_Paper_Punch_G.jpg-eef7cc1211fcd09a793b2205bd1070d2.ctex"
+uid="uid://djhf2ytpjxhgp"
+path="res://.godot/imported/Stamp_decline.png-2e14be99a1afa275846fb4aa191e555f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/images/1-04851-00_BL_Notebook_Paper_Punch_G.jpg"
-dest_files=["res://.godot/imported/1-04851-00_BL_Notebook_Paper_Punch_G.jpg-eef7cc1211fcd09a793b2205bd1070d2.ctex"]
+source_file="res://assets/textures/Stamp_decline.png"
+dest_files=["res://.godot/imported/Stamp_decline.png-2e14be99a1afa275846fb4aa191e555f.ctex"]
 
 [params]
 
