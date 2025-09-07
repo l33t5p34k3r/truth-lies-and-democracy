@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://eqoxgferdc40"]
 
-[ext_resource type="Script" uid="uid://lfsy66xtgq6d" path="res://Scenes/internet.gd" id="1_my8bp"]
+[ext_resource type="Script" uid="uid://lfsy66xtgq6d" path="res://Scenes/archive/internet.gd" id="1_my8bp"]
 [ext_resource type="Theme" uid="uid://d08ry3kmkbtce" path="res://Assets/Themes/Buttons_Game.tres" id="2_5mmg3"]
 [ext_resource type="Texture2D" uid="uid://bqxlpk6glsur4" path="res://Assets/images/Adds/sale-signs.webp" id="3_5mmg3"]
 

@@ -1,7 +1,7 @@
 [gd_scene load_steps=10 format=3 uid="uid://bwkcdxjc181vd"]
 
 [ext_resource type="Texture2D" uid="uid://dmhm07lmdhmak" path="res://Assets/images/TEST_image_News.png" id="1_g6tdo"]
-[ext_resource type="Script" uid="uid://ymoftux3sje" path="res://Scenes/incoming_news.gd" id="1_t0kei"]
+[ext_resource type="Script" uid="uid://ymoftux3sje" path="res://Scenes/archive/incoming_news.gd" id="1_t0kei"]
 [ext_resource type="Theme" uid="uid://c54g80843t7ci" path="res://Assets/Themes/Text_newspapers.tres" id="2_jgouw"]
 [ext_resource type="Texture2D" uid="uid://b3gmcohlum5gm" path="res://Assets/images/arrow_r.svg" id="3_fy3x7"]
 [ext_resource type="Texture2D" uid="uid://bvkvr5umnhdxo" path="res://Assets/images/arrow_l.svg" id="4_fy3x7"]

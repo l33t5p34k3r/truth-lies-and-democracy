@@ -152,11 +152,11 @@ func is_position_inside_paper(pos: Vector2) -> bool:
 func _unhandled_input(event):
 	if is_being_dragged and event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
-			print("Global mouse release detected - stopping drag")
+			#print("Global mouse release detected - stopping drag")
 			stop_drag()
 			
 func start_drag(mouse_pos: Vector2):
-	print("Starting drag at: ", mouse_pos)
+	#print("Starting drag at: ", mouse_pos)
 	is_being_dragged = true
 	drag_offset = global_position - mouse_pos
 	currently_dragging_paper = self
@@ -164,7 +164,7 @@ func start_drag(mouse_pos: Vector2):
 	z_index = 100  # High z-index to appear on top
 
 func stop_drag():
-	print("Stopping drag")
+	#print("Stopping drag")
 	is_being_dragged = false
 	currently_dragging_paper = null
 	#z_index = original_z_index
@@ -259,19 +259,19 @@ func rotate_to_zero(delta: float):
 	while angle_diff < -PI:
 		angle_diff += 2 * PI
 	
-	print("inertia is ", inertia)
-	print("Angle diff: ", angle_diff, " Current rotation: ", rotation, " Angular velocity: ", angular_velocity)
+	#print("inertia is ", inertia)
+	#print("Angle diff: ", angle_diff, " Current rotation: ", rotation, " Angular velocity: ", angular_velocity)
 	
 	# Apply torque to rotate toward zero
 	if abs(angle_diff) > 0.05:  # Small threshold to prevent jitter
 		var torque = angle_diff * rotation_strength
-		print("Applying torque: ", torque)
+		#print("Applying torque: ", torque)
 		apply_torque(torque)
 		#TODO: consider current rotation speed when calculating torque
 	else:
 		# Apply damping when close to target to prevent oscillation
 		var damping_torque = -angular_velocity * 10.0
-		print("Applying damping torque: ", damping_torque)
+		#print("Applying damping torque: ", damping_torque)
 		apply_torque(damping_torque)
 		
 
@@ -322,3 +322,12 @@ func _on_overlap_area_area_entered(area: Area2D) -> void:
 
 func _on_overlap_area_area_exited(area: Area2D) -> void:
 	_on_area_exit(area)
+
+func add_stamp_sprite(texture: Texture2D, position: Vector2):
+	var stamp = Sprite2D.new()
+	stamp.texture = texture
+	stamp.position = position
+	stamp.rotation = -rotation
+	#stamp.rotation_degrees = randf_range(-10, 10)  # Optional: add some variation
+	#stamp.scale = Vector2.ONE * randf_range(0.9, 1.1)  # Optional: slight scale variation
+	$StampMask.add_child(stamp)

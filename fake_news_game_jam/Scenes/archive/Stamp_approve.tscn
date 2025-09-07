@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://bggrq4msf8afc"]
 
-[ext_resource type="Script" uid="uid://cn4bx1o62k4gx" path="res://Scenes/stamp.gd" id="2_bqj8j"]
+[ext_resource type="Script" uid="uid://cn4bx1o62k4gx" path="res://Scenes/archive/old_stamp.gd" id="2_bqj8j"]
 [ext_resource type="Texture2D" uid="uid://h3ax3v44vbm0" path="res://Assets/images/Stamp_approved.png" id="2_rucql"]
 
 [node name="stamp_approved" type="Node2D"]
@@ -43,5 +43,4 @@ Rclick to release"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[connection signal="stamping" from="." to="." method="_on_stamping"]
 [connection signal="button_down" from="Stamp/Button" to="." method="_on_button_button_down"]

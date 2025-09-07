@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://6ny0ityyprpo"]
 
-[ext_resource type="Script" uid="uid://cn4bx1o62k4gx" path="res://Scenes/stamp.gd" id="1_i0bt2"]
+[ext_resource type="Script" uid="uid://cn4bx1o62k4gx" path="res://Scenes/archive/old_stamp.gd" id="1_i0bt2"]
 [ext_resource type="Texture2D" uid="uid://djhf2ytpjxhgp" path="res://Assets/images/Stamp_decline.png" id="2_i0bt2"]
 
 [node name="stamp_decline" type="Node2D"]
@@ -43,5 +43,4 @@ Rclick to release"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[connection signal="stamping" from="." to="." method="_on_stamping"]
 [connection signal="button_down" from="Stamp/Button" to="." method="_on_button_button_down"]

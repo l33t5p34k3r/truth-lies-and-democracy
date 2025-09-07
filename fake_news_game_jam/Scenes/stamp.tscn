@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3 uid="uid://dcevhfveknkjq"]
+
+[ext_resource type="Script" uid="uid://bal5eh341y1ep" path="res://Scenes/stamp.gd" id="1_djlf7"]
+[ext_resource type="Texture2D" uid="uid://ci31qa50nbru2" path="res://Assets/images/Approved.png" id="1_l2w4f"]
+[ext_resource type="AudioStream" uid="uid://dmu1yvkukdh40" path="res://Assets/sound/stamp-102627.mp3" id="3_11415"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6mb4n"]
+size = Vector2(181, 67)
+
+[node name="Stamp" type="Node2D"]
+script = ExtResource("1_djlf7")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_l2w4f")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(-0.5, 0.5)
+shape = SubResource("RectangleShape2D_6mb4n")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_11415")
+
+[connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]
+[connection signal="area_exited" from="Area2D" to="." method="_on_area_2d_area_exited"]

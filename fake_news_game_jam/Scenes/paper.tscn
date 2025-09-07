@@ -64,6 +64,13 @@ mouse_filter = 2
 position = Vector2(0.5, -1)
 shape = SubResource("RectangleShape2D_322pb")
 
+[node name="StampMask" type="Polygon2D" parent="."]
+clip_children = 1
+position = Vector2(0.501709, 0.501373)
+scale = Vector2(0.996564, 0.99726)
+texture = ExtResource("2_322pb")
+polygon = PackedVector2Array(-144, -182, 145, -182, 146, 183, -145, 183)
+
 [connection signal="input_event" from="Area2D" to="." method="_on_area_2d_input_event"]
 [connection signal="area_entered" from="OverlapArea" to="." method="_on_overlap_area_area_entered"]
 [connection signal="area_exited" from="OverlapArea" to="." method="_on_overlap_area_area_exited"]

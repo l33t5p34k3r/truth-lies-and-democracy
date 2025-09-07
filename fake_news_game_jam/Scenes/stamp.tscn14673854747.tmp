@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://dcevhfveknkjq"]
+
+[ext_resource type="Script" uid="uid://bal5eh341y1ep" path="res://Scenes/stamp.gd" id="1_djlf7"]
+[ext_resource type="Texture2D" uid="uid://ci31qa50nbru2" path="res://Assets/images/Approved.png" id="1_l2w4f"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6mb4n"]
+size = Vector2(181, 67)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_6mb4n"]
+
+[node name="Stamp" type="RigidBody2D"]
+mass = 1000.0
+gravity_scale = 0.0
+script = ExtResource("1_djlf7")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_l2w4f")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(-0.5, 0.5)
+shape = SubResource("RectangleShape2D_6mb4n")
+
+[node name="tbd_Collision" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_6mb4n")
+
+[connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]
