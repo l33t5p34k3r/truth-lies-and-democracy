@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://33frnk6f5jem"]
+[gd_scene load_steps=6 format=3 uid="uid://33frnk6f5jem"]
 
 [ext_resource type="Script" uid="uid://bo2tkdvc0iknc" path="res://Scenes/paper_playground.gd" id="1_onxtm"]
 [ext_resource type="Texture2D" uid="uid://dr4y7sl7qxejj" path="res://Assets/images/1-04851-00_BL_Notebook_Paper_Punch_G.jpg" id="2_vqhyn"]
 [ext_resource type="PackedScene" uid="uid://bggrq4msf8afc" path="res://Scenes/Stamp_approve.tscn" id="3_ev6ug"]
 [ext_resource type="Script" uid="uid://b4vk6qvptctt" path="res://Scenes/layer_stamps.gd" id="3_vqhyn"]
+[ext_resource type="PackedScene" uid="uid://p1o3fbi3apjd" path="res://Scenes/Pen.tscn" id="5_jpj0y"]
 
 [node name="PaperPlayground" type="Node2D"]
 script = ExtResource("1_onxtm")
@@ -19,3 +20,11 @@ script = ExtResource("3_vqhyn")
 [node name="PaperContainer" type="Node2D" parent="."]
 
 [node name="DragHandler" type="Node2D" parent="."]
+
+[node name="Pen" parent="." instance=ExtResource("5_jpj0y")]
+visible = false
+
+[node name="Label" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Right click to draw on paper"

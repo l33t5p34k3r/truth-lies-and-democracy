@@ -2,9 +2,8 @@ extends Node2D
 
 var dragging = false
 signal stamping
-@onready var input_help = %InputHelp
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if dragging:
 		position = get_global_mouse_position()
 		#input_help.show()
