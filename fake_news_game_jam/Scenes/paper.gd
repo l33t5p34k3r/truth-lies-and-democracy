@@ -28,6 +28,13 @@ var input_area: Area2D
 var paper_size: Vector2
 var original_z_index: int = 0
 
+var drawing_texture: ImageTexture
+var drawing_image: Image
+var is_drawing := false
+var last_draw_position: Vector2
+var pencil_color := Color.BLACK
+var pencil_size := 3.0
+@onready var texture_rect: TextureRect
 # keeps checked if paper has been stamped
 var is_stamped = false
 
@@ -74,6 +81,8 @@ func _ready():
 	
 	original_z_index = z_index
 	
+	setup_drawing_surface()
+	
 	
 	print("Paper setup complete with Area2D input detection")
 
@@ -91,7 +100,7 @@ func add_news_content():
 	headline.text = news_headlines[article_index]
 	#headline.position = Vector2(8, 8)
 	#headline.size = Vector2(paper_size.x - 16, 25)
-	headline.add_theme_font_size_override("font_size", 16)
+	headline.add_theme_font_size_override("font_size", 24)
 	headline.add_theme_color_override("font_color", Color.BLACK)
 	headline.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	headline.add_theme_stylebox_override("normal", create_headline_style())
@@ -102,7 +111,7 @@ func add_news_content():
 	content.text = news_content[article_index]
 	#content.position = Vector2(8, 38)
 	#content.size = Vector2(paper_size.x - 16, paper_size.y - 46)
-	content.add_theme_font_size_override("normal_font_size", 12)
+	content.add_theme_font_size_override("normal_font_size", 18)
 	content.add_theme_color_override("default_color", Color(0.2, 0.2, 0.2))
 	content.fit_content = true
 	content.bbcode_enabled = false
@@ -127,6 +136,19 @@ func _on_area_input_event(viewport, event, shape_idx):
 			start_drag(event.global_position)
 		#else:
 			#stop_drag()
+	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT:
+			if event.pressed and is_topmost_paper_at_position(event.global_position):
+				var pos = to_local(event.global_position) - $TextureRect.position
+				start_drawing(pos)
+			else:
+				stop_drawing()
+	elif event is InputEventMouseMotion:
+		if is_drawing:
+			if not Input.is_action_pressed("stamp_down"):
+				is_drawing = false
+			else:
+				var pos = to_local(event.global_position) - $TextureRect.position
+				draw_to_position(pos)
 			
 func is_topmost_paper_at_position(pos: Vector2) -> bool:
 	# Check all papers at this position and see if this one is on top
@@ -195,7 +217,7 @@ func _process(_delta):
 		var distance = direction.length()
 		
 		if distance > 5.0:
-			var velocity = direction.normalized() * min(distance * 16.0, 2400.0)
+			var velocity = direction.normalized() * min(distance * 25.0, 4500.0)
 			linear_velocity = velocity
 		else:
 			linear_velocity = Vector2.ZERO
@@ -325,6 +347,75 @@ func _on_overlap_area_area_entered(area: Area2D) -> void:
 
 func _on_overlap_area_area_exited(area: Area2D) -> void:
 	_on_area_exit(area)
+
+	
+func setup_drawing_surface():
+	#texture_rect = TextureRect.new()
+	texture_rect = $TextureRect
+	#add_child(texture_rect)
+	texture_rect.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	
+	#var paper_size = Vector2i(800, 600)
+	var paper_size = $Area2D/CollisionShape2D.shape.get_rect().size
+	drawing_image = Image.create(paper_size.x, paper_size.y, false, Image.FORMAT_RGBA8)
+	#drawing_image.fill(Color.WHITE)
+	
+	drawing_texture = ImageTexture.new()
+	drawing_texture.set_image(drawing_image)
+	texture_rect.texture = drawing_texture
+
+func start_drawing(target_position: Vector2):
+	is_drawing = true
+	last_draw_position = target_position
+	draw_point(target_position)
+
+func stop_drawing():
+	is_drawing = false
+
+func draw_to_position(target_position: Vector2):
+	draw_line_between_points(last_draw_position, target_position)
+	last_draw_position = target_position
+
+func draw_point(target_position: Vector2):
+	var image_pos = Vector2i(int(target_position.x), int(target_position.y))
+	draw_circle_on_image(image_pos, pencil_size, pencil_color)
+	update_texture()
+
+func draw_line_between_points(from: Vector2, to: Vector2):
+	var distance = from.distance_to(to)
+	var steps = max(1, int(distance / 2))
+	
+	for i in range(steps + 1):
+		var t = float(i) / float(steps) if steps > 0 else 0.0
+		var pos = from.lerp(to, t)
+		var image_pos = Vector2i(int(pos.x), int(pos.y))
+		draw_circle_on_image(image_pos, pencil_size, pencil_color)
+	
+	update_texture()
+
+func draw_circle_on_image(center: Vector2i, radius: float, color: Color):
+	var image_size = drawing_image.get_size()
+	var radius_int = int(radius)
+	
+	for y in range(-radius_int, radius_int + 1):
+		for x in range(-radius_int, radius_int + 1):
+			if x * x + y * y <= radius * radius:
+				var pixel_pos = center + Vector2i(x, y)
+				if pixel_pos.x >= 0 and pixel_pos.x < image_size.x and pixel_pos.y >= 0 and pixel_pos.y < image_size.y:
+					drawing_image.set_pixelv(pixel_pos, color)
+
+func update_texture():
+	drawing_texture.update(drawing_image)
+
+func set_pencil_color(color: Color):
+	pencil_color = color
+
+func set_pencil_size(size: float):
+	pencil_size = clamp(size, 1.0, 20.0)
+
+func clear_drawing():
+	drawing_image.fill(Color.WHITE)
+	update_texture()
 
 
 # does all the stamping

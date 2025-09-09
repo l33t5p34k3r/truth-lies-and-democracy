@@ -1,6 +1,13 @@
 class_name Stamp
 extends Node2D
 
+var dragging = false
+signal stamping
+
+func _process(_delta: float) -> void:
+	if dragging:
+		position = get_global_mouse_position()
+		#input_help.show()
 var overlapping_paper: Array[Paper] = []
 
 func _ready():
