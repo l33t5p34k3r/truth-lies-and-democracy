@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://1sxa4t2y7xkv"]
 
-[ext_resource type="Script" uid="uid://bq64warrfgu6a" path="res://Scenes/paper.gd" id="1_c7gsp"]
-[ext_resource type="Texture2D" uid="uid://dr4y7sl7qxejj" path="res://Assets/images/1-04851-00_BL_Notebook_Paper_Punch_G.jpg" id="2_322pb"]
+[ext_resource type="Script" uid="uid://bq64warrfgu6a" path="res://scenes/paper.gd" id="1_c7gsp"]
+[ext_resource type="Texture2D" uid="uid://dr4y7sl7qxejj" path="res://assets/textures/1-04851-00_BL_Notebook_Paper_Punch_G.jpg" id="2_322pb"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_c7gsp"]
 radius = 9.61769
@@ -67,6 +67,13 @@ text = "asdasdsad"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="OverlapArea"]
 position = Vector2(0.5, -1)
 shape = SubResource("RectangleShape2D_322pb")
+
+[node name="StampMask" type="Polygon2D" parent="."]
+clip_children = 1
+position = Vector2(0.501709, 0.501373)
+scale = Vector2(0.996564, 0.99726)
+texture = ExtResource("2_322pb")
+polygon = PackedVector2Array(-144, -182, 145, -182, 146, 183, -145, 183)
 
 [node name="TextureRect" type="TextureRect" parent="."]
 anchors_preset = 8

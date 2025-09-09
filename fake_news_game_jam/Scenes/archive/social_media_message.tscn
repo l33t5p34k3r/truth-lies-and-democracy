@@ -1,0 +1,42 @@
+[gd_scene load_steps=3 format=3 uid="uid://depviawpyn3jn"]
+
+[ext_resource type="Script" uid="uid://cc15sdh6yec2q" path="res://scenes/archive/social_media_message.gd" id="1_4cyox"]
+
+[sub_resource type="Theme" id="Theme_ox2ne"]
+Label/colors/font_color = Color(0, 0, 0, 1)
+Label/font_sizes/font_size = 30
+RichTextLabel/colors/default_color = Color(0.00184107, 0.00184107, 0.00184107, 1)
+RichTextLabel/font_sizes/bold_font_size = 22
+
+[node name="SocialMediaMessage" type="Control"]
+custom_minimum_size = Vector2(1100, 150)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1100.0
+offset_bottom = 150.0
+script = ExtResource("1_4cyox")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+custom_minimum_size = Vector2(1100, 250)
+layout_mode = 2
+offset_right = 1100.0
+offset_bottom = 250.0
+theme = SubResource("Theme_ox2ne")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Date" type="Label" parent="VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+text = "Date"
+
+[node name="NameLabel" type="Label" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0.556863, 1)
+text = "Lui"
+
+[node name="MessageText" type="RichTextLabel" parent="VBoxContainer"]
+custom_minimum_size = Vector2(1100, 100)
+layout_mode = 2
+text = "test"

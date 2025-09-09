@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://m40a1i47l0c8"]
+
+[ext_resource type="Script" uid="uid://xhqxnc5mnr50" path="res://scenes/tape.gd" id="1_cgxy3"]
+[ext_resource type="Texture2D" uid="uid://bvs0h8ipi6ivh" path="res://assets/textures/tape.png" id="1_xo5f3"]
+[ext_resource type="AudioStream" uid="uid://b0ytw44wnalyg" path="res://assets/sounds/celebration.mp3" id="3_q3rsh"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_q3rsh"]
+size = Vector2(564, 338)
+
+[node name="Tape" type="RigidBody2D"]
+collision_layer = 2
+collision_mask = 2
+input_pickable = true
+gravity_scale = 0.0
+script = ExtResource("1_cgxy3")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("1_xo5f3")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+scale = Vector2(0.3, 0.3)
+shape = SubResource("RectangleShape2D_q3rsh")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_q3rsh")
+
+[connection signal="input_event" from="." to="." method="_on_area_input_event"]

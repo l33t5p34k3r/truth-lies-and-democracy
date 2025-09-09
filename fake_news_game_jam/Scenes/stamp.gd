@@ -1,3 +1,4 @@
+class_name Stamp
 extends Node2D
 
 var dragging = false
@@ -7,16 +8,24 @@ func _process(_delta: float) -> void:
 	if dragging:
 		position = get_global_mouse_position()
 		#input_help.show()
+var overlapping_paper: Array[Paper] = []
 
-#RIGHT MOUSE CLICK TO RELEASE STAMP managable in input system
-	if Input.is_action_just_pressed("stamp_down") and dragging == true:
-		dragging = false
-		#input_help.hide()
-		print("player tries to put down stamp")
+func _ready():
+	z_index = 101
 
+func _on_area_2d_area_entered(area: Area2D) -> void:
+	if area.get_parent() is Paper:
+		overlapping_paper.append(area.get_parent())
 
-func _on_button_button_down() -> void:
-	if dragging == true:
-		stamping.emit()
+func _on_area_2d_area_exited(area: Area2D) -> void:
+	if overlapping_paper.find(area.get_parent()):
+		overlapping_paper.erase(area.get_parent())
 
-	dragging = true
+func _input(event):
+	if event.is_action_pressed("stamp_down"):
+		if overlapping_paper:
+			$AudioStreamPlayer.play()
+			var stamp_texture = $Sprite2D.texture
+			for node in overlapping_paper:
+				var contact_local_pos = node.to_local(global_position)
+				node.add_stamp_sprite(stamp_texture, contact_local_pos)
