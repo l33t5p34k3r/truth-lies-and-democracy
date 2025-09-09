@@ -1,10 +1,10 @@
 [gd_scene load_steps=6 format=3 uid="uid://33frnk6f5jem"]
 
 [ext_resource type="Script" uid="uid://bo2tkdvc0iknc" path="res://Scenes/paper_playground.gd" id="1_onxtm"]
-[ext_resource type="Texture2D" uid="uid://dr4y7sl7qxejj" path="res://Assets/images/1-04851-00_BL_Notebook_Paper_Punch_G.jpg" id="2_vqhyn"]
-[ext_resource type="PackedScene" uid="uid://g70f6unffr4n" path="res://scenes/tapeplayer.tscn" id="4_ks51s"]
-[ext_resource type="PackedScene" uid="uid://dcevhfveknkjq" path="res://scenes/stamp.tscn" id="5_jpj0y"]
-[ext_resource type="PackedScene" uid="uid://m40a1i47l0c8" path="res://scenes/tape.tscn" id="5_w7qgv"]
+[ext_resource type="Texture2D" uid="uid://dr4y7sl7qxejj" path="res://Assets/textures/1-04851-00_BL_Notebook_Paper_Punch_G.jpg" id="2_vqhyn"]
+[ext_resource type="PackedScene" uid="uid://g70f6unffr4n" path="res://Scenes/tapeplayer.tscn" id="4_ks51s"]
+[ext_resource type="PackedScene" uid="uid://dcevhfveknkjq" path="res://Scenes/stamp.tscn" id="5_jpj0y"]
+[ext_resource type="PackedScene" uid="uid://m40a1i47l0c8" path="res://Scenes/tape.tscn" id="5_w7qgv"]
 
 [node name="PaperPlayground" type="Node2D"]
 script = ExtResource("1_onxtm")

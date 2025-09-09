@@ -38,7 +38,7 @@ var pencil_size := 3.0
 # keeps checked if paper has been stamped
 var is_stamped = false
 
-var boundary_rect: Rect2 = Rect2(50, 50, 1680, 920)  # x, y, width, height
+var boundary_rect: Rect2 = Rect2(-50, -50, 1380, 790)  # x, y, width, height
 var boundary_margin: float = 10.0  # Extra space for half paper size
 
 var news_headlines = [
