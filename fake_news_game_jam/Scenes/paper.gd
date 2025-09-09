@@ -216,7 +216,7 @@ func _process(_delta):
 		var distance = direction.length()
 		
 		if distance > 5.0:
-			var velocity = direction.normalized() * min(distance * 45.0, 3800.0)
+			var velocity = direction.normalized() * min(distance * 25.0, 4500.0)
 			linear_velocity = velocity
 		else:
 			linear_velocity = Vector2.ZERO
