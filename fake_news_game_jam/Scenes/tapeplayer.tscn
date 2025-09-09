@@ -1,0 +1,36 @@
+[gd_scene load_steps=5 format=3 uid="uid://g70f6unffr4n"]
+
+[ext_resource type="Script" uid="uid://derothqy7m7aa" path="res://scenes/tapeplayer.gd" id="1_g2els"]
+[ext_resource type="Texture2D" uid="uid://dsc80u46rtem0" path="res://assets/textures/play.png" id="2_g2els"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dqkch"]
+size = Vector2(564, 339)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_qhqgy"]
+radius = 345.009
+
+[node name="Player" type="RigidBody2D"]
+input_pickable = true
+gravity_scale = 0.0
+script = ExtResource("1_g2els")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("2_g2els")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -0.5)
+scale = Vector2(0.4, 0.4)
+shape = SubResource("RectangleShape2D_dqkch")
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+scale = Vector2(0.4, 0.4)
+shape = SubResource("CircleShape2D_qhqgy")
+
+[connection signal="input_event" from="." to="." method="_on_area_input_event"]
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]
