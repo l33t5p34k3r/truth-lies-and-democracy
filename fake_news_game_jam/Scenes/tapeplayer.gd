@@ -22,7 +22,6 @@ func _unhandled_input(event):
 		if event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
 			#print("Global mouse release detected - stopping drag")
 			stop_drag()
-			
 
 func start_drag(mouse_pos: Vector2):
 	#print("Starting drag at: ", mouse_pos)

@@ -10,6 +10,7 @@ size = Vector2(564, 338)
 [node name="Tape" type="RigidBody2D"]
 collision_layer = 2
 collision_mask = 2
+input_pickable = true
 gravity_scale = 0.0
 script = ExtResource("1_cgxy3")
 
@@ -23,3 +24,5 @@ shape = SubResource("RectangleShape2D_q3rsh")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_q3rsh")
+
+[connection signal="input_event" from="." to="." method="_on_area_input_event"]
