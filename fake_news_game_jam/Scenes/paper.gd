@@ -10,21 +10,19 @@
 
 # Paper.gd - Script for individual paper documents
 class_name Paper
-extends RigidBody2D
+extends DragBody2D
 
 @export var paper_texture: Texture2D
 @export var paper_color: Color = Color.WHITE
 
-var is_being_dragged = false
+
 static var currently_dragging_paper: Paper = null
 static var all_papers: Array[Paper] = []
 static var paper_stack_order: Array[Paper] = []  # Bottom to top order
 
-var drag_offset = Vector2.ZERO
-var glob_pos = Vector2.ZERO
-var mouse_pos_ = Vector2.ZERO
-var original_gravity_scale: float
-var input_area: Area2D
+
+var overlapping_papers: Array[Paper] = []
+
 var paper_size: Vector2
 var original_z_index: int = 0
 
@@ -35,11 +33,30 @@ var last_draw_position: Vector2
 var pencil_color := Color.BLACK
 var pencil_size := 3.0
 @onready var texture_rect: TextureRect
-# keeps checked if paper has been stamped
+
+# checks if paper has been stamped
 var is_stamped = false
 
-var boundary_rect: Rect2 = Rect2(-50, -50, 1380, 790)  # x, y, width, height
-var boundary_margin: float = 10.0  # Extra space for half paper size
+
+func _physics_process(delta):
+	super._physics_process(delta)
+	# Apply drag effect to overlapping papers
+	if is_being_dragged and overlapping_papers.size() > 0:
+		for other_paper in overlapping_papers:
+			if is_instance_valid(other_paper) and other_paper != self:
+				other_paper.apply_paper_drag(linear_velocity, global_position)
+
+func start_drag(mouse_pos: Vector2):
+	super.start_drag(mouse_pos)
+	currently_dragging_paper = self
+	
+	z_index = 100  # High z-index to appear on top
+
+func stop_drag():
+	super.stop_drag()
+
+	currently_dragging_paper = null	
+	bring_to_top()
 
 var news_headlines = [
 	"Local Cat Wins Mayor Election",
@@ -73,50 +90,37 @@ func register_paper():
 	paper_stack_order.append(self)
 	update_all_z_indices()
 
-func _ready():
-	register_paper()
-	print("Paper created at position: ", position)
-	paper_size = $Sprite2D.texture.get_size() * $Sprite2D.scale.x
-	add_news_content()
-	
-	original_z_index = z_index
-	
-	setup_drawing_surface()
-	
-	
-	print("Paper setup complete with Area2D input detection")
-
+# something breaks the paper location in this cycle
+#func _ready():
+#	register_paper()
+# 	paper_size = $Sprite2D.texture.get_size() * $Sprite2D.scale.x
+# 	add_news_content()
+#	original_z_index = z_index
+#	setup_drawing_surface()
 
 func add_news_content():
-	var content_container = $Control
-	#content_container.size = paper_size
-	#content_container.position = Vector2(-paper_size.x * 0.5, -paper_size.y * 0.5)
-	#add_child(content_container)
-	
+
 	var article_index = randi() % news_headlines.size()
 	
 	# Headline
 	var headline = $Control/Label
 	headline.text = news_headlines[article_index]
-	#headline.position = Vector2(8, 8)
-	#headline.size = Vector2(paper_size.x - 16, 25)
+
 	headline.add_theme_font_size_override("font_size", 24)
 	headline.add_theme_color_override("font_color", Color.BLACK)
 	headline.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	headline.add_theme_stylebox_override("normal", create_headline_style())
-	#content_container.add_child(headline)
 	
 	# Content
 	var content = $Control/RichTextLabel
 	content.text = news_content[article_index]
-	#content.position = Vector2(8, 38)
-	#content.size = Vector2(paper_size.x - 16, paper_size.y - 46)
+
 	content.add_theme_font_size_override("normal_font_size", 18)
 	content.add_theme_color_override("default_color", Color(0.2, 0.2, 0.2))
 	content.fit_content = true
 	content.bbcode_enabled = false
 	content.scroll_active = false
-	#content_container.add_child(content)
+
 
 func create_headline_style():
 	var style = StyleBoxFlat.new()
@@ -125,17 +129,14 @@ func create_headline_style():
 	style.border_color = Color(0.3, 0.3, 0.3, 0.6)
 	return style
 	
-	
+
 func _on_area_input_event(viewport, event, shape_idx):
-	#print("Area input event called! Event: ", event)
+	super._on_area_input_event(viewport, event, shape_idx)
+
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		#print("Mouse button left detected!")
-		glob_pos = global_position
-		mouse_pos_ = event.global_position
 		if event.pressed and currently_dragging_paper == null and is_topmost_paper_at_position(event.global_position):
 			start_drag(event.global_position)
-		#else:
-			#stop_drag()
+
 	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT:
 			if event.pressed and is_topmost_paper_at_position(event.global_position):
 				var pos = to_local(event.global_position) - $TextureRect.position
@@ -174,29 +175,6 @@ func is_position_inside_paper(pos: Vector2) -> bool:
 	var paper_rect = Rect2(global_position - half_size, paper_size)
 	return paper_rect.has_point(pos)
 			
-func _unhandled_input(event):
-	if is_being_dragged and event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
-			#print("Global mouse release detected - stopping drag")
-			stop_drag()
-			
-func start_drag(mouse_pos: Vector2):
-	#print("Starting drag at: ", mouse_pos)
-	is_being_dragged = true
-	drag_offset = global_position - mouse_pos
-	currently_dragging_paper = self
-	
-	z_index = 100  # High z-index to appear on top
-
-func stop_drag():
-	#print("Stopping drag")
-	is_being_dragged = false
-	currently_dragging_paper = null
-	#z_index = original_z_index
-	
-	
-	bring_to_top()
-
 func bring_to_top():
 	# Remove from current position and add to end (top)
 	paper_stack_order.erase(self)
@@ -212,35 +190,7 @@ static func update_all_z_indices():
 
 func _process(_delta):
 	if is_being_dragged:
-		var target_position = get_global_mouse_position() + drag_offset
-		var direction = target_position - global_position
-		var distance = direction.length()
-		
-		if distance > 5.0:
-			var velocity = direction.normalized() * min(distance * 25.0, 4500.0)
-			linear_velocity = velocity
-		else:
-			linear_velocity = Vector2.ZERO
-		rotate_to_zero(_delta)
-			
-			
-	apply_boundary_constraints()
-			
-	DebugDraw.draw_velocity(self, -drag_offset, 0.2)
-	DebugDraw.draw_boundary(boundary_rect, Color.ORANGE)
-	if is_being_dragged:
-		DebugDraw.draw_point(drag_offset, Color.RED)
-		DebugDraw.draw_point(mouse_pos_, Color.GREEN)
-		DebugDraw.draw_point(glob_pos, Color.CHARTREUSE)
-
-var overlapping_papers: Array[Paper] = []
-
-func _physics_process(delta):
-	# Apply drag effect to overlapping papers
-	if is_being_dragged and overlapping_papers.size() > 0:
-		for other_paper in overlapping_papers:
-			if is_instance_valid(other_paper) and other_paper != self:
-				other_paper.apply_paper_drag(linear_velocity, global_position)
+		rotate_to_zero()
 
 func _on_area_overlap(area):
 	var other_paper = area.get_parent()
@@ -272,7 +222,7 @@ func apply_paper_drag(drag_velocity: Vector2, drag_source_pos: Vector2):
 func _on_area_2d_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
 	_on_area_input_event(viewport, event, shape_idx)
 
-func rotate_to_zero(delta: float):
+func rotate_to_zero():
 	var target_rotation = 0.0
 	var rotation_strength = 50.0
 	
@@ -298,48 +248,6 @@ func rotate_to_zero(delta: float):
 		var damping_torque = -angular_velocity * 10.0
 		#print("Applying damping torque: ", damping_torque)
 		apply_torque(damping_torque)
-		
-
-
-func apply_boundary_constraints():
-	# TODO: this is a pretty bad constraint
-	var half_size = paper_size * 0.5
-	var min_pos = boundary_rect.position + half_size
-	var max_pos = boundary_rect.position + boundary_rect.size - half_size
-	
-	var new_position = global_position
-	var apply_force = false
-	var bounce_force = Vector2.ZERO
-	
-	# Check X boundaries
-	if global_position.x < min_pos.x:
-		new_position.x = min_pos.x
-		if linear_velocity.x < 0:
-			bounce_force.x = -linear_velocity.x * 0.5
-		apply_force = true
-	elif global_position.x > max_pos.x:
-		new_position.x = max_pos.x
-		if linear_velocity.x > 0:
-			bounce_force.x = -linear_velocity.x * 0.5
-		apply_force = true
-	
-	# Check Y boundaries  
-	if global_position.y < min_pos.y:
-		new_position.y = min_pos.y
-		if linear_velocity.y < 0:
-			bounce_force.y = -linear_velocity.y * 0.5
-		apply_force = true
-	elif global_position.y > max_pos.y:
-		new_position.y = max_pos.y
-		if linear_velocity.y > 0:
-			bounce_force.y = -linear_velocity.y * 0.5
-		apply_force = true
-	
-	# Apply corrections
-	if apply_force:
-		global_position = new_position
-		if not is_being_dragged:  # Only bounce when not being dragged
-			linear_velocity += bounce_force
 
 func _on_overlap_area_area_entered(area: Area2D) -> void:
 	_on_area_overlap(area)
@@ -347,7 +255,6 @@ func _on_overlap_area_area_entered(area: Area2D) -> void:
 
 func _on_overlap_area_area_exited(area: Area2D) -> void:
 	_on_area_exit(area)
-
 	
 func setup_drawing_surface():
 	#texture_rect = TextureRect.new()
@@ -419,12 +326,11 @@ func clear_drawing():
 
 
 # does all the stamping
-func add_stamp_sprite(texture: Texture2D, position: Vector2):
+func add_stamp_sprite(texture: Texture2D, stamp_position: Vector2):
 	var stamp = Sprite2D.new()
 	stamp.texture = texture
-	stamp.position = position
+	stamp.position = stamp_position
 	stamp.rotation = -rotation
-	#stamp.rotation_degrees = randf_range(-10, 10)  # Optional: add some variation
-	#stamp.scale = Vector2.ONE * randf_range(0.9, 1.1)  # Optional: slight scale variation
+
 	$StampMask.add_child(stamp)
 	is_stamped=true
