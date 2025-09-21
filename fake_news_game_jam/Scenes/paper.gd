@@ -91,12 +91,13 @@ func register_paper():
 	update_all_z_indices()
 
 # something breaks the paper location in this cycle
-#func _ready():
-#	register_paper()
-# 	paper_size = $Sprite2D.texture.get_size() * $Sprite2D.scale.x
-# 	add_news_content()
-#	original_z_index = z_index
-#	setup_drawing_surface()
+func _ready():
+	super._ready()
+	register_paper()
+	paper_size = $Sprite2D.texture.get_size() * $Sprite2D.scale.x
+	add_news_content()
+	original_z_index = z_index
+	setup_drawing_surface()
 
 func add_news_content():
 
