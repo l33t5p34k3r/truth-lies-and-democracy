@@ -3,7 +3,8 @@ extends Control
 @export var messages_count: int = 10
 
 @onready var internet = $"."
-@onready var message_scene = preload("res://social_media_message.tscn")
+const message_scene = preload("uid://depviawpyn3jn")
+
 @onready var message_container = $SocialMedia/ScrollContainer/VBoxContainer
 @onready var timer = $Timer
 

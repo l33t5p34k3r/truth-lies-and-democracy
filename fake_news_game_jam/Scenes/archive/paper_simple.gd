@@ -2,8 +2,10 @@ extends Sprite2D
 
 var dragging = false
 
-var approved = preload("res://Scenes/approved.tscn")
-var declined = preload("res://Scenes/declined.tscn")
+
+const approved = preload("uid://btqc78apitl7k")
+const declined = preload("uid://h7tbhkc1wx08")
+
 
 func _process(delta: float) -> void:
 	if dragging:
