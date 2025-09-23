@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://bggrq4msf8afc"]
 
-[ext_resource type="Script" uid="uid://cn4bx1o62k4gx" path="res://scenes/archive/old_stamp.gd" id="2_bqj8j"]
-[ext_resource type="Texture2D" uid="uid://h3ax3v44vbm0" path="res://assets/textures/Stamp_approved.png" id="2_rucql"]
+[ext_resource type="Script" uid="uid://cn4bx1o62k4gx" path="res://Scenes/archive/old_stamp.gd" id="2_bqj8j"]
+[ext_resource type="Texture2D" uid="uid://h3ax3v44vbm0" path="res://Assets/textures/Stamp_approved.png" id="2_rucql"]
 
 [node name="stamp_approved" type="Node2D"]
 script = ExtResource("2_bqj8j")
