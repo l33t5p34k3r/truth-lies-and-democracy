@@ -24,6 +24,10 @@ DebugDraw="*res://scenes/archive/DebugDraw.gd"
 window/size/viewport_width=1280
 window/size/viewport_height=720
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/SimpleTODO/plugin.cfg")
+
 [input]
 
 stamp_down={
