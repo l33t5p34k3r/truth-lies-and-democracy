@@ -1,2 +1,1 @@
-# democracy-gamejam
-Truth, Lies and Gamejamming
+# Truth, Lies and Democracy
