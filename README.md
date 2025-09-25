@@ -2,5 +2,5 @@
 
 
 
-A small Godot Project 
+A small Godot Project about Democracy and the Press
 
