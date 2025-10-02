@@ -18,6 +18,7 @@ config/icon="res://scenes/archive/icon.svg"
 [autoload]
 
 DebugDraw="*res://scenes/archive/DebugDraw.gd"
+Manager="*res://Scenes/Manager.gd"
 
 [display]
 
