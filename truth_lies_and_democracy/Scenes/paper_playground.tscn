@@ -26,7 +26,7 @@ text = "Right click to draw on paper"
 position = Vector2(980, 499)
 
 [node name="Tapeplayer" parent="." instance=ExtResource("4_ks51s")]
-position = Vector2(598, 193)
+position = Vector2(1111, 297)
 
 [node name="Tape" parent="." instance=ExtResource("5_w7qgv")]
-position = Vector2(912, 169)
+position = Vector2(1099, 93)

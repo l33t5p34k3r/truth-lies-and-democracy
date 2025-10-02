@@ -2,29 +2,42 @@
 extends Node2D
 
 @export var paper_textures: Array[Texture2D]
-@export var paper_count: int = 5
 
 @onready var paper_scene = preload("res://Scenes/paper.tscn")
 
-var papers: Array[Paper] = []
+var paper_array: Array[Paper] = []
+var approved_paper: Array[Paper] = []
+
+var paper_container = Node2D.new()
+
+
+func load_papers():
+	var file = FileAccess.open("res://Assets/papers/papers.json", FileAccess.READ)
+	var raw = file.get_as_text()
+	var json = JSON.new()
+	json.parse(raw)
+	var papers = json.data
+
+	spawn_papers(papers)
+
 
 func _ready():
-	spawn_papers()
+	load_papers()
 
 
-func spawn_papers():
+func spawn_papers(papers : Dictionary):
 	var container = Node2D.new()
 	container.name = "PaperContainer"
 	add_child(container)
 	
-	print("Spawning ", paper_count, " papers")
-	
-	for i in range(paper_count):
-		var paper = paper_scene.instantiate()
-		#var paper = Paper.new()
-		#
-		#if paper_textures.size() > 0:
-			#paper.paper_texture = paper_textures[i % paper_textures.size()]
+	for element in papers.keys():
+		var paper :Paper= paper_scene.instantiate()
+		
+		var paper_headline : String = papers[element].get("news_headline", "")
+		var paper_content : String = papers[element].get("news_content", "")
+		
+		paper.paper_headline = paper_headline
+		paper.paper_content = paper_content
 		
 		paper.paper_color = Color(
 			randf_range(0.9, 1.0),
@@ -41,6 +54,4 @@ func spawn_papers():
 		paper.rotation = randf_range(-0.3, 0.3)
 		
 		container.add_child(paper)
-		papers.append(paper)
-		
-		print("Paper ", i, " added at position: ", paper.position)
+		paper_array.append(paper)

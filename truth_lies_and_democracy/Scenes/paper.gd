@@ -15,6 +15,9 @@ extends DragBody2D
 @export var paper_texture: Texture2D
 @export var paper_color: Color = Color.WHITE
 
+var paper_headline : String = ""
+var paper_content : String = ""
+
 
 static var currently_dragging_paper: Paper = null
 static var all_papers: Array[Paper] = []
@@ -58,27 +61,6 @@ func stop_drag():
 	currently_dragging_paper = null	
 	bring_to_top()
 
-var news_headlines = [
-	"Local Cat Wins Mayor Election",
-	"Scientists Discover Coffee Beans Can Fly", 
-	"Traffic Light Goes on Strike",
-	"Pizza Delivery Via Drone Causes Chaos",
-	"Weather Report: It's Definitely Outside",
-	"Breaking: Pencils Found to Contain Lead",
-	"Local Man Loses Keys in Own Pocket",
-	"Study Shows 100% of Studies Are Studies"
-]
-
-var news_content = [
-	"In a shocking turn of events, Mr. Whiskers defeated incumbent mayor by promising more nap time and mandatory laser pointer sessions for all citizens.",
-	"Researchers at the Institute of Caffeinated Sciences announced that coffee beans exhibit flight patterns when nobody is watching, explaining missing morning coffee.",
-	"The intersection's traffic light issued a formal complaint about working conditions, demanding better weather protection and longer lunch breaks.",
-	"Emergency services responded to seventeen reports of pizzas landing in unexpected locations after drone navigation systems confused 'delivery' with 'bombing run.'",
-	"Local meteorologist confirms that weather continues to occur outdoors, urging citizens to 'check by looking through windows or stepping outside.'",
-	"Archaeological expedition into desk drawers reveals ancient pencils containing mysterious graphite substance previously thought to be actual lead.",
-	"Area resident spent three hours searching for missing keys before discovering them in the very pocket he'd checked 47 times previously.",
-	"Groundbreaking meta-analysis confirms that research studies are indeed studies, revolutionizing the field of study identification and classification."
-]
 
 func _exit_tree() -> void:
 	all_papers.erase(self)
@@ -101,11 +83,10 @@ func _ready():
 
 func add_news_content():
 
-	var article_index = randi() % news_headlines.size()
 	
 	# Headline
 	var headline = $Control/Label
-	headline.text = news_headlines[article_index]
+	headline.text = paper_headline
 
 	headline.add_theme_font_size_override("font_size", 24)
 	headline.add_theme_color_override("font_color", Color.BLACK)
@@ -114,7 +95,7 @@ func add_news_content():
 	
 	# Content
 	var content = $Control/RichTextLabel
-	content.text = news_content[article_index]
+	content.text = paper_content
 
 	content.add_theme_font_size_override("normal_font_size", 18)
 	content.add_theme_color_override("default_color", Color(0.2, 0.2, 0.2))
