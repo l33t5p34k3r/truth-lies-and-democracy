@@ -23,6 +23,7 @@ var money:int = 1000 :
 		money = value
 
 var current_cost_per_round:int = 5
+var current_onlyfans_money_per_round:int = 1
 
 var report_accuracy:float = 50.0
 
@@ -32,7 +33,30 @@ var partisan_trust:Dictionary[PARTY, float] = {
 	PARTY.PARTY3: 50.0,
 	PARTY.PARTY4: 50.0
 }
+var partisan_funding:Dictionary[PARTY, int] = {
+	PARTY.PARTY1: 60,
+	PARTY.PARTY2: 90,
+	PARTY.PARTY3: 500,
+	PARTY.PARTY4: 140
+}
 
+
+func round_expenses() -> int:
+	var total_expenses:int = 0
+	total_expenses += current_cost_per_round
+	return total_expenses
+	
+func round_income() -> int:
+	var total_income:int = 0
+	total_income += current_onlyfans_money_per_round
+	total_income += funding_from_parties()
+	return total_income
+
+func funding_from_parties() -> int:
+	var total_funding:int = 0
+	for party in partisan_trust:
+		total_funding += floor((partisan_trust[party] / 100.0) * partisan_funding[party])
+	return total_funding
 
 
 
