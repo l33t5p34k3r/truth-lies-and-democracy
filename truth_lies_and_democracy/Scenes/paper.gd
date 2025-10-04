@@ -29,15 +29,19 @@ var overlapping_papers: Array[Paper] = []
 var paper_size: Vector2
 var original_z_index: int = 0
 
+
 var drawing_texture: ImageTexture
 var drawing_image: Image
 var is_drawing := false
 var last_draw_position: Vector2
 var pencil_color := Color.BLACK
 var pencil_size := 3.0
-@onready var texture_rect: TextureRect
 
-# checks if paper has been stamped
+@onready var texture_rect: TextureRect
+@onready var sprite = get_node("Sprite2D")
+
+
+# checks if paper has been stampged
 var is_stamped = false
 
 
@@ -170,7 +174,10 @@ static func update_all_z_indices():
 		if paper != currently_dragging_paper:  # Don't change z-index while dragging
 			paper.z_index = i
 
-func _process(_delta):
+func _process(delta):
+	
+	sprite.scale = sprite.scale.lerp(target_scale, delta * 3)
+	
 	if is_being_dragged:
 		rotate_to_zero()
 
@@ -316,3 +323,11 @@ func add_stamp_sprite(texture: Texture2D, stamp_position: Vector2):
 
 	$StampMask.add_child(stamp)
 	is_stamped=true
+
+func _on_HoverArea_mouse_entered():
+	if not is_being_dragged:
+		target_scale = hover_scale
+		
+func _on_HoverArea_mouse_exited():
+	if not is_being_dragged:
+		target_scale = normal_scale

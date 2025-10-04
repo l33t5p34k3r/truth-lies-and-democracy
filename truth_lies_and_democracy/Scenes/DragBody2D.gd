@@ -6,6 +6,12 @@ var is_being_dragged = false
 var drag_offset = Vector2.ZERO
 var boundary_rect = Rect2(Vector2.ZERO, Vector2.ZERO)
 
+var normal_scale = Vector2(0.53,0.53)
+var hover_scale = Vector2(0.6,0.6)
+
+var target_scale = normal_scale
+
+
 # default
 var damp_percentage = 0.90
 
@@ -35,6 +41,7 @@ func _physics_process(_delta: float) -> void:
 
 	# check that item does not flee the screen
 	apply_boundary_constraints()
+
 
 func start_drag(mouse_pos: Vector2):
 	is_being_dragged = true
@@ -82,3 +89,11 @@ func _on_area_input_event(_viewport, event, _shape_idx):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 		glob_pos = global_position
 		start_drag(event.global_position)
+
+func _on_HoverArea_mouse_entered():
+	if not is_being_dragged:
+		$Area2D.scale = hover_scale
+		
+func _on_HoverArea_mouse_exited():
+	if not is_being_dragged:
+		$Area2D.scale = normal_scale

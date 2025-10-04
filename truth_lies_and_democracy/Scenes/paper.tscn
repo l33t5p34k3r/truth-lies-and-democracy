@@ -89,5 +89,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [connection signal="input_event" from="Area2D" to="." method="_on_area_2d_input_event"]
+[connection signal="mouse_entered" from="Area2D" to="." method="_on_HoverArea_mouse_entered"]
+[connection signal="mouse_exited" from="Area2D" to="." method="_on_HoverArea_mouse_exited"]
 [connection signal="area_entered" from="OverlapArea" to="." method="_on_overlap_area_area_entered"]
 [connection signal="area_exited" from="OverlapArea" to="." method="_on_overlap_area_area_exited"]
