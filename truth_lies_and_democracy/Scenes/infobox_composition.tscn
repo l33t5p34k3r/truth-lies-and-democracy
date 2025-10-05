@@ -1,0 +1,22 @@
+[gd_scene load_steps=2 format=3 uid="uid://dr638i8p0fsnt"]
+
+[ext_resource type="Script" uid="uid://cep827lxdiu3n" path="res://Scenes/infobox_composition.gd" id="1_47lnr"]
+
+[node name="InfoboxComposition" type="Node2D"]
+script = ExtResource("1_47lnr")
+
+[node name="Infobox" type="Panel" parent="."]
+offset_right = 469.0
+offset_bottom = 331.0
+
+[node name="Label" type="Label" parent="Infobox"]
+layout_mode = 0
+offset_right = 221.0
+offset_bottom = 115.0
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Infobox"]
+layout_mode = 0
+offset_left = 17.0
+offset_top = 124.0
+offset_right = 438.0
+offset_bottom = 297.0

@@ -28,8 +28,10 @@ var paper_content : String = ""
 @onready var stamp_mask: Polygon2D = $Content/StampMask
 @onready var content: Node2D = $Content
 
+@onready var infobox := preload("res://Scenes/infobox_composition.tscn").instantiate()
 
 
+	
 
 # to make papers slightly drag each other
 var overlapping_papers: Array[Paper] = []
@@ -77,6 +79,9 @@ func _ready():
 	paper_size = sprite_2d.texture.get_size() * sprite_2d.scale.x
 	add_news_content()
 	setup_drawing_surface()
+	
+	add_child(infobox)
+	infobox.hide()
 
 func add_news_content():
 
@@ -295,7 +300,16 @@ func _on_HoverArea_mouse_entered():
 	if not is_being_dragged and is_topmost_body_at_position(get_global_mouse_position()):
 		target_scale = hover_scale
 		
+		var metadata = {
+			"headline": paper_headline,
+			"content": paper_content
+		}
+		
+
+		infobox.show_info(global_position, metadata)
+		
 # TODO: this will not be called if another paper is now highlighted -> build into DragBody2D to make sure only one paper is highlighted at a time
 func _on_HoverArea_mouse_exited():
 	if not is_being_dragged:
 		target_scale = normal_scale
+		infobox.hide_info()
