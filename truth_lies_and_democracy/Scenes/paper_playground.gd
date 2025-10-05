@@ -5,6 +5,9 @@ extends Node2D
 
 @onready var paper_scene = preload("res://Scenes/paper.tscn")
 
+@onready var confirm_button: Button = $CanvasLayer/Control/Button
+
+
 var paper_array: Array[Paper] = []
 var approved_paper: Array[Paper] = []
 
@@ -55,3 +58,11 @@ func spawn_papers(papers : Dictionary):
 		
 		container.add_child(paper)
 		paper_array.append(paper)
+		paper.got_stamped.connect(on_paper_stamped)
+
+
+func on_paper_stamped() -> void:
+	confirm_button.visible = true
+
+func _on_confirm_button_pressed() -> void:
+	get_tree().change_scene_to_file("res://Scenes/report/ProgressReview.tscn")

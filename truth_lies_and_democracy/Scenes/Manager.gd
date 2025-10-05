@@ -40,6 +40,40 @@ var partisan_funding:Dictionary[PARTY, int] = {
 	PARTY.PARTY4: 140
 }
 
+enum STATS {
+	CURRENT_MONEY, TOTAL_MONEY_EARNED, EXPENSES_PER_ROUND, FUNDING_FROM_PARTIES, FAKE_NEWS_PUBLISHED
+}
+# TODO: substats (some stats are per party)
+var stat_display_name :Dictionary[STATS, String] = {
+	STATS.CURRENT_MONEY: "current_money",
+	STATS.TOTAL_MONEY_EARNED: "total_money_earned",
+	STATS.EXPENSES_PER_ROUND: "expenses_per_round",
+	STATS.FUNDING_FROM_PARTIES: "funding_from_parties",
+	STATS.FAKE_NEWS_PUBLISHED: "fake_news_published"
+}
+
+# TODO: stat description (e.g. as a popup-tooltip)
+
+# stat_key -> stat name
+func get_stat_names_pretty() -> Dictionary[STATS, String]:
+	return stat_display_name
+
+# stat_key -> stat value as str
+func get_stat_values_pretty() -> Dictionary[STATS, String]:
+	var current_stats :Dictionary[STATS, String] = {}
+
+	current_stats[STATS.CURRENT_MONEY] = str(money)
+	current_stats[STATS.TOTAL_MONEY_EARNED] = str(total_money_earned)
+	current_stats[STATS.EXPENSES_PER_ROUND] = str(round_expenses())
+	current_stats[STATS.FUNDING_FROM_PARTIES] = str(funding_from_parties())
+	current_stats[STATS.FAKE_NEWS_PUBLISHED] = str(fake_news_published)
+
+	for key in STATS.values():
+		if not key in current_stats:
+			push_error("Missing key from current_stats: ", key)
+
+	return current_stats
+
 
 func round_expenses() -> int:
 	var total_expenses:int = 0

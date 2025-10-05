@@ -15,6 +15,8 @@ extends DragBody2D
 @export var paper_texture: Texture2D
 @export var paper_color: Color = Color.WHITE
 
+signal got_stamped
+
 var paper_headline : String = ""
 var paper_content : String = ""
 
@@ -275,10 +277,16 @@ func add_stamp_sprite(texture: Texture2D, stamp_position: Vector2):
 	stamp.texture = texture
 	stamp.position = stamp_position
 	stamp.rotation = -rotation
+	# account for size scaling on hover
 	stamp.scale = Vector2(1.0 / content.scale.x, 1.0 / content.scale.y)
 
+	# TODO: currently, everything is fake news
+	if not is_stamped:
+		Manager.fake_news_published += 1
+
 	stamp_mask.add_child(stamp)
-	is_stamped=true
+	is_stamped = true
+	got_stamped.emit()
 
 # TODO: we need to rework mouse entry/exit events a bit, to account for overlapping papers
 # i.e. paper is not topmost when mouse enters, but becomes topmost when mouse exits another paper

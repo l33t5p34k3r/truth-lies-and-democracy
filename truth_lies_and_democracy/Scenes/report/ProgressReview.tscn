@@ -1,0 +1,48 @@
+[gd_scene load_steps=2 format=3 uid="uid://bnhgktoa5qsfs"]
+
+[ext_resource type="Script" uid="uid://b7gh7mcgwvd3m" path="res://Scenes/report/progress_review.gd" id="1_41q1p"]
+
+[node name="ProgressReview" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_41q1p")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="Heading" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Progress Report"
+horizontal_alignment = 1
+
+[node name="StatContainer" type="VBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Continue" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+focus_mode = 0
+text = "Continue"
+
+[connection signal="pressed" from="MarginContainer/ScrollContainer/VBoxContainer/Continue" to="." method="_on_continue_pressed"]
