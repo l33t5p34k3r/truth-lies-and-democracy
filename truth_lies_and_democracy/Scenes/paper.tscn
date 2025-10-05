@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://1sxa4t2y7xkv"]
+[gd_scene load_steps=7 format=3 uid="uid://1sxa4t2y7xkv"]
 
 [ext_resource type="Script" uid="uid://bq64warrfgu6a" path="res://Scenes/paper.gd" id="1_c7gsp"]
-[ext_resource type="Texture2D" uid="uid://dr4y7sl7qxejj" path="res://Assets/textures/1-04851-00_BL_Notebook_Paper_Punch_G.jpg" id="2_322pb"]
+[ext_resource type="Texture2D" uid="uid://c5hyeon2lcw0a" path="res://Assets/textures/1-04851-00_BL_Notebook_Paper_Punch_G.jpg" id="2_322pb"]
+[ext_resource type="Script" uid="uid://bibcynwo6jjjq" path="res://Scenes/overlap_area.gd" id="3_322pb"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_c7gsp"]
 radius = 9.61769
@@ -22,23 +23,25 @@ linear_damp = 12.051
 angular_damp = 41.835
 script = ExtResource("1_c7gsp")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-0.5, -0.5)
+shape = SubResource("CircleShape2D_c7gsp")
+
+[node name="Content" type="Node2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="Content"]
 scale = Vector2(0.53, 0.53)
 texture = ExtResource("2_322pb")
 region_enabled = true
 region_rect = Rect2(27.8996, 17.2028, 547.412, 685.594)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-0.5, -0.5)
-shape = SubResource("CircleShape2D_c7gsp")
+[node name="Area2D" type="Area2D" parent="Content"]
 
-[node name="Area2D" type="Area2D" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Content/Area2D"]
 position = Vector2(1, -2)
 shape = SubResource("RectangleShape2D_4sl6c")
 
-[node name="Control" type="Control" parent="."]
+[node name="Control" type="Control" parent="Content"]
 layout_mode = 3
 anchors_preset = 0
 offset_left = -136.0
@@ -47,13 +50,13 @@ offset_right = 137.0
 offset_bottom = 173.0
 mouse_filter = 2
 
-[node name="Label" type="Label" parent="Control"]
+[node name="Label" type="Label" parent="Content/Control"]
 layout_mode = 0
 offset_right = 270.0
 offset_bottom = 94.0
 text = "asdasd"
 
-[node name="RichTextLabel" type="RichTextLabel" parent="Control"]
+[node name="RichTextLabel" type="RichTextLabel" parent="Content/Control"]
 layout_mode = 0
 offset_left = 2.0
 offset_top = 88.0
@@ -62,20 +65,21 @@ offset_bottom = 348.0
 mouse_filter = 2
 text = "asdasdsad"
 
-[node name="OverlapArea" type="Area2D" parent="."]
+[node name="OverlapArea" type="Area2D" parent="Content"]
+script = ExtResource("3_322pb")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="OverlapArea"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Content/OverlapArea"]
 position = Vector2(0.5, -1)
 shape = SubResource("RectangleShape2D_322pb")
 
-[node name="StampMask" type="Polygon2D" parent="."]
+[node name="StampMask" type="Polygon2D" parent="Content"]
 clip_children = 1
 position = Vector2(0.501709, 0.501373)
 scale = Vector2(0.996564, 0.99726)
 texture = ExtResource("2_322pb")
 polygon = PackedVector2Array(-144, -182, 145, -182, 146, 183, -145, 183)
 
-[node name="TextureRect" type="TextureRect" parent="."]
+[node name="TextureRect" type="TextureRect" parent="Content"]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -88,8 +92,8 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[connection signal="input_event" from="Area2D" to="." method="_on_area_2d_input_event"]
-[connection signal="mouse_entered" from="Area2D" to="." method="_on_HoverArea_mouse_entered"]
-[connection signal="mouse_exited" from="Area2D" to="." method="_on_HoverArea_mouse_exited"]
-[connection signal="area_entered" from="OverlapArea" to="." method="_on_overlap_area_area_entered"]
-[connection signal="area_exited" from="OverlapArea" to="." method="_on_overlap_area_area_exited"]
+[connection signal="input_event" from="Content/Area2D" to="." method="_on_area_2d_input_event"]
+[connection signal="mouse_entered" from="Content/Area2D" to="." method="_on_HoverArea_mouse_entered"]
+[connection signal="mouse_exited" from="Content/Area2D" to="." method="_on_HoverArea_mouse_exited"]
+[connection signal="area_entered" from="Content/OverlapArea" to="." method="_on_overlap_area_area_entered"]
+[connection signal="area_exited" from="Content/OverlapArea" to="." method="_on_overlap_area_area_exited"]

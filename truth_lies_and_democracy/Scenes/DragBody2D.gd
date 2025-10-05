@@ -6,8 +6,8 @@ var is_being_dragged = false
 var drag_offset = Vector2.ZERO
 var boundary_rect = Rect2(Vector2.ZERO, Vector2.ZERO)
 
-var normal_scale = Vector2(0.53,0.53)
-var hover_scale = Vector2(0.6,0.6)
+var normal_scale = Vector2(1.0, 1.0)
+var hover_scale = Vector2(1.2, 1.2)
 
 var target_scale = normal_scale
 

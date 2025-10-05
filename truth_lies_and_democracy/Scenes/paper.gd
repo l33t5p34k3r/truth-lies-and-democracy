@@ -18,6 +18,15 @@ extends DragBody2D
 var paper_headline : String = ""
 var paper_content : String = ""
 
+@onready var sprite_2d: Sprite2D = $Content/Sprite2D
+@onready var text_label: Label = $Content/Control/Label
+@onready var text_rich_text_label: RichTextLabel = $Content/Control/RichTextLabel
+@onready var texture_rect: TextureRect = $Content/TextureRect
+@onready var draw_collision_shape_2d: CollisionShape2D = $Content/Area2D/CollisionShape2D
+@onready var stamp_mask: Polygon2D = $Content/StampMask
+@onready var content: Node2D = $Content
+
+
 
 static var currently_dragging_paper: Paper = null
 static var all_papers: Array[Paper] = []
@@ -36,9 +45,6 @@ var is_drawing := false
 var last_draw_position: Vector2
 var pencil_color := Color.BLACK
 var pencil_size := 3.0
-
-@onready var texture_rect: TextureRect
-@onready var sprite = get_node("Sprite2D")
 
 
 # checks if paper has been stampged
@@ -80,7 +86,7 @@ func register_paper():
 func _ready():
 	super._ready()
 	register_paper()
-	paper_size = $Sprite2D.texture.get_size() * $Sprite2D.scale.x
+	paper_size = sprite_2d.texture.get_size() * sprite_2d.scale.x
 	add_news_content()
 	original_z_index = z_index
 	setup_drawing_surface()
@@ -89,7 +95,7 @@ func add_news_content():
 
 	
 	# Headline
-	var headline = $Control/Label
+	var headline = text_label
 	headline.text = paper_headline
 
 	headline.add_theme_font_size_override("font_size", 24)
@@ -98,7 +104,7 @@ func add_news_content():
 	headline.add_theme_stylebox_override("normal", create_headline_style())
 	
 	# Content
-	var content = $Control/RichTextLabel
+	var content = text_rich_text_label
 	content.text = paper_content
 
 	content.add_theme_font_size_override("normal_font_size", 18)
@@ -125,7 +131,7 @@ func _on_area_input_event(viewport, event, shape_idx):
 
 	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT:
 			if event.pressed and is_topmost_paper_at_position(event.global_position):
-				var pos = to_local(event.global_position) - $TextureRect.position
+				var pos = to_local(event.global_position) - texture_rect.position
 				start_drawing(pos)
 			else:
 				stop_drawing()
@@ -134,7 +140,7 @@ func _on_area_input_event(viewport, event, shape_idx):
 			if not Input.is_action_pressed("stamp_down"):
 				is_drawing = false
 			else:
-				var pos = to_local(event.global_position) - $TextureRect.position
+				var pos = to_local(event.global_position) - texture_rect.position
 				draw_to_position(pos)
 			
 func is_topmost_paper_at_position(pos: Vector2) -> bool:
@@ -176,7 +182,8 @@ static func update_all_z_indices():
 
 func _process(delta):
 	
-	sprite.scale = sprite.scale.lerp(target_scale, delta * 3)
+	#sprite.scale = sprite.scale.lerp(target_scale, delta * 3)
+	content.scale = content.scale.lerp(target_scale, delta * 3)
 	
 	if is_being_dragged:
 		rotate_to_zero()
@@ -247,13 +254,12 @@ func _on_overlap_area_area_exited(area: Area2D) -> void:
 	
 func setup_drawing_surface():
 	#texture_rect = TextureRect.new()
-	texture_rect = $TextureRect
 	#add_child(texture_rect)
 	texture_rect.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	
 	#var paper_size = Vector2i(800, 600)
-	var paper_size = $Area2D/CollisionShape2D.shape.get_rect().size
-	drawing_image = Image.create(paper_size.x, paper_size.y, false, Image.FORMAT_RGBA8)
+	var draw_paper_size = draw_collision_shape_2d.shape.get_rect().size
+	drawing_image = Image.create(draw_paper_size.x, draw_paper_size.y, false, Image.FORMAT_RGBA8)
 	#drawing_image.fill(Color.WHITE)
 	
 	drawing_texture = ImageTexture.new()
@@ -320,8 +326,9 @@ func add_stamp_sprite(texture: Texture2D, stamp_position: Vector2):
 	stamp.texture = texture
 	stamp.position = stamp_position
 	stamp.rotation = -rotation
+	stamp.scale = Vector2(1.0 / content.scale.x, 1.0 / content.scale.y)
 
-	$StampMask.add_child(stamp)
+	stamp_mask.add_child(stamp)
 	is_stamped=true
 
 func _on_HoverArea_mouse_entered():
