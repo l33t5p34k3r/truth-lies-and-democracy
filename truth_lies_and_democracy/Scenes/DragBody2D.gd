@@ -8,9 +8,13 @@ var boundary_rect = Rect2(Vector2.ZERO, Vector2.ZERO)
 
 var normal_scale = Vector2(1.0, 1.0)
 var hover_scale = Vector2(1.2, 1.2)
+var original_z_index: int = 0
 
 var target_scale = normal_scale
 
+static var currently_dragging_body: DragBody2D = null
+static var all_dragbodies: Array[DragBody2D] = []
+static var body_stack_order: Array[DragBody2D] = []  # Bottom to top order
 
 # default
 var damp_percentage = 0.90
@@ -18,6 +22,8 @@ var damp_percentage = 0.90
 
 func _ready():
 	boundary_rect = get_viewport().get_visible_rect()
+	register_dragbody()
+	original_z_index = z_index
 
 
 func _physics_process(_delta: float) -> void:
@@ -45,12 +51,15 @@ func _physics_process(_delta: float) -> void:
 
 func start_drag(mouse_pos: Vector2):
 	is_being_dragged = true
+	currently_dragging_body = self
 	drag_offset = global_position - mouse_pos
 	
 	z_index = 100  # High z-index to appear on top
 
 func stop_drag():
 	is_being_dragged = false
+	currently_dragging_body = null
+	bring_to_top()
 
 func apply_boundary_constraints():
 	var min_pos = boundary_rect.position
@@ -86,7 +95,7 @@ func apply_boundary_constraints():
 
 
 func _on_area_input_event(_viewport, event, _shape_idx):
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed and is_topmost_body_at_position(event.global_position):
 		glob_pos = global_position
 		start_drag(event.global_position)
 
@@ -97,3 +106,52 @@ func _on_HoverArea_mouse_entered():
 func _on_HoverArea_mouse_exited():
 	if not is_being_dragged:
 		$Area2D.scale = normal_scale
+
+
+static func update_all_z_indices():
+	# Assign z-indices based on position in stack (0 = bottom, higher = top)
+	for i in range(body_stack_order.size()):
+		var body = body_stack_order[i]
+		if body != currently_dragging_body:  # Don't change z-index while dragging
+			body.z_index = i
+
+func bring_to_top():
+	# Remove from current position and add to end (top)
+	body_stack_order.erase(self)
+	body_stack_order.append(self)
+	update_all_z_indices()
+	
+
+func _exit_tree() -> void:
+	all_dragbodies.erase(self)
+	body_stack_order.erase(self)
+	update_all_z_indices()
+
+func register_dragbody():
+	all_dragbodies.append(self)
+	body_stack_order.append(self)
+	update_all_z_indices()
+	
+func is_topmost_body_at_position(pos: Vector2) -> bool:
+	var bodies_at_pos: Array[DragBody2D] = []
+	
+	for body in all_dragbodies:
+		if body.is_position_inside_body(pos):
+			bodies_at_pos.append(body)
+	
+	if bodies_at_pos.is_empty():
+		return false
+	
+	# Find the body with highest z-index (last in stack order)
+	var topmost_body = bodies_at_pos[0]
+	for body in bodies_at_pos:
+		if body_stack_order.find(body) > body_stack_order.find(topmost_body):
+			topmost_body = body
+	
+	return topmost_body == self
+	
+
+func is_position_inside_body(_pos: Vector2) -> bool:
+	# implement this in the child class!
+	push_error("This function should not be called directly!")
+	return false

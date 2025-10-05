@@ -42,3 +42,10 @@ func pull_object_towards_target(physics_body: RigidBody2D, target_position: Vect
 		pull_force += damping_force
  
 	physics_body.apply_central_force(pull_force)
+
+
+
+# override parent function
+func is_position_inside_body(pos: Vector2) -> bool:
+	var rect = $CollisionShape2D.shape.get_rect()
+	return rect.has_point(pos - global_position)

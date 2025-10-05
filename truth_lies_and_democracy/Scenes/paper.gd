@@ -28,15 +28,11 @@ var paper_content : String = ""
 
 
 
-static var currently_dragging_paper: Paper = null
-static var all_papers: Array[Paper] = []
-static var paper_stack_order: Array[Paper] = []  # Bottom to top order
 
-
+# to make papers slightly drag each other
 var overlapping_papers: Array[Paper] = []
 
 var paper_size: Vector2
-var original_z_index: int = 0
 
 
 var drawing_texture: ImageTexture
@@ -61,34 +57,23 @@ func _physics_process(delta):
 
 func start_drag(mouse_pos: Vector2):
 	super.start_drag(mouse_pos)
-	currently_dragging_paper = self
 	
-	z_index = 100  # High z-index to appear on top
+	
+	#z_index = 100  # High z-index to appear on top
 
 func stop_drag():
 	super.stop_drag()
 
-	currently_dragging_paper = null	
-	bring_to_top()
+	
 
 
-func _exit_tree() -> void:
-	all_papers.erase(self)
-	paper_stack_order.erase(self)
-	update_all_z_indices()
-
-func register_paper():
-	all_papers.append(self)
-	paper_stack_order.append(self)
-	update_all_z_indices()
 
 # something breaks the paper location in this cycle
 func _ready():
 	super._ready()
-	register_paper()
+	
 	paper_size = sprite_2d.texture.get_size() * sprite_2d.scale.x
 	add_news_content()
-	original_z_index = z_index
 	setup_drawing_surface()
 
 func add_news_content():
@@ -104,14 +89,14 @@ func add_news_content():
 	headline.add_theme_stylebox_override("normal", create_headline_style())
 	
 	# Content
-	var content = text_rich_text_label
-	content.text = paper_content
+	var story_content = text_rich_text_label
+	story_content.text = paper_content
 
-	content.add_theme_font_size_override("normal_font_size", 18)
-	content.add_theme_color_override("default_color", Color(0.2, 0.2, 0.2))
-	content.fit_content = true
-	content.bbcode_enabled = false
-	content.scroll_active = false
+	story_content.add_theme_font_size_override("normal_font_size", 18)
+	story_content.add_theme_color_override("default_color", Color(0.2, 0.2, 0.2))
+	story_content.fit_content = true
+	story_content.bbcode_enabled = false
+	story_content.scroll_active = false
 
 
 func create_headline_style():
@@ -125,12 +110,8 @@ func create_headline_style():
 func _on_area_input_event(viewport, event, shape_idx):
 	super._on_area_input_event(viewport, event, shape_idx)
 
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		if event.pressed and currently_dragging_paper == null and is_topmost_paper_at_position(event.global_position):
-			start_drag(event.global_position)
-
-	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT:
-			if event.pressed and is_topmost_paper_at_position(event.global_position):
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT:
+			if event.pressed and is_topmost_body_at_position(event.global_position):
 				var pos = to_local(event.global_position) - texture_rect.position
 				start_drawing(pos)
 			else:
@@ -143,46 +124,14 @@ func _on_area_input_event(viewport, event, shape_idx):
 				var pos = to_local(event.global_position) - texture_rect.position
 				draw_to_position(pos)
 			
-func is_topmost_paper_at_position(pos: Vector2) -> bool:
-	# Check all papers at this position and see if this one is on top
-	var papers_at_pos: Array[Paper] = []
-	
-	for paper in all_papers:
-		if paper.is_position_inside_paper(pos):
-			papers_at_pos.append(paper)
-	
-	if papers_at_pos.is_empty():
-		return false
-	
-	# Find the paper with highest z-index (last in stack order)
-	var topmost_paper = papers_at_pos[0]
-	for paper in papers_at_pos:
-		if paper_stack_order.find(paper) > paper_stack_order.find(topmost_paper):
-			topmost_paper = paper
-	
-	return topmost_paper == self
-			
-func is_position_inside_paper(pos: Vector2) -> bool:
-	var half_size = paper_size * 0.5
-	var paper_rect = Rect2(global_position - half_size, paper_size)
-	return paper_rect.has_point(pos)
-			
-func bring_to_top():
-	# Remove from current position and add to end (top)
-	paper_stack_order.erase(self)
-	paper_stack_order.append(self)
-	update_all_z_indices()
 
-static func update_all_z_indices():
-	# Assign z-indices based on position in stack (0 = bottom, higher = top)
-	for i in range(paper_stack_order.size()):
-		var paper = paper_stack_order[i]
-		if paper != currently_dragging_paper:  # Don't change z-index while dragging
-			paper.z_index = i
+# override parent function
+func is_position_inside_body(pos: Vector2) -> bool:
+	var rect = draw_collision_shape_2d.shape.get_rect()
+	return rect.has_point(pos - global_position)
 
 func _process(delta):
-	
-	#sprite.scale = sprite.scale.lerp(target_scale, delta * 3)
+	# TODO: move this to DragBody2D as well
 	content.scale = content.scale.lerp(target_scale, delta * 3)
 	
 	if is_being_dragged:
@@ -331,10 +280,14 @@ func add_stamp_sprite(texture: Texture2D, stamp_position: Vector2):
 	stamp_mask.add_child(stamp)
 	is_stamped=true
 
+# TODO: we need to rework mouse entry/exit events a bit, to account for overlapping papers
+# i.e. paper is not topmost when mouse enters, but becomes topmost when mouse exits another paper
+# also: paper is topmost, but is no longer topmost when mouse enters another overlapping paper
 func _on_HoverArea_mouse_entered():
-	if not is_being_dragged:
+	if not is_being_dragged and is_topmost_body_at_position(get_global_mouse_position()):
 		target_scale = hover_scale
 		
+# TODO: this will not be called if another paper is now highlighted -> build into DragBody2D to make sure only one paper is highlighted at a time
 func _on_HoverArea_mouse_exited():
 	if not is_being_dragged:
 		target_scale = normal_scale

@@ -2,7 +2,6 @@ class_name Stamp
 extends Node2D
 
 var dragging = false
-signal stamping
 
 func _process(_delta: float) -> void:
 	if dragging:
