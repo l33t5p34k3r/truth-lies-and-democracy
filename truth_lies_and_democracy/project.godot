@@ -19,11 +19,16 @@ config/icon="res://scenes/archive/icon.svg"
 
 DebugDraw="*res://scenes/archive/DebugDraw.gd"
 Manager="*res://Scenes/Manager.gd"
+SignalHandler="*res://Scenes/SignalHandler.gd"
 
 [display]
 
 window/size/viewport_width=1280
 window/size/viewport_height=720
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/json_editor/plugin.cfg")
 
 [input]
 

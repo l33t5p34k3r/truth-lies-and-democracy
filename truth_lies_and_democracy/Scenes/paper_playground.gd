@@ -65,4 +65,6 @@ func on_paper_stamped() -> void:
 	confirm_button.visible = true
 
 func _on_confirm_button_pressed() -> void:
+	# TODO: check if we are allowed to call deferred when this current object will be deleted this tick?
+	SignalHandler.scene_changed.emit.call_deferred()
 	get_tree().change_scene_to_file("res://Scenes/report/ProgressReview.tscn")
