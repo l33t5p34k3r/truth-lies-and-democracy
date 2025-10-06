@@ -45,11 +45,11 @@ enum STATS {
 }
 # TODO: substats (some stats are per party)
 var stat_display_name :Dictionary[STATS, String] = {
-	STATS.CURRENT_MONEY: "current_money",
-	STATS.TOTAL_MONEY_EARNED: "total_money_earned",
-	STATS.EXPENSES_PER_ROUND: "expenses_per_round",
-	STATS.FUNDING_FROM_PARTIES: "funding_from_parties",
-	STATS.FAKE_NEWS_PUBLISHED: "fake_news_published"
+	STATS.CURRENT_MONEY: "Current Moneys",
+	STATS.TOTAL_MONEY_EARNED: "Total amount of moneys earned",
+	STATS.EXPENSES_PER_ROUND: "Money leaving each round",
+	STATS.FUNDING_FROM_PARTIES: "Moneys provided by parties",
+	STATS.FAKE_NEWS_PUBLISHED: "Fake news you have personally published"
 }
 
 # TODO: stat description (e.g. as a popup-tooltip)
