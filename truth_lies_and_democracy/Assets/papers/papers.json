@@ -1,5 +1,7 @@
-{
-  "1": [
+[
+  {
+	"id": "1",
+    "stories": [
 	{
 	  "news_headline": "City Launches Rooftop Garden Initiative to Combat Urban Heat",
 	  "news_content": "In response to rising summer temperatures and poor air quality, the city council has approved funding for rooftop gardens on public buildings. Officials say the initiative will reduce heat islands, improve biodiversity, and provide fresh produce to local communities.",
@@ -15,8 +17,11 @@
 	  "news_content": "A fringe research group claims that certain tree species emit signals that could be interpreted as alien communication. While mainstream scientists dismiss the theory, the group insists their data shows 'non-terrestrial patterns' in tree root networks.",
 	  "news_fake": true
 	}
-  ],
-  "2": [
+	]
+  },
+  {
+	"id": "2",
+    "stories": [
 	{
 	  "news_headline": "City Implements Noise Curfew to Improve Mental Health",
 	  "news_content": "In response to rising complaints about nighttime disturbances, the city council has passed a noise curfew ordinance. Officials say reduced noise pollution will improve sleep quality and mental health, especially in densely populated areas.",
@@ -31,9 +36,11 @@
 	  "news_headline": "Schools Introduce Climate Literacy into Curriculum",
 	  "news_content": "Public schools across the region are adding climate literacy modules to science classes. Educators hope this will empower students to understand environmental challenges and participate in sustainable solutions.",
 	  "news_fake": false
-	}
-  ],
-  "3": [
+	}]
+  },
+  {
+	"id": "3",
+    "stories":[
 	{
 	  "news_headline": "Rainclouds Sue City for Emotional Neglect",
 	  "news_content": "In a bizarre legal filing, a group of rainclouds claims emotional distress due to being blamed for bad weather. The clouds are seeking recognition for their role in maintaining ecosystems and replenishing water supplies.",
@@ -49,5 +56,5 @@
 	  "news_content": "Tech enthusiasts claim that placing banana peels near routers improves signal strength. While no scientific evidence supports the claim, online forums are flooded with testimonials and DIY peel placement guides.",
 	  "news_fake": true
 	}
-  ]
-}
+  ]}
+]
