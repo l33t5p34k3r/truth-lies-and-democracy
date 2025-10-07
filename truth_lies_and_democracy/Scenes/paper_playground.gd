@@ -32,44 +32,44 @@ func _ready():
 	load_papers()
 
 
-func spawn_papers(papers : Dictionary):
+func spawn_papers(papers : Array):
 	var container = Node2D.new()
 	container.name = "PaperContainer"
 	add_child(container)
 	
-	for paper_set in papers.keys():
-		var paper_data = papers[paper_set]
-		if paper_set == str(Manager.current_round):
-			for story in paper_data:
+	for paper_set:Dictionary in papers:
+		if paper_set["id"] != str(Manager.current_round):
+			continue
 			
-				var paper :Paper= paper_scene.instantiate()
-				
-				var paper_headline : String = story.get("news_headline", "")
-				var paper_content : String = story.get("news_content", "")
-				#TODO add defaults for production
-				var paper_is_fake : bool = story.get("news_fake")
-				
-				paper.paper_headline = paper_headline
-				paper.paper_content = paper_content
-				paper.paper_is_fake = paper_is_fake
-				
-				paper.paper_color = Color(
-					randf_range(0.9, 1.0),
-					randf_range(0.9, 1.0),
-					randf_range(0.8, 1.0),
-					1.0
-				)
-				
-				paper.position = Vector2(
-					randf_range(200, 1080),
-					randf_range(200, 520)
-				)
-				
-				paper.rotation = randf_range(-0.3, 0.3)
-				
-				container.add_child(paper)
-				paper_array.append(paper)
-				paper.got_stamped.connect(on_paper_stamped)
+		for story:Dictionary in paper_set["stories"]:
+		
+			var paper :Paper= paper_scene.instantiate()
+			
+			var paper_headline : String = story["news_headline"]
+			var paper_content : String = story["news_content"]
+			var paper_is_fake : bool = story["news_fake"]
+			
+			paper.paper_headline = paper_headline
+			paper.paper_content = paper_content
+			paper.paper_is_fake = paper_is_fake
+			
+			paper.paper_color = Color(
+				randf_range(0.9, 1.0),
+				randf_range(0.9, 1.0),
+				randf_range(0.8, 1.0),
+				1.0
+			)
+			
+			paper.position = Vector2(
+				randf_range(200, 1080),
+				randf_range(200, 520)
+			)
+			
+			paper.rotation = randf_range(-0.3, 0.3)
+			
+			container.add_child(paper)
+			paper_array.append(paper)
+			paper.got_stamped.connect(on_paper_stamped)
 
 
 func on_paper_stamped() -> void:

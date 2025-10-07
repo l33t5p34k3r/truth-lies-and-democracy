@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://1sxa4t2y7xkv"]
 
 [ext_resource type="Script" uid="uid://bq64warrfgu6a" path="res://Scenes/paper.gd" id="1_c7gsp"]
-[ext_resource type="Texture2D" uid="uid://dr4y7sl7qxejj" path="res://Assets/textures/1-04851-00_BL_Notebook_Paper_Punch_G.jpg" id="2_322pb"]
+[ext_resource type="Texture2D" uid="uid://c5hyeon2lcw0a" path="res://Assets/textures/1-04851-00_BL_Notebook_Paper_Punch_G.jpg" id="2_322pb"]
 [ext_resource type="Script" uid="uid://bibcynwo6jjjq" path="res://Scenes/overlap_area.gd" id="3_322pb"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_c7gsp"]
@@ -34,6 +34,18 @@ scale = Vector2(0.53, 0.53)
 texture = ExtResource("2_322pb")
 region_enabled = true
 region_rect = Rect2(27.8996, 17.2028, 547.412, 685.594)
+
+[node name="SignBox" type="Polygon2D" parent="Content"]
+position = Vector2(1, 122)
+polygon = PackedVector2Array(-1, 0, -1, 49, 135, 49, 135, 0)
+
+[node name="SignLabel" type="Label" parent="Content"]
+offset_left = 2.0
+offset_top = 148.0
+offset_right = 74.0
+offset_bottom = 171.0
+theme_override_colors/font_color = Color(0.29586652, 0.2958665, 0.2958665, 1)
+text = "Sign here"
 
 [node name="Area2D" type="Area2D" parent="Content"]
 
