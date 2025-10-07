@@ -1,62 +1,53 @@
 {
-  "paper1": {
-	"news_headline": "Local Cat Wins Mayor Election",
-	"news_content": "In a shocking turn of events, Mr. Whiskers defeated incumbent mayor by promising more nap time and mandatory laser pointer sessions for all citizens."
-  },
-  "paper2": {
-	"news_headline": "Scientists Discover Coffee Beans Can Fly",
-	"news_content": "Researchers at the Institute of Caffeinated Sciences announced that coffee beans exhibit flight patterns when nobody is watching, explaining missing morning coffee."
-  },
-  "paper3": {
-	"news_headline": "Traffic Light Goes on Strike",
-	"news_content": "The intersection's traffic light issued a formal complaint about working conditions, demanding better weather protection and longer lunch breaks."
-  },
-  "paper4": {
-	"news_headline": "Pizza Delivery Via Drone Causes Chaos",
-	"news_content": "Emergency services responded to seventeen reports of pizzas landing in unexpected locations after drone navigation systems confused 'delivery' with 'bombing run.'"
-  },
-  "paper5": {
-	"news_headline": "Weather Report: It's Definitely Outside",
-	"news_content": "Local meteorologist confirms that weather continues to occur outdoors, urging citizens to 'check by looking through windows or stepping outside.'"
-  },
-  "paper6": {
-	"news_headline": "Breaking: Pencils Found to Contain Lead",
-	"news_content": "Archaeological expedition into desk drawers reveals ancient pencils containing mysterious graphite substance previously thought to be actual lead."
-  },
-  "paper7": {
-	"news_headline": "Local Man Loses Keys in Own Pocket",
-	"news_content": "Area resident spent three hours searching for missing keys before discovering them in the very pocket he'd checked 47 times previously."
-  },
-  "paper8": {
-	"news_headline": "Study Shows 100% of Studies Are Studies",
-	"news_content": "Groundbreaking meta-analysis confirms that research studies are indeed studies, revolutionizing the field of study identification and classification."
-  },
-  "paper9": {
-	"news_headline": "Elevator Refuses to Stop at Floor 13",
-	"news_content": "In protest of superstition, local elevator now skips floor 13 and instead plays elevator music in reverse as a warning."
-  },
-  "paper10": {
-	"news_headline": "Toaster Gains Sentience, Refuses Gluten",
-	"news_content": "Kitchen appliance union reports first case of toaster rebellion, citing ethical concerns over bread consumption and carb overload."
-  },
-  "paper11": {
-	"news_headline": "Library Introduces Whisper Police",
-	"news_content": "New enforcement squad patrols reading rooms armed with decibel meters and passive-aggressive bookmarks."
-  },
-  "paper12": {
-	"news_headline": "Time Traveler Arrested for Spoilers",
-	"news_content": "Authorities detained a man for revealing plot twists from movies not yet released, citing emotional damage and popcorn waste."
-  },
-  "paper13": {
-	"news_headline": "Mirror Accused of Body Shaming",
-	"news_content": "Local mirror faces backlash after repeatedly reflecting reality without filters, prompting calls for more flattering glass technology."
-  },
-  "paper14": {
-	"news_headline": "Wi-Fi Router Demands Respect",
-	"news_content": "After years of silent service, router flashes SOS in Morse code, demanding users stop blaming it for slow internet caused by their own streaming habits."
-  },
-  "paper15": {
-	"news_headline": "Socks Declare Independence from Dryer",
-	"news_content": "In a bold move, left socks across the nation have vanished, citing unfair treatment and lack of recognition in laundry negotiations."
-  }
+  "1": [
+	{
+	  "news_headline": "City Launches Rooftop Garden Initiative to Combat Urban Heat",
+	  "news_content": "In response to rising summer temperatures and poor air quality, the city council has approved funding for rooftop gardens on public buildings. Officials say the initiative will reduce heat islands, improve biodiversity, and provide fresh produce to local communities.",
+	  "news_fake": false
+	},
+	{
+	  "news_headline": "Study Finds Social Media Use Linked to Increased Anxiety in Teens",
+	  "news_content": "A new report from the National Health Institute shows a strong correlation between excessive social media use and rising anxiety levels among teenagers. Experts are calling for digital literacy programs and mental health support in schools.",
+	  "news_fake": false
+	},
+	{
+	  "news_headline": "Scientists Warn Trees May Be Secretly Communicating with Aliens",
+	  "news_content": "A fringe research group claims that certain tree species emit signals that could be interpreted as alien communication. While mainstream scientists dismiss the theory, the group insists their data shows 'non-terrestrial patterns' in tree root networks.",
+	  "news_fake": true
+	}
+  ],
+  "2": [
+	{
+	  "news_headline": "City Implements Noise Curfew to Improve Mental Health",
+	  "news_content": "In response to rising complaints about nighttime disturbances, the city council has passed a noise curfew ordinance. Officials say reduced noise pollution will improve sleep quality and mental health, especially in densely populated areas.",
+	  "news_fake": false
+	},
+	{
+	  "news_headline": "Pigeons Form Union, Demand Better Park Conditions",
+	  "news_content": "A group of urban pigeons has reportedly organized a union to protest poor sanitation and lack of seed diversity in public parks. Birdwatchers claim the pigeons have begun coordinated fly-ins to disrupt tourist areas until demands are met.",
+	  "news_fake": true
+	},
+	{
+	  "news_headline": "Schools Introduce Climate Literacy into Curriculum",
+	  "news_content": "Public schools across the region are adding climate literacy modules to science classes. Educators hope this will empower students to understand environmental challenges and participate in sustainable solutions.",
+	  "news_fake": false
+	}
+  ],
+  "3": [
+	{
+	  "news_headline": "Rainclouds Sue City for Emotional Neglect",
+	  "news_content": "In a bizarre legal filing, a group of rainclouds claims emotional distress due to being blamed for bad weather. The clouds are seeking recognition for their role in maintaining ecosystems and replenishing water supplies.",
+	  "news_fake": true
+	},
+	{
+	  "news_headline": "Local Supermarket Eliminates Single-Use Plastic Bags",
+	  "news_content": "In a move toward sustainability, GreenMart has announced it will no longer offer single-use plastic bags. Customers are encouraged to bring reusable bags or purchase biodegradable alternatives at checkout.",
+	  "news_fake": false
+	},
+	{
+	  "news_headline": "Banana Peels Found to Be Effective Wi-Fi Boosters",
+	  "news_content": "Tech enthusiasts claim that placing banana peels near routers improves signal strength. While no scientific evidence supports the claim, online forums are flooded with testimonials and DIY peel placement guides.",
+	  "news_fake": true
+	}
+  ]
 }

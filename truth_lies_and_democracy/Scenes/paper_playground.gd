@@ -33,32 +33,39 @@ func spawn_papers(papers : Dictionary):
 	container.name = "PaperContainer"
 	add_child(container)
 	
-	for element in papers.keys():
-		var paper :Paper= paper_scene.instantiate()
-		
-		var paper_headline : String = papers[element].get("news_headline", "")
-		var paper_content : String = papers[element].get("news_content", "")
-		
-		paper.paper_headline = paper_headline
-		paper.paper_content = paper_content
-		
-		paper.paper_color = Color(
-			randf_range(0.9, 1.0),
-			randf_range(0.9, 1.0),
-			randf_range(0.8, 1.0),
-			1.0
-		)
-		
-		paper.position = Vector2(
-			randf_range(200, 1080),
-			randf_range(200, 520)
-		)
-		
-		paper.rotation = randf_range(-0.3, 0.3)
-		
-		container.add_child(paper)
-		paper_array.append(paper)
-		paper.got_stamped.connect(on_paper_stamped)
+	for paper_set in papers.keys():
+		var paper_data = papers[paper_set]
+		if paper_set == str(Manager.current_round):
+			for story in paper_data:
+			
+				var paper :Paper= paper_scene.instantiate()
+				
+				var paper_headline : String = story.get("news_headline", "")
+				var paper_content : String = story.get("news_content", "")
+				#TODO add defaults for production
+				var paper_is_fake : bool = story.get("news_fake")
+				
+				paper.paper_headline = paper_headline
+				paper.paper_content = paper_content
+				paper.paper_is_fake = paper_is_fake
+				
+				paper.paper_color = Color(
+					randf_range(0.9, 1.0),
+					randf_range(0.9, 1.0),
+					randf_range(0.8, 1.0),
+					1.0
+				)
+				
+				paper.position = Vector2(
+					randf_range(200, 1080),
+					randf_range(200, 520)
+				)
+				
+				paper.rotation = randf_range(-0.3, 0.3)
+				
+				container.add_child(paper)
+				paper_array.append(paper)
+				paper.got_stamped.connect(on_paper_stamped)
 
 
 func on_paper_stamped() -> void:

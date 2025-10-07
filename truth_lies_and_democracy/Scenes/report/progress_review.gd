@@ -19,5 +19,9 @@ func _ready():
 
 
 func _on_continue_pressed() -> void:
+	Manager.current_round += 1
+	
+	get_tree().change_scene_to_file("res://Scenes/paper_playground.tscn")
+	
 	print("TODO: switch to next scene")
 	pass # Replace with function body.

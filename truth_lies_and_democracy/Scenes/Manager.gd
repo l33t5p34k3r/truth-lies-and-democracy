@@ -14,6 +14,8 @@ const PARTIES:Array[String] = [
 
 var currently_selected_paper:int = -1
 
+var current_round = 1
+
 var money:int = 1000 :
 	get:
 		return money

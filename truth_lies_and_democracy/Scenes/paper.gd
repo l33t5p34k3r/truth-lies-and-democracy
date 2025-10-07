@@ -19,6 +19,7 @@ signal got_stamped
 
 var paper_headline : String = ""
 var paper_content : String = ""
+var paper_is_fake : bool = false
 
 @onready var sprite_2d: Sprite2D = $Content/Sprite2D
 @onready var text_label: Label = $Content/Control/Label
@@ -285,8 +286,7 @@ func add_stamp_sprite(texture: Texture2D, stamp_position: Vector2):
 	# account for size scaling on hover
 	stamp.scale = Vector2(1.0 / content.scale.x, 1.0 / content.scale.y)
 
-	# TODO: currently, everything is fake news
-	if not is_stamped:
+	if not is_stamped and self.paper_is_fake:
 		Manager.fake_news_published += 1
 
 	stamp_mask.add_child(stamp)
