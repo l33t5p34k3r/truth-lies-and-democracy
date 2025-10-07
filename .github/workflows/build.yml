@@ -30,7 +30,7 @@ jobs:
           --export-release "Windows" ${{ github.workspace }}/build/game.exe
 
       - name: Upload Windows build
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: windows-build
           path: ${{ github.workspace }}/build/game.exe
