@@ -31,8 +31,12 @@ var paper_is_fake : bool = false
 
 @onready var infobox := preload("res://Scenes/infobox_composition.tscn").instantiate()
 
+var drawing_enabled:bool = false
+var is_signed:bool = false
+var points_drawn:float = 0.0
+var points_drawn_threshold:float = 20.0
 
-	
+
 
 # to make papers slightly drag each other
 var overlapping_papers: Array[Paper] = []
@@ -118,7 +122,7 @@ func create_headline_style():
 func _on_area_input_event(viewport, event, shape_idx):
 	super._on_area_input_event(viewport, event, shape_idx)
 
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT:
+	if drawing_enabled and event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT:
 			if event.pressed and is_topmost_body_at_position(event.global_position):
 				var pos = to_local(event.global_position) - texture_rect.position
 				start_drawing(pos)
@@ -233,6 +237,9 @@ func stop_drawing():
 
 func draw_to_position(target_position: Vector2):
 	draw_line_between_points(last_draw_position, target_position)
+	points_drawn += (target_position - last_draw_position).length()
+	if points_drawn > points_drawn_threshold:
+		is_signed = true
 	last_draw_position = target_position
 
 func draw_point(target_position: Vector2):
@@ -276,6 +283,9 @@ func clear_drawing():
 	drawing_image.fill(Color.WHITE)
 	update_texture()
 
+func enable_drawing():
+	drawing_enabled = true
+	stop_drawing()
 
 # does all the stamping
 func add_stamp_sprite(texture: Texture2D, stamp_position: Vector2):

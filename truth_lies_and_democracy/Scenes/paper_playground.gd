@@ -6,10 +6,13 @@ extends Node2D
 @onready var paper_scene = preload("res://Scenes/paper.tscn")
 
 @onready var confirm_button: Button = $CanvasLayer/Control/Button
+@onready var first_confirm_button: Button = $CanvasLayer/Control/Button2
 
 
 var paper_array: Array[Paper] = []
 var approved_paper: Array[Paper] = []
+
+var papers_need_to_be_signed: Array[Paper] = []
 
 var paper_container = Node2D.new()
 
@@ -25,6 +28,7 @@ func load_papers():
 
 
 func _ready():
+	%SignPrompt.visible = false
 	load_papers()
 
 
@@ -69,9 +73,40 @@ func spawn_papers(papers : Dictionary):
 
 
 func on_paper_stamped() -> void:
-	confirm_button.visible = true
+	if not first_confirm_button.visible and not confirm_button.visible:
+		first_confirm_button.visible = true
+
+#
 
 func _on_confirm_button_pressed() -> void:
-	# TODO: check if we are allowed to call deferred when this current object will be deleted this tick?
 	SignalHandler.scene_changed.emit.call_deferred()
 	get_tree().change_scene_to_file("res://Scenes/report/ProgressReview.tscn")
+
+
+func _on_first_confirm_button_pressed() -> void:
+	%Stamp.is_enabled = false
+	%Stamp.visible = false
+	papers_need_to_be_signed.clear()
+	for paper in paper_array:
+		if paper.is_stamped:
+			paper.enable_drawing()
+			papers_need_to_be_signed.append(paper)
+	
+	%SignPrompt.visible = true
+	%DocuSignTimer.start()
+	
+	first_confirm_button.visible = false	
+
+
+
+
+# slight delay on check
+func _on_docu_sign_timer_timeout() -> void:
+	var all_relevant_papers_signed := true
+	for paper in papers_need_to_be_signed:
+		if not paper.is_signed:
+			all_relevant_papers_signed = false
+	
+	if all_relevant_papers_signed:
+		confirm_button.visible = true
+		%DocuSignTimer.stop()
