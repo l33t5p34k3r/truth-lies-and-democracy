@@ -1,7 +1,7 @@
 extends Control
 
 const SINGLE_STAT = preload("uid://b8q34f51dcu65")
-@onready var stat_container: VBoxContainer = $MarginContainer/ScrollContainer/VBoxContainer/StatContainer
+@onready var stat_container: VBoxContainer = %StatContainer
 
 
 func _ready():

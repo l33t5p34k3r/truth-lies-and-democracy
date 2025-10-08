@@ -30,6 +30,10 @@ window/size/viewport_height=720
 
 enabled=PackedStringArray()
 
+[gui]
+
+theme/custom="uid://bqh1uqu1vqqoh"
+
 [input]
 
 stamp_down={

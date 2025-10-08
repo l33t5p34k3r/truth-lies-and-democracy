@@ -43,7 +43,7 @@ var partisan_funding:Dictionary[PARTY, int] = {
 }
 
 enum STATS {
-	CURRENT_MONEY, TOTAL_MONEY_EARNED, EXPENSES_PER_ROUND, FUNDING_FROM_PARTIES, FAKE_NEWS_PUBLISHED
+	CURRENT_MONEY, TOTAL_MONEY_EARNED, EXPENSES_PER_ROUND, FUNDING_FROM_PARTIES, FAKE_NEWS_PUBLISHED, USELESS_STATS_TRACKED
 }
 # TODO: substats (some stats are per party)
 var stat_display_name :Dictionary[STATS, String] = {
@@ -51,7 +51,8 @@ var stat_display_name :Dictionary[STATS, String] = {
 	STATS.TOTAL_MONEY_EARNED: "Total amount of moneys earned",
 	STATS.EXPENSES_PER_ROUND: "Money leaving each round",
 	STATS.FUNDING_FROM_PARTIES: "Moneys provided by parties",
-	STATS.FAKE_NEWS_PUBLISHED: "Fake news you have personally published"
+	STATS.FAKE_NEWS_PUBLISHED: "Fake news you have personally published",
+	STATS.USELESS_STATS_TRACKED: "The number of stats we have tracked for no reason."
 }
 
 # TODO: stat description (e.g. as a popup-tooltip)
@@ -69,6 +70,7 @@ func get_stat_values_pretty() -> Dictionary[STATS, String]:
 	current_stats[STATS.EXPENSES_PER_ROUND] = str(round_expenses())
 	current_stats[STATS.FUNDING_FROM_PARTIES] = str(funding_from_parties())
 	current_stats[STATS.FAKE_NEWS_PUBLISHED] = str(fake_news_published)
+	current_stats[STATS.USELESS_STATS_TRACKED] = str(STATS.size())
 
 	for key in STATS.values():
 		if not key in current_stats:

@@ -5,8 +5,8 @@ extends Node2D
 
 @onready var paper_scene = preload("res://Scenes/paper.tscn")
 
-@onready var confirm_button: Button = $CanvasLayer/Control/Button
-@onready var first_confirm_button: Button = $CanvasLayer/Control/Button2
+@onready var confirm_button: Button = $CanvasLayer/Control/confirm2Button
+@onready var first_confirm_button: Button = $CanvasLayer/Control/confirm1Button
 
 
 var paper_array: Array[Paper] = []
@@ -29,6 +29,8 @@ func load_papers():
 
 func _ready():
 	%SignPrompt.visible = false
+	confirm_button.visible = false
+	first_confirm_button.visible = false
 	load_papers()
 
 

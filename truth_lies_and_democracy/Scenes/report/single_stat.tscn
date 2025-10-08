@@ -1,8 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://b8q34f51dcu65"]
+[gd_scene load_steps=3 format=3 uid="uid://b8q34f51dcu65"]
 
 [ext_resource type="Script" uid="uid://b33acf7h5e6bd" path="res://Scenes/report/single_stat.gd" id="1_5rd77"]
+[ext_resource type="Theme" uid="uid://bqh1uqu1vqqoh" path="res://Assets/Themes/default.tres" id="1_befwq"]
 
 [node name="SingleStatContainer" type="PanelContainer"]
+theme = ExtResource("1_befwq")
 script = ExtResource("1_5rd77")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]

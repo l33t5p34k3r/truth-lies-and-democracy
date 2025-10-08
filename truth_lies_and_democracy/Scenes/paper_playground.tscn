@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://33frnk6f5jem"]
+[gd_scene load_steps=7 format=3 uid="uid://33frnk6f5jem"]
 
 [ext_resource type="Script" uid="uid://bo2tkdvc0iknc" path="res://Scenes/paper_playground.gd" id="1_onxtm"]
 [ext_resource type="Texture2D" uid="uid://c5hyeon2lcw0a" path="res://Assets/textures/1-04851-00_BL_Notebook_Paper_Punch_G.jpg" id="2_vqhyn"]
 [ext_resource type="PackedScene" uid="uid://g70f6unffr4n" path="res://Scenes/tapeplayer.tscn" id="4_ks51s"]
 [ext_resource type="PackedScene" uid="uid://dcevhfveknkjq" path="res://Scenes/stamp.tscn" id="5_jpj0y"]
 [ext_resource type="PackedScene" uid="uid://m40a1i47l0c8" path="res://Scenes/tape.tscn" id="5_w7qgv"]
+[ext_resource type="Theme" uid="uid://bqh1uqu1vqqoh" path="res://Assets/Themes/default.tres" id="6_qspym"]
 
 [node name="PaperPlayground" type="Node2D"]
 script = ExtResource("1_onxtm")
@@ -20,6 +21,7 @@ visible = false
 [node name="Label" type="Label" parent="."]
 offset_right = 40.0
 offset_bottom = 23.0
+theme = ExtResource("6_qspym")
 text = "Right click to draw on paper"
 
 [node name="Stamp" parent="." instance=ExtResource("5_jpj0y")]
@@ -44,33 +46,29 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 mouse_filter = 1
+theme = ExtResource("6_qspym")
 
-[node name="Button" type="Button" parent="CanvasLayer/Control"]
-visible = false
+[node name="confirm2Button" type="Button" parent="CanvasLayer/Control"]
 layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
+anchors_preset = 2
 anchor_top = 1.0
-anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -127.0
-offset_top = -31.0
-grow_horizontal = 0
+offset_top = -44.0
+offset_right = 188.0
 grow_vertical = 0
+theme_type_variation = &"LargeButton"
 text = "Confirm Choice!"
 
-[node name="Button2" type="Button" parent="CanvasLayer/Control"]
-visible = false
+[node name="confirm1Button" type="Button" parent="CanvasLayer/Control"]
 layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
+anchors_preset = 2
 anchor_top = 1.0
-anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -127.0
-offset_top = -31.0
-grow_horizontal = 0
+offset_top = -44.0
+offset_right = 195.0
 grow_vertical = 0
+theme = ExtResource("6_qspym")
+theme_type_variation = &"LargeButton"
 text = "Confirm Choice?"
 
 [node name="SignPrompt" type="Label" parent="CanvasLayer/Control"]
@@ -80,14 +78,12 @@ offset_left = -1.0
 offset_top = 52.0
 offset_right = 241.0
 offset_bottom = 75.0
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_outline_size = 4
-theme_override_font_sizes/font_size = 22
+theme_type_variation = &"LargeLabel"
 text = "Please sign the stamped paper!"
 
 [node name="DocuSignTimer" type="Timer" parent="."]
 unique_name_in_owner = true
 
-[connection signal="pressed" from="CanvasLayer/Control/Button" to="." method="_on_confirm_button_pressed"]
-[connection signal="pressed" from="CanvasLayer/Control/Button2" to="." method="_on_first_confirm_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/Control/confirm2Button" to="." method="_on_confirm_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/Control/confirm1Button" to="." method="_on_first_confirm_button_pressed"]
 [connection signal="timeout" from="DocuSignTimer" to="." method="_on_docu_sign_timer_timeout"]

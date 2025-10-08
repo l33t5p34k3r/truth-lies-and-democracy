@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://dr638i8p0fsnt"]
+[gd_scene load_steps=3 format=3 uid="uid://dr638i8p0fsnt"]
 
 [ext_resource type="Script" uid="uid://cep827lxdiu3n" path="res://Scenes/infobox_component.gd" id="1_1rnyl"]
+[ext_resource type="Theme" uid="uid://bqh1uqu1vqqoh" path="res://Assets/Themes/default.tres" id="2_yq5c6"]
 
 [node name="InfoboxComponent" type="CanvasLayer"]
 script = ExtResource("1_1rnyl")
@@ -16,6 +17,7 @@ offset_left = -200.0
 offset_top = -111.0
 grow_horizontal = 0
 grow_vertical = 0
+theme = ExtResource("2_yq5c6")
 
 [node name="MarginContainer" type="MarginContainer" parent="Infobox"]
 layout_mode = 2
