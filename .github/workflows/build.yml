@@ -29,6 +29,10 @@ jobs:
           --path ${{ github.workspace}}/truth_lies_and_democracy \
           --export-release "Windows" ${{ github.workspace }}/build/game.exe
 
+      - name: Embed .pck into .exe
+        run: |
+          cat ${{ github.workspace }}/build/game.pck >> ${{ github.workspace }}/build/game.exe
+
       - name: Upload Windows build
         uses: actions/upload-artifact@v4
         with:
