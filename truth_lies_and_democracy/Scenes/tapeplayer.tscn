@@ -1,36 +1,52 @@
-[gd_scene load_steps=5 format=3 uid="uid://g70f6unffr4n"]
+[gd_scene load_steps=7 format=3 uid="uid://g70f6unffr4n"]
 
 [ext_resource type="Script" uid="uid://derothqy7m7aa" path="res://Scenes/tapeplayer.gd" id="1_g2els"]
 [ext_resource type="Texture2D" uid="uid://d0kxojxksqe7v" path="res://Assets/textures/play.png" id="2_g2els"]
+[ext_resource type="PackedScene" uid="uid://cnroehowses8g" path="res://Scenes/components/drag_component.tscn" id="3_6syxf"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_dqkch"]
-size = Vector2(564, 339)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3vphn"]
+size = Vector2(225, 135)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_qhqgy"]
 radius = 345.009
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dqkch"]
+size = Vector2(564, 339)
 
 [node name="Player" type="RigidBody2D"]
 input_pickable = true
 gravity_scale = 0.0
 script = ExtResource("1_g2els")
 
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(0.5, -0.5)
+shape = SubResource("RectangleShape2D_3vphn")
+
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(0.4, 0.4)
 texture = ExtResource("2_g2els")
 
+[node name="InputArea2D" type="Area2D" parent="."]
+visible = false
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InputArea2D"]
+scale = Vector2(0.4, 0.4)
+shape = SubResource("CircleShape2D_qhqgy")
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2(0, -0.5)
 scale = Vector2(0.4, 0.4)
 shape = SubResource("RectangleShape2D_dqkch")
 
-[node name="Area2D" type="Area2D" parent="."]
-collision_layer = 0
-collision_mask = 2
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-scale = Vector2(0.4, 0.4)
-shape = SubResource("CircleShape2D_qhqgy")
+[node name="DragComponent" parent="." node_paths=PackedStringArray("target_node", "click_target_node") instance=ExtResource("3_6syxf")]
+target_node = NodePath("..")
+click_target_node = NodePath("../Area2D")
 
 [connection signal="input_event" from="." to="." method="_on_area_input_event"]
-[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
-[connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]
+[connection signal="body_entered" from="InputArea2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_exited" from="InputArea2D" to="." method="_on_area_2d_body_exited"]

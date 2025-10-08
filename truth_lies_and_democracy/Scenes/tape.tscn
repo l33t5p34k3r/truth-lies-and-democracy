@@ -1,11 +1,15 @@
-[gd_scene load_steps=5 format=3 uid="uid://m40a1i47l0c8"]
+[gd_scene load_steps=7 format=3 uid="uid://m40a1i47l0c8"]
 
 [ext_resource type="Script" uid="uid://xhqxnc5mnr50" path="res://Scenes/tape.gd" id="1_cgxy3"]
 [ext_resource type="Texture2D" uid="uid://8nlwcuwrbiey" path="res://Assets/textures/tape.png" id="1_xo5f3"]
 [ext_resource type="AudioStream" uid="uid://duk1tv1m3nb2o" path="res://Assets/sounds/celebration.mp3" id="3_q3rsh"]
+[ext_resource type="PackedScene" uid="uid://cnroehowses8g" path="res://Scenes/components/drag_component.tscn" id="4_eqa7r"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_q3rsh"]
-size = Vector2(564, 338)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_o2wq0"]
+size = Vector2(170, 102)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_eqa7r"]
+size = Vector2(170, 102)
 
 [node name="Tape" type="RigidBody2D"]
 collision_layer = 2
@@ -14,15 +18,21 @@ input_pickable = true
 gravity_scale = 0.0
 script = ExtResource("1_cgxy3")
 
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("RectangleShape2D_o2wq0")
+
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(0.3, 0.3)
 texture = ExtResource("1_xo5f3")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-scale = Vector2(0.3, 0.3)
-shape = SubResource("RectangleShape2D_q3rsh")
+shape = SubResource("RectangleShape2D_eqa7r")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_q3rsh")
 
-[connection signal="input_event" from="." to="." method="_on_area_input_event"]
+[node name="DragComponent" parent="." node_paths=PackedStringArray("target_node", "click_target_node") instance=ExtResource("4_eqa7r")]
+target_node = NodePath("..")
+click_target_node = NodePath("../Area2D")

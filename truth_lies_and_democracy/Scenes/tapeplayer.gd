@@ -1,5 +1,5 @@
 class_name TapePlayer
-extends DragBody2D
+extends RigidBody2D
 
 var tapeArray: Array[Tape] = []
 var playingTape: Tape = null
@@ -25,22 +25,45 @@ func _on_area_2d_body_exited(body: Node2D) -> void:
 		playingTape.stopTape()
 	tapeArray.erase(body)
 
-func pull_object_towards_target(physics_body: RigidBody2D, target_position: Vector2, pull_strength: float, max_distance: float = 100.0, damping_radius: float = 20.0):
+func pull_object_towards_target(
+	physics_body: RigidBody2D,
+	target_position: Vector2,
+	pull_strength: float,
+	max_distance: float = 100.0,
+	damping_radius: float = 20.0,
+	snap_threshold: float = 1.0
+):
 	var current_position = physics_body.global_position
-	var distance_to_target = current_position.distance_to(target_position)
+	var to_target = target_position - current_position
+	var distance = to_target.length()
 
- 
-	var direction = (target_position - current_position).normalized()
-	var distance_factor = 1.0 - distance_to_target / max_distance
+	if distance < snap_threshold and physics_body.linear_velocity.length() < 1.0:
+		# Snap to target if very close and nearly still
+		physics_body.global_position = target_position
+		physics_body.linear_velocity = Vector2.ZERO
+		return
+
+	var direction = to_target.normalized()
+
+	# Smooth falloff using quadratic curve
+	var distance_factor = clamp((1.0 - distance / max_distance), 0.0, 1.0)
+	distance_factor = distance_factor * distance_factor  # Quadratic easing
+
 	var pull_force = direction * pull_strength * distance_factor
- 
-  #Apply stronger damping when close to target
-	if distance_to_target < damping_radius:
+
+	# Predictive damping when close
+	if distance < damping_radius:
 		var velocity_towards_target = physics_body.linear_velocity.dot(direction)
-		var damping_factor = (damping_radius - distance_to_target) / damping_radius
-		var damping_force = -direction * velocity_towards_target * pull_strength * damping_factor * 2.0
+		var damping_factor = (damping_radius - distance) / damping_radius
+		var damping_force = -direction * velocity_towards_target * damping_factor * pull_strength * 0.5
 		pull_force += damping_force
- 
+
+	# Optional: clamp force to avoid jitter
+	var max_force = pull_strength * 1.2
+	if pull_force.length() > max_force:
+		pull_force = pull_force.normalized() * max_force
+
+	physics_body.sleeping = false  # Ensure it's awake
 	physics_body.apply_central_force(pull_force)
 
 

@@ -1,5 +1,5 @@
 class_name Tape
-extends DragBody2D
+extends RigidBody2D
 
 
 func playTape():
