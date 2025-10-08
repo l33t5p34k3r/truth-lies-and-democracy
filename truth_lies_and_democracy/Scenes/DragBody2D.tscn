@@ -1,8 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://dfw3w65rfvkk7"]
-
-[ext_resource type="Script" uid="uid://ca4aoqj0gwdol" path="res://Scenes/DragBody2D.gd" id="1_6eg14"]
-
-[node name="DragBody2D" type="RigidBody2D"]
-input_pickable = true
-linear_damp = 50.0
-script = ExtResource("1_6eg14")

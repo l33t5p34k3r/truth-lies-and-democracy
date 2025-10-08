@@ -3,8 +3,8 @@
 [ext_resource type="Script" uid="uid://bq64warrfgu6a" path="res://Scenes/paper.gd" id="1_c7gsp"]
 [ext_resource type="Texture2D" uid="uid://c5hyeon2lcw0a" path="res://Assets/textures/1-04851-00_BL_Notebook_Paper_Punch_G.jpg" id="2_322pb"]
 [ext_resource type="Script" path="res://Scenes/overlap_area.gd" id="3_322pb"]
-[ext_resource type="PackedScene" uid="uid://cnroehowses8g" path="res://Scenes/drag_component.tscn" id="4_yox0v"]
-[ext_resource type="PackedScene" uid="uid://dr638i8p0fsnt" path="res://Scenes/infobox_component.tscn" id="5_4sl6c"]
+[ext_resource type="PackedScene" uid="uid://cnroehowses8g" path="res://Scenes/components/drag_component.tscn" id="4_yox0v"]
+[ext_resource type="PackedScene" uid="uid://dr638i8p0fsnt" path="res://Scenes/components/infobox_component.tscn" id="5_4sl6c"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_c7gsp"]
 radius = 9.61769
@@ -28,6 +28,12 @@ script = ExtResource("1_c7gsp")
 position = Vector2(-0.5, -0.5)
 shape = SubResource("CircleShape2D_c7gsp")
 
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(1, -2)
+shape = SubResource("RectangleShape2D_4sl6c")
+
 [node name="Content" type="Node2D" parent="."]
 
 [node name="Sprite2D" type="Sprite2D" parent="Content"]
@@ -47,12 +53,6 @@ offset_right = 74.0
 offset_bottom = 171.0
 theme_override_colors/font_color = Color(0.29586652, 0.2958665, 0.2958665, 1)
 text = "Sign here"
-
-[node name="ClickArea2D" type="Area2D" parent="Content"]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Content/ClickArea2D"]
-position = Vector2(1, -2)
-shape = SubResource("RectangleShape2D_4sl6c")
 
 [node name="Control" type="Control" parent="Content"]
 layout_mode = 3
@@ -107,15 +107,15 @@ grow_vertical = 2
 
 [node name="DragComponent" parent="." node_paths=PackedStringArray("target_node", "click_target_node") instance=ExtResource("4_yox0v")]
 target_node = NodePath("..")
-click_target_node = NodePath("../Content/ClickArea2D")
+click_target_node = NodePath("../Area2D")
 
 [node name="InfoboxComponent" parent="." node_paths=PackedStringArray("target_click_node", "target_data_node", "drag_component") instance=ExtResource("5_4sl6c")]
-target_click_node = NodePath("../Content/ClickArea2D")
+target_click_node = NodePath("../Area2D")
 target_data_node = NodePath("..")
 drag_component = NodePath("../DragComponent")
 
-[connection signal="input_event" from="Content/ClickArea2D" to="." method="_on_area_2d_input_event"]
-[connection signal="mouse_entered" from="Content/ClickArea2D" to="." method="_on_HoverArea_mouse_entered"]
-[connection signal="mouse_exited" from="Content/ClickArea2D" to="." method="_on_HoverArea_mouse_exited"]
+[connection signal="input_event" from="Area2D" to="." method="_on_area_2d_input_event"]
+[connection signal="mouse_entered" from="Area2D" to="." method="_on_HoverArea_mouse_entered"]
+[connection signal="mouse_exited" from="Area2D" to="." method="_on_HoverArea_mouse_exited"]
 [connection signal="area_entered" from="Content/OverlapArea2D" to="." method="_on_overlap_area_area_entered"]
 [connection signal="area_exited" from="Content/OverlapArea2D" to="." method="_on_overlap_area_area_exited"]

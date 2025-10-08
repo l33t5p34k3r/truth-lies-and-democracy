@@ -81,7 +81,6 @@ func on_paper_stamped() -> void:
 #
 
 func _on_confirm_button_pressed() -> void:
-	SignalHandler.scene_changed.emit.call_deferred()
 	get_tree().change_scene_to_file("res://Scenes/report/ProgressReview.tscn")
 
 

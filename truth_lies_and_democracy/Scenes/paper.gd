@@ -25,7 +25,7 @@ var paper_is_fake : bool = false
 @onready var text_label: Label = $Content/Control/Label
 @onready var text_rich_text_label: RichTextLabel = $Content/Control/RichTextLabel
 @onready var texture_rect: TextureRect = $Content/SignTextureRect
-@onready var draw_collision_shape_2d: CollisionShape2D = $Content/ClickArea2D/CollisionShape2D
+@onready var draw_collision_shape_2d: CollisionShape2D = $Area2D/CollisionShape2D
 @onready var stamp_mask: Polygon2D = $Content/StampMask
 @onready var content: Node2D = $Content
 
