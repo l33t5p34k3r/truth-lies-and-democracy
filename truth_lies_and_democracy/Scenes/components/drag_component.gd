@@ -80,7 +80,6 @@ func rotate_to_zero():
 	if abs(angle_diff) > 0.05:
 		# Predictive damping: reduce torque if already rotating toward target
 		var torque := angle_diff * rotation_strength - angular_velocity * damping_strength
-		print("Applying torque:", torque)
 		target_node.apply_torque(torque)
 	else:
 		# Near target: apply damping only
