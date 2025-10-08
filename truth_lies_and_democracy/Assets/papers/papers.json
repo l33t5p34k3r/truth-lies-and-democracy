@@ -1,7 +1,7 @@
 [
   {
 	"id": "1",
-    "stories": [
+	"stories": [
 	{
 	  "news_headline": "City Launches Rooftop Garden Initiative to Combat Urban Heat",
 	  "news_content": "In response to rising summer temperatures and poor air quality, the city council has approved funding for rooftop gardens on public buildings. Officials say the initiative will reduce heat islands, improve biodiversity, and provide fresh produce to local communities.",
@@ -21,7 +21,7 @@
   },
   {
 	"id": "2",
-    "stories": [
+	"stories": [
 	{
 	  "news_headline": "City Implements Noise Curfew to Improve Mental Health",
 	  "news_content": "In response to rising complaints about nighttime disturbances, the city council has passed a noise curfew ordinance. Officials say reduced noise pollution will improve sleep quality and mental health, especially in densely populated areas.",
@@ -40,7 +40,7 @@
   },
   {
 	"id": "3",
-    "stories":[
+	"stories":[
 	{
 	  "news_headline": "Rainclouds Sue City for Emotional Neglect",
 	  "news_content": "In a bizarre legal filing, a group of rainclouds claims emotional distress due to being blamed for bad weather. The clouds are seeking recognition for their role in maintaining ecosystems and replenishing water supplies.",

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://cnroehowses8g"]
+
+[ext_resource type="Script" uid="uid://bcdym5xoufn0b" path="res://Scenes/drag_component.gd" id="1_nh2ot"]
+
+[node name="DragComponent" type="Node2D"]
+script = ExtResource("1_nh2ot")
