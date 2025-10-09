@@ -5,6 +5,9 @@ on:
     paths:
       - truth_lies_and_democracy/Assets/papers/papers.xlsx  # Trigger only if this file changes
 
+  workflow_dispatch:
+
+    
 permissions:
     contents: write
 
