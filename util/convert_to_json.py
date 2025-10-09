@@ -4,7 +4,7 @@ import os
 
 
 list_of_files_to_convert = {
-    "papers.xlsx": os.path.join("truth_lies_and_democracy", "Assets", "papers", "papers.json")
+    os.path.join("truth_lies_and_democracy", "Assets", "papers", "papers.xlsx"): os.path.join("truth_lies_and_democracy", "Assets", "papers", "papers.json")
 }
 
 
