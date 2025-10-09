@@ -1,9 +1,12 @@
-name: Run Python Script on File Change
+name: Convert
 
 on:
   push:
     paths:
       - truth_lies_and_democracy/Assets/papers/papers.xlsx  # Trigger only if this file changes
+
+permissions:
+    contents: write
 
 jobs:
   run-script:
