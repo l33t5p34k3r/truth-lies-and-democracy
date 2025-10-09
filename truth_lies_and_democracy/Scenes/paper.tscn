@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bq64warrfgu6a" path="res://Scenes/paper.gd" id="1_c7gsp"]
 [ext_resource type="Texture2D" uid="uid://c5hyeon2lcw0a" path="res://Assets/textures/1-04851-00_BL_Notebook_Paper_Punch_G.jpg" id="2_322pb"]
-[ext_resource type="Script" path="res://Scenes/overlap_area.gd" id="3_322pb"]
+[ext_resource type="Script" uid="uid://bibcynwo6jjjq" path="res://Scenes/overlap_area.gd" id="3_322pb"]
 [ext_resource type="PackedScene" uid="uid://cnroehowses8g" path="res://Scenes/components/drag_component.tscn" id="4_yox0v"]
 [ext_resource type="PackedScene" uid="uid://dr638i8p0fsnt" path="res://Scenes/components/infobox_component.tscn" id="5_4sl6c"]
 
@@ -15,7 +15,7 @@ size = Vector2(288, 360)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_322pb"]
 size = Vector2(271, 348)
 
-[node name="Paper" type="RigidBody2D"]
+[node name="Paper" type="RigidBody2D" node_paths=PackedStringArray("topmost_provider")]
 collision_layer = 0
 collision_mask = 0
 input_pickable = true
@@ -23,6 +23,7 @@ gravity_scale = 0.0
 inertia = 1.76
 linear_damp = 12.051
 script = ExtResource("1_c7gsp")
+topmost_provider = NodePath("DragComponent")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-0.5, -0.5)

@@ -23,5 +23,4 @@ func _on_continue_pressed() -> void:
 	
 	get_tree().change_scene_to_file("res://Scenes/paper_playground.tscn")
 	
-	print("TODO: switch to next scene")
-	pass # Replace with function body.
+	print("TODO: final game over screen")

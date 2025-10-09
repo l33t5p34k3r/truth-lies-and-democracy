@@ -15,6 +15,8 @@ extends RigidBody2D
 @export var paper_texture: Texture2D
 @export var paper_color: Color = Color.WHITE
 
+@export var topmost_provider:Node = null
+
 signal got_stamped
 
 var paper_headline : String = ""
@@ -94,7 +96,7 @@ func create_headline_style():
 func _on_area_input_event(_viewport, event, _shape_idx):
 
 	if drawing_enabled and event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT:
-			if event.pressed: # TODO: and is_topmost_body_at_position(event.global_position):
+			if event.pressed and topmost_provider.is_topmost_body_at_position(event.global_position):
 				var pos = to_local(event.global_position) - texture_rect.position
 				start_drawing(pos)
 			else:
