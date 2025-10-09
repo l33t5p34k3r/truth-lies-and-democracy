@@ -1,0 +1,25 @@
+name: Run Python Script on File Change
+
+on:
+  push:
+    paths:
+      - truth_lies_and_democracy/Assets/papers/papers.xlsx  # Trigger only if this file changes
+
+jobs:
+  run-script:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+
+      - name: Run script
+        run: python ${{ github.workspace}}/truth_lies_and_democracy/util/convert_to_json.py
+
+      - name: commit json file
+        uses: EndBug/add-and-commit@v9
+        with:
+            message: "converted excel to json"
+            add: truth_lies_and_democracy/Assets/papers/papers.json
