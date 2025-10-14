@@ -69,20 +69,9 @@ func add_news_content():
 	var headline = text_label
 	headline.text = paper_headline
 
-	headline.add_theme_font_size_override("font_size", 22)
-	headline.add_theme_color_override("font_color", Color.BLACK)
-	headline.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	headline.add_theme_stylebox_override("normal", create_headline_style())
-	
 	# Content
 	var story_content = text_rich_text_label
 	story_content.text = paper_content
-
-	story_content.add_theme_font_size_override("normal_font_size", 16)
-	story_content.add_theme_color_override("default_color", Color(0.2, 0.2, 0.2))
-	story_content.fit_content = true
-	story_content.bbcode_enabled = false
-	story_content.scroll_active = false
 
 
 func create_headline_style():

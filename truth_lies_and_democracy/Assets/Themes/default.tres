@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=14 format=3 uid="uid://bqh1uqu1vqqoh"]
+[gd_resource type="Theme" load_steps=17 format=3 uid="uid://bqh1uqu1vqqoh"]
 
 [ext_resource type="Texture2D" uid="uid://cokfnlbd75uhd" path="res://Assets/textures/ui/Blue/Default/button_rectangle_depth_gradient.png" id="1_7ev38"]
 [ext_resource type="Texture2D" uid="uid://646qlaocpxr7" path="res://Assets/textures/ui/Blue/Default/button_rectangle_flat.png" id="2_slk4v"]
@@ -70,6 +70,42 @@ texture_margin_top = 5.0
 texture_margin_right = 5.0
 texture_margin_bottom = 5.0
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7ev38"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.09239706, 0.09239709, 0.09239695, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slk4v"]
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kwyn7"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_kri2g"]
 content_margin_left = 18.0
 content_margin_top = 18.0
@@ -98,6 +134,12 @@ Button/styles/hover = SubResource("StyleBoxTexture_okgkb")
 Button/styles/hover_pressed = SubResource("StyleBoxTexture_awvkj")
 Button/styles/normal = SubResource("StyleBoxTexture_wc5tk")
 Button/styles/pressed = SubResource("StyleBoxTexture_xgf16")
+FlatPanel/base_type = &"PanelContainer"
+FlatPanel/styles/panel = SubResource("StyleBoxFlat_7ev38")
+FlatPanelLight/base_type = &"PanelContainer"
+FlatPanelLight/styles/panel = SubResource("StyleBoxFlat_slk4v")
+FlatPanelOutline/base_type = &"PanelContainer"
+FlatPanelOutline/styles/panel = SubResource("StyleBoxFlat_kwyn7")
 Label/colors/font_color = Color(0, 0, 0, 1)
 Label/font_sizes/font_size = 18
 LargeButton/base_type = &"Button"

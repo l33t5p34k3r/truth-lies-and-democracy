@@ -1,26 +1,29 @@
 [
   {
-    "id": "1",
+    "group_id": "1",
     "stories": [
       {
         "news_headline": "City Launches Rooftop Garden Initiative to Combat Urban Heat",
         "news_content": "In response to rising summer temperatures and poor air quality, the city council has approved funding for rooftop gardens on public buildings. Officials say the initiative will reduce heat islands, improve biodiversity, and provide fresh produce to local communities.",
-        "news_fake": false
+        "news_fake": false,
+        "story_id": "1"
       },
       {
         "news_headline": "Study Finds Social Media Use Linked to Increased Anxiety in Teens",
         "news_content": "A new report from the National Health Institute shows a strong correlation between excessive social media use and rising anxiety levels among teenagers. Experts are calling for digital literacy programs and mental health support in schools.",
-        "news_fake": false
+        "news_fake": false,
+        "story_id": "2"
       },
       {
         "news_headline": "Scientists Warn Trees May Be Secretly Communicating with Aliens",
         "news_content": "A fringe research group claims that certain tree species emit signals that could be interpreted as alien communication. While mainstream scientists dismiss the theory, the group insists their data shows 'non-terrestrial patterns' in tree root networks.",
-        "news_fake": true
+        "news_fake": true,
+        "story_id": "3"
       }
     ]
   },
   {
-    "id": "2",
+    "group_id": "2",
     "stories": [
       {
         "news_headline": "City Implements Noise Curfew to Improve Mental Health",
@@ -40,7 +43,7 @@
     ]
   },
   {
-    "id": "3",
+    "group_id": "3",
     "stories": [
       {
         "news_headline": "Rainclouds Sue City for Emotional Neglect",
@@ -60,7 +63,7 @@
     ]
   },
   {
-    "id": "4",
+    "group_id": "4",
     "stories": [
       {
         "news_headline": "Totally cool headline",

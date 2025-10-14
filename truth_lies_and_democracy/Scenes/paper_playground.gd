@@ -40,7 +40,7 @@ func spawn_papers(papers : Array):
 	add_child(container)
 	
 	for paper_set:Dictionary in papers:
-		if paper_set["id"] != str(Manager.current_round):
+		if paper_set["group_id"] != str(Manager.current_round):
 			continue
 			
 		for story:Dictionary in paper_set["stories"]:
@@ -111,3 +111,7 @@ func _on_docu_sign_timer_timeout() -> void:
 	if all_relevant_papers_signed:
 		confirm_button.visible = true
 		%DocuSignTimer.stop()
+
+
+func _on_escape_pressed() -> void:
+	get_tree().change_scene_to_file("res://Scenes/SocialMedia/SocialMedia.tscn")

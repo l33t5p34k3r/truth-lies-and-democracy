@@ -1,0 +1,25 @@
+[gd_scene load_steps=2 format=3 uid="uid://b7037uk7lkt5v"]
+
+[ext_resource type="Script" uid="uid://16sfrgncra83" path="res://Scenes/SocialMedia/story_post.gd" id="1_31faa"]
+
+[node name="StoryPost" type="PanelContainer"]
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -23.5
+offset_bottom = 23.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"FlatPanelOutline"
+script = ExtResource("1_31faa")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+
+[node name="StoryHeadline" type="Label" parent="MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"LargeLabel"
+text = "Cool story"
+horizontal_alignment = 1

@@ -1,0 +1,57 @@
+[gd_scene load_steps=3 format=3 uid="uid://cy85dub7l2p5n"]
+
+[ext_resource type="Script" uid="uid://cn7sp4dsrruub" path="res://Scenes/SocialMedia/media_post.gd" id="1_ssp5j"]
+[ext_resource type="Texture2D" uid="uid://h54f6lgmpqne" path="res://Assets/textures/TEST_image_News_mini.png" id="1_xm7se"]
+
+[node name="Post" type="PanelContainer"]
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -57.5
+offset_bottom = 57.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"FlatPanelOutline"
+script = ExtResource("1_ssp5j")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+theme_type_variation = &"FlatPanel"
+
+[node name="UserIcon" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer/PanelContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("1_xm7se")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="UserName" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.1584723, 0.15847233, 0.15847224, 1)
+theme_override_font_sizes/font_size = 16
+text = "User01asdadsadasdadasdasd"
+horizontal_alignment = 2
+
+[node name="PostContent" type="RichTextLabel" parent="MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Cool story my bro"
+fit_content = true
+scroll_active = false

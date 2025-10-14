@@ -68,7 +68,9 @@ mouse_filter = 2
 layout_mode = 0
 offset_right = 270.0
 offset_bottom = 94.0
+theme_type_variation = &"LargeLabel"
 text = "asdasd"
+autowrap_mode = 3
 
 [node name="RichTextLabel" type="RichTextLabel" parent="Content/Control"]
 layout_mode = 0
@@ -78,6 +80,7 @@ offset_right = 273.0
 offset_bottom = 348.0
 mouse_filter = 2
 text = "asdasdsad"
+fit_content = true
 
 [node name="OverlapArea2D" type="Area2D" parent="Content"]
 script = ExtResource("3_322pb")

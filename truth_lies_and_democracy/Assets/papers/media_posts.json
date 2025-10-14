@@ -1,0 +1,85 @@
+[
+  {
+  "group_id": "1",
+  "posts": [
+    {
+        "story_id": "1",
+        "posts": [
+            {
+                "user_name": "GreenThumbMike",
+                "content_text": "Finally some actual progress on climate action! Would love to volunteer for the rooftop garden project if they need help 🌱"
+            },
+            {
+                "user_name": "TaxpayerSteve",
+                "content_text": "great another way to waste our money. how about fixing the potholes first???"
+            },
+            {
+                "user_name": "UrbanPlanner_Sara",
+                "content_text": "This is actually brilliant policy. Cities like Singapore have been doing this for years with measurable results in temperature reduction and stormwater management. Good to see evidence-based solutions being implemented."
+            },
+            {
+                "user_name": "dave_2real",
+                "content_text": "cool now i can grow tomatoes on city hall lmao"
+            },
+            {
+                "user_name": "ClimateSkeptic99",
+                "content_text": "Heat islands are natural. This is just virtue signaling by the council to look environmentally conscious before elections."
+            }
+        ]
+      
+    },
+    {
+        "story_id": "2",
+        "posts": [
+            {
+                "user_name": "worried_mom_of_3",
+                "content_text": "I've been saying this for YEARS. My daughter is on her phone 6 hours a day and her grades are tanking. We need to take this seriously."
+            },
+            {
+                "user_name": "GenZVoice",
+                "content_text": "maybe the problem isn't the apps, maybe it's the world you created for us??? just a thought 💀"
+            },
+            {
+                "user_name": "Dr_Martinez_PhD",
+                "content_text": "Important to note correlation ≠ causation. Teens with existing anxiety may seek social media as coping mechanism. We need longitudinal studies before jumping to policy conclusions."
+            },
+            {
+                "user_name": "nostalgic_millennial",
+                "content_text": "we really had it better with MSN messenger and flip phones huh"
+            },
+            {
+                "user_name": "TechBroKevin",
+                "content_text": "Or maybe teach kids resilience instead of blaming technology? Social media is a tool. The problem is parenting."
+            }
+        ]
+    },
+    {
+        "story_id": "3",
+        "posts": [
+            {
+                "user_name": "conspiracy_rabbit_hole",
+                "content_text": "THEY'RE FINALLY ADMITTING IT!!! I've been researching tree frequencies for 10 years and everyone called me crazy. WHO'S LAUGHING NOW"
+            },
+            {
+                "user_name": "ActualBotanist",
+                "content_text": "This is embarrassingly bad science. Trees DO communicate via mycorrhizal networks but calling it 'alien signals' is peak pseudoscience clickbait. Please stop sharing this garbage."
+            },
+            {
+                "user_name": "meme_lord_420",
+                "content_text": "my guy really said the trees are texting aliens 💀💀💀 bro what are they even talking about? \"hey ET the soil pH is looking rough today\""
+            },
+            {
+                "user_name": "open_minded_seeker",
+                "content_text": "I mean... we don't know everything about the universe. Maybe we shouldn't dismiss this so quickly? Ancient cultures always knew trees were special 🌳✨"
+            },
+            {
+                "user_name": "ScienceTeacher_Julie",
+                "content_text": "Class, this is a perfect example of why media literacy matters. Notice how the article itself says 'fringe group' and 'mainstream scientists dismiss' - they're telling you it's fake news IN the fake news. Read critically!"
+            }
+        ]
+    }
+
+
+  ]
+    }
+]
