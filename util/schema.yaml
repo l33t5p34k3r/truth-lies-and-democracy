@@ -1,0 +1,146 @@
+schema_version: "1.0"
+
+types:
+  StoryGroup:
+    fields:
+      group_id:
+        type: int
+        constraints:
+          - unique
+          - required
+        description: "Unique identifier for the story group"
+
+      stories:
+        type: array<int>
+        constraints:
+          - required
+          - references_many: Story.story_id
+          - external: true
+        description: "Collection of news stories in this group"
+
+  Story:
+    fields:
+      story_id:
+        type: int
+        constraints:
+          - unique
+          - required
+        description: "Unique identifier for the story"
+
+      news_headline:
+        type: string
+        constraints:
+          - required
+          - max_length: 200
+        description: "News article headline"
+
+      news_content:
+        type: string
+        constraints:
+          - required
+          - max_length: 1000
+        description: "News article content/body"
+
+      news_fake:
+        type: bool
+        constraints:
+          - required
+        description: "Whether this is fake news (true) or real news (false)"
+
+  MediaPostGroup:
+    fields:
+      group_id:
+        type: int
+        constraints:
+          - unique
+          - required
+          - references: StoryGroup.group_id
+          - external: true
+        description: "References the story group ID from papers.json"
+
+      story_posts:
+        type: array<int>
+        constraints:
+          - required
+          - references_many: StoryPosts.story_id
+          - external: true
+        description: "Social media posts organized by story"
+
+  StoryPosts:
+    fields:
+      story_id:
+        type: int
+        constraints:
+          - required
+          - references: Story.story_id
+          - external: true
+        description: "References the story ID from papers.json"
+
+      posts:
+        type: array<int>
+        constraints:
+          - required
+          - references_many: SocialMediaPost.post_id
+          - external: true
+        description: "Individual social media posts for this story"
+
+  SocialMediaPost:
+    fields:
+      post_id:
+        type: int
+        constraints:
+          - unique
+          - required
+        description: "Unique identifier for the post"
+
+      user_name:
+        type: string
+        constraints:
+          - required
+          - max_length: 50
+        description: "Username of the post author"
+
+      content_text:
+        type: string
+        constraints:
+          - required
+          - max_length: 500
+        description: "Content of the social media post"
+
+excel:
+  sheet_order:
+    - StoryGroup
+    - Story
+    - MediaPostGroup
+    - StoryPosts
+    - SocialMediaPost
+
+  column_width:
+    default: 20
+    news_headline: 50
+    news_content: 60
+    content_text: 60
+    story_id: 15
+    group_id: 15
+
+validation_rules:
+  Story:
+    - rule: "story_id should be set for proper cross-referencing"
+      check: "story_id != null and !story_id.is_empty()"
+
+notes: |
+  This schema represents a news game with two main files:
+
+  1. papers.json - Contains news stories organized in groups
+     - Real and fake news stories
+     - Each story has a unique story_id
+     - Stories are grouped together
+
+  2. media_posts.json - Contains social media reactions to stories
+     - Posts are organized by group and story
+     - References stories via story_id (cross-file reference)
+     - Multiple user posts per story
+
+  Cross-file relationships:
+  - MediaPostGroup.group_id → StoryGroup.group_id
+  - StoryPosts.story_id → Story.story_id

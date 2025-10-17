@@ -1,0 +1,111 @@
+#!/usr/bin/env python3
+import openpyxl
+import json
+from pathlib import Path
+import sys
+
+def convert_value(value_str: str, target_type: str):
+    """Convert a string value to the target type"""
+    value_str = value_str.strip()
+
+    if target_type == "int":
+        try:
+            return int(value_str)
+        except ValueError:
+            print(f"Warning: Cannot convert '{value_str}' to int, using 0")
+            return 0
+    elif target_type == "float":
+        try:
+            return float(value_str)
+        except ValueError:
+            print(f"Warning: Cannot convert '{value_str}' to float, using 0.0")
+            return 0.0
+    elif target_type == "bool":
+        lower = value_str.lower()
+        return lower in ["true", "1", "yes", "y"]
+    else:
+        # string or unknown type
+        return value_str
+
+def excel_to_json(excel_path: str, output_path: str):
+    wb = openpyxl.load_workbook(excel_path)
+    all_data = {}
+
+    {% for type_name, type_def in types.items() %}
+    if "{{ type_name }}" in wb.sheetnames:
+        ws = wb["{{ type_name }}"]
+        headers = [cell.value for cell in ws[1]]
+        {{ type_name | lower }}_data = []
+
+        # Build field type mapping
+        field_types = {
+            {% for field_name, field_def in type_def.fields.items() %}
+            "{{ field_name }}": "{{ field_def.type }}",
+            {% endfor %}
+        }
+
+        for row in ws.iter_rows(min_row=3, values_only=True):
+            if all(cell is None for cell in row):
+                continue
+
+            entry = {}
+            for header, value in zip(headers, row):
+                if value is not None and header in field_types:
+                    field_type = field_types[header]
+
+                    # Handle array types
+                    if field_type.startswith("array<"):
+                        # TODO: this is really stupid
+                        inner_type = field_type[6:-1]
+                        if isinstance(value, list):
+                            # Already a list (shouldn't happen in Excel, but handle it)
+                            if inner_type in ["int", "float", "bool"]:
+                                entry[header] = [convert_value(str(item), inner_type) for item in value]
+                            else:
+                                entry[header] = value
+                        else:
+                            # Convert comma-separated string to list with proper types
+                            value_str = str(value)
+                            raw_list = [x.strip() for x in value_str.split(",") if x.strip()]
+
+                            # Convert each element to the correct type
+                            if inner_type == "int":
+                                entry[header] = [convert_value(x, "int") for x in raw_list]
+                            elif inner_type == "float":
+                                entry[header] = [convert_value(x, "float") for x in raw_list]
+                            elif inner_type == "bool":
+                                entry[header] = [convert_value(x, "bool") for x in raw_list]
+                            else:
+                                # string or custom type
+                                entry[header] = raw_list
+
+                    # Handle basic types
+                    elif field_type == "int":
+                        entry[header] = convert_value(str(value), "int")
+                    elif field_type == "float":
+                        entry[header] = convert_value(str(value), "float")
+                    elif field_type == "bool":
+                        entry[header] = convert_value(str(value), "bool")
+
+                    # All other types: convert to string
+                    else:
+                        entry[header] = str(value) if not isinstance(value, (list, dict)) else value
+
+
+            if entry:
+                {{ type_name | lower }}_data.append(entry)
+
+        all_data["{{ type_name }}"] = {{ type_name | lower }}_data
+
+    {% endfor %}
+    with open(output_path, "w") as f:
+        json.dump(all_data, f, indent=2)
+
+    print(f"Converted {excel_path} to {output_path}")
+
+if __name__ == "__main__":
+    if len(sys.argv) != 3:
+        print("Usage: python excel_to_json.py <input.xlsx> <output.json>")
+        sys.exit(1)
+
+    excel_to_json(sys.argv[1], sys.argv[2])

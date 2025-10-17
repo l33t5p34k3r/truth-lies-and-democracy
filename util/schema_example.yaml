@@ -1,0 +1,229 @@
+schema_version: "1.0"
+
+types:
+  StoryGroup:
+    fields:
+      id:
+        type: int
+        constraints:
+          - unique
+          - required
+        description: "Unique group identifier"
+      
+      name:
+        type: string
+        constraints:
+          - required
+          - max_length: 50
+        description: "Group display name"
+      
+      description:
+        type: string
+        constraints:
+          - optional
+          - max_length: 200
+        description: "Group description"
+      
+      unlock_type:
+        type: string
+        constraints:
+          - required
+          - enum: [sequential, any, all]
+        description: "How stories unlock: sequential, any, all"
+      
+      story_ids:
+        type: array<int>
+        constraints:
+          - optional
+          - references_many: Story.id
+        description: "Stories in this group (comma-separated IDs)"
+      
+      required_group_ids:
+        type: array<int>
+        constraints:
+          - optional
+          - references_many: StoryGroup.id
+        description: "Groups that must be completed first"
+
+  Story:
+    fields:
+      id:
+        type: int
+        constraints:
+          - unique
+          - required
+        description: "Unique story identifier"
+      
+      group_id:
+        type: int
+        constraints:
+          - optional
+          - references: StoryGroup.id
+        description: "Group this story belongs to"
+      
+      title:
+        type: string
+        constraints:
+          - required
+          - max_length: 100
+        description: "Story title"
+      
+      description:
+        type: string
+        constraints:
+          - optional
+          - max_length: 500
+        description: "Story description"
+      
+      difficulty:
+        type: string
+        constraints:
+          - required
+          - enum: Difficulty
+        description: "Difficulty: easy, medium, hard, expert"
+      
+      difficulty_value:
+        type: int
+        constraints:
+          - required
+          - min: 1
+          - max: 10
+        description: "Numeric difficulty (1-10)"
+      
+      prerequisite_story_ids:
+        type: array<int>
+        constraints:
+          - optional
+          - references_many: Story.id
+        description: "Stories that must be completed first"
+      
+      tags:
+        type: array<string>
+        constraints:
+          - optional
+        description: "Story tags (comma-separated)"
+      
+      duration_minutes:
+        type: int
+        constraints:
+          - optional
+          - min: 1
+          - max: 300
+        description: "Expected completion time in minutes"
+      
+      rewards:
+        type: array<Reward>
+        constraints:
+          - optional
+        description: "Multiple rewards"
+      
+      is_repeatable:
+        type: bool
+        constraints:
+          - required
+        description: "Can story be replayed?"
+      
+      cooldown_hours:
+        type: int
+        constraints:
+          - optional
+          - min: 0
+        description: "Hours before story can be repeated"
+
+  Reward:
+    fields:
+      reward_type:
+        type: string
+        constraints:
+          - required
+          - enum: RewardType
+        description: "Type: gold, experience, item, unlock"
+      
+      amount:
+        type: int
+        constraints:
+          - required
+          - min: 0
+        description: "Amount of gold/exp or item quantity"
+      
+      item_id:
+        type: string
+        constraints:
+          - optional
+        description: "Item identifier if reward_type is item"
+      
+      unlock_story_id:
+        type: int
+        constraints:
+          - optional
+          - references: Story.id
+        description: "Story to unlock if reward_type is unlock"
+
+  Quest:
+    external_file: "quest_data.json"
+    fields:
+      id:
+        type: int
+        constraints:
+          - unique
+          - required
+        description: "Unique quest identifier"
+      
+      story_id:
+        type: int
+        constraints:
+          - required
+          - references: Story.id
+          - external: true
+        description: "Related story ID"
+      
+      title:
+        type: string
+        constraints:
+          - required
+          - max_length: 100
+        description: "Quest title"
+      
+      objectives:
+        type: array<string>
+        constraints:
+          - required
+        description: "Quest objectives (comma-separated)"
+
+validation_rules:
+  Story:
+    - rule: "if is_repeatable then cooldown_hours must be set"
+      check: "is_repeatable implies cooldown_hours != null"
+    
+    - rule: "sequential group stories should have prerequisites"
+      check: "group.unlock_type == sequential implies prerequisite_story_ids.size() > 0"
+  
+  Reward:
+    - rule: "item rewards must have item_id"
+      check: "reward_type == item implies item_id != null"
+    
+    - rule: "unlock rewards must have unlock_story_id"
+      check: "reward_type == unlock implies unlock_story_id != null"
+
+excel:
+  sheet_order:
+    - StoryGroup
+    - Story
+    - Reward
+    - Quest
+  
+  column_width:
+    default: 20
+    description: 40
+    story_ids: 30
+    prerequisite_story_ids: 30
+    required_group_ids: 30
+    objectives: 40
+  
+  conditional_formatting:
+    Story:
+      difficulty:
+        easy: {bg_color: "90EE90"}
+        medium: {bg_color: "FFD700"}
+        hard: {bg_color: "FFA500"}
+        expert: {bg_color: "FF4500"}

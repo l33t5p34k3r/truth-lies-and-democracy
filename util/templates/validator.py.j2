@@ -1,0 +1,244 @@
+#!/usr/bin/env python3
+"""
+Standalone JSON data validator
+Validates data files against the schema without requiring Godot
+"""
+import json
+import sys
+from pathlib import Path
+from typing import Dict, List, Any, Set, Tuple
+
+class DataValidator:
+    def __init__(self):
+        self.errors: List[str] = []
+        self.warnings: List[str] = []
+        self.all_objects: Dict[str, Dict[Any, Any]] = {}
+
+    def validate_files(self, file_paths: List[str]) -> bool:
+        """Validate multiple JSON files and their cross-references"""
+        print(f"Validating {len(file_paths)} file(s)...")
+
+        for path in file_paths:
+            self._load_and_validate_file(path)
+
+        self._validate_cross_references()
+
+        return self._print_results()
+
+    def _load_and_validate_file(self, path: str) -> None:
+        """Load and validate a single file"""
+        print(f"\nValidating: {path}")
+
+        try:
+            with open(path, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+        except FileNotFoundError:
+            self.errors.append(f"File not found: {path}")
+            return
+        except json.JSONDecodeError as e:
+            self.errors.append(f"Invalid JSON in {path}: {e}")
+            return
+
+        {% for type_name, type_def in types.items() %}
+        if "{{ type_name }}" in data:
+            self._validate_{{ type_name }}(data["{{ type_name }}"], path)
+        {% endfor %}
+
+    {% for type_name, type_def in types.items() %}
+    def _validate_{{ type_name }}(self, entries: List[Dict], file_path: str) -> None:
+        """Validate {{ type_name }} entries"""
+        if not isinstance(entries, list):
+            self.errors.append(f"{{ type_name }} must be a list in {file_path}")
+            return
+
+        type_objects = {}
+        seen_ids = set()
+
+        for idx, entry in enumerate(entries):
+            if not isinstance(entry, dict):
+                self.errors.append(f"{{ type_name }}[{idx}] must be a dictionary in {file_path}")
+                continue
+
+            {% for field_name, field_def in type_def.fields.items() %}
+            {% set constraints = field_def.get('constraints', []) %}
+            {% set field_type = field_def.type %}
+
+            # Validate {{ field_name }}
+            value = entry.get("{{ field_name }}")
+
+            {% if 'required' in constraints %}
+            {% if field_type == 'string' %}
+            if value is None or (isinstance(value, str) and not value.strip()):
+                self.errors.append(f"{{ type_name }}[{idx}].{{ field_name }} is required in {file_path}")
+            {% elif field_type.startswith('array') %}
+            if value is None or (isinstance(value, list) and len(value) == 0):
+                self.errors.append(f"{{ type_name }}[{idx}].{{ field_name }} is required in {file_path}")
+            {% else %}
+            if value is None:
+                self.errors.append(f"{{ type_name }}[{idx}].{{ field_name }} is required in {file_path}")
+            {% endif %}
+            {% endif %}
+
+            {% if field_type == 'int' %}
+            if value is not None:
+                try:
+                    value = int(value)
+                    entry["{{ field_name }}"] = value
+                except (ValueError, TypeError):
+                    self.errors.append(f"{{ type_name }}[{idx}].{{ field_name }} must be an integer in {file_path}")
+            {% elif field_type == 'float' %}
+            if value is not None:
+                try:
+                    value = float(value)
+                    entry["{{ field_name }}"] = value
+                except (ValueError, TypeError):
+                    self.errors.append(f"{{ type_name }}[{idx}].{{ field_name }} must be a float in {file_path}")
+            {% elif field_type == 'bool' %}
+            if value is not None and not isinstance(value, bool):
+                if isinstance(value, str):
+                    entry["{{ field_name }}"] = value.lower() in ['true', '1', 'yes', 'y']
+                elif isinstance(value, int):
+                    entry["{{ field_name }}"] = value != 0
+                else:
+                    self.errors.append(f"{{ type_name }}[{idx}].{{ field_name }} must be a boolean in {file_path}")
+            {% elif field_type.startswith('array') %}
+            if value is not None and not isinstance(value, list):
+                self.errors.append(f"{{ type_name }}[{idx}].{{ field_name }} must be an array in {file_path}")
+            {% endif %}
+
+            {% for constraint in constraints %}
+            {% if constraint is mapping %}
+            {% if 'unique' in constraint %}
+            if value is not None:
+                if value in seen_ids:
+                    self.errors.append(f"{{ type_name }}[{idx}].{{ field_name }} '{value}' is not unique in {file_path}")
+                seen_ids.add(value)
+            {% endif %}
+
+            {% if 'min' in constraint %}
+            if value is not None and value < {{ constraint.min }}:
+                self.errors.append(f"{{ type_name }}[{idx}].{{ field_name }} must be >= {{ constraint.min }} in {file_path}")
+            {% endif %}
+
+            {% if 'max' in constraint %}
+            if value is not None and value > {{ constraint.max }}:
+                self.errors.append(f"{{ type_name }}[{idx}].{{ field_name }} must be <= {{ constraint.max }} in {file_path}")
+            {% endif %}
+
+            {% if 'max_length' in constraint %}
+            {% if field_type == 'string' %}
+            if value is not None and isinstance(value, str) and len(value) > {{ constraint.max_length }}:
+                self.errors.append(f"{{ type_name }}[{idx}].{{ field_name }} exceeds max length {{ constraint.max_length }} in {file_path}")
+            {% endif %}
+            {% endif %}
+
+            {% if 'enum' in constraint %}
+            {% set enum_values = constraint.enum %}
+            {% if enum_values is string and enum_values in enums %}
+            {% set enum_list = enums[enum_values].values %}
+            {% else %}
+            {% set enum_list = enum_values %}
+            {% endif %}
+            if value is not None and value not in {{ enum_list }}:
+                self.errors.append(f"{{ type_name }}[{idx}].{{ field_name }} must be one of {{ enum_list }} in {file_path}")
+            {% endif %}
+            {% endif %}
+            {% endfor %}
+            {% endfor %}
+
+            # Store for cross-reference validation
+            {% set id_field = type_def | get_id_field %}
+            {% if id_field %}
+            id_field = entry.get("{{ id_field }}")
+            if id_field is not None:
+                type_objects[id_field] = entry
+            {% endif %}
+
+        self.all_objects["{{ type_name }}"] = type_objects
+        print(f"  Validated {len(entries)} {{ type_name }} entries")
+
+    {% endfor %}
+
+    def _validate_cross_references(self) -> None:
+        """Validate references between types"""
+        print("\nValidating cross-references...")
+
+        {% for type_name, refs in references.items() %}
+        # {{ type_name }} internal references
+        if "{{ type_name }}" in self.all_objects:
+            for obj_id, obj in self.all_objects["{{ type_name }}"].items():
+                {% for src_type, field_name, target_ref, is_many, _ in refs %}
+                {% set target_type, target_field = target_ref.split('.') %}
+                # {{ field_name }} -> {{ target_ref }}
+                value = obj.get("{{ field_name }}")
+                {% if is_many %}
+                if value:
+                    for ref_id in value:
+                        if ref_id not in self.all_objects.get("{{ target_type }}", {}):
+                            self.errors.append(f"{{ src_type }}.{obj_id}.{{ field_name }} references missing {{ target_type }}.{ref_id}")
+                {% else %}
+                if value is not None and value not in self.all_objects.get("{{ target_type }}", {}):
+                    self.errors.append(f"{{ src_type }}.{obj_id}.{{ field_name }} references missing {{ target_type }}.{value}")
+                {% endif %}
+                {% endfor %}
+        {% endfor %}
+
+        {% for type_name, refs in external_references.items() %}
+        # {{ type_name }} external references
+        if "{{ type_name }}" in self.all_objects:
+            for obj_id, obj in self.all_objects["{{ type_name }}"].items():
+                {% for src_type, field_name, target_ref, is_many, _ in refs %}
+                {% set target_type, target_field = target_ref.split('.') %}
+                # {{ field_name }} -> {{ target_ref }} (external)
+                value = obj.get("{{ field_name }}")
+                {% if is_many %}
+                if value:
+                    for ref_id in value:
+                        if ref_id not in self.all_objects.get("{{ target_type }}", {}):
+                            self.errors.append(f"{{ src_type }}.{obj_id}.{{ field_name }} references missing external {{ target_type }}.{ref_id}")
+                {% else %}
+                if value is not None and value not in self.all_objects.get("{{ target_type }}", {}):
+                    self.errors.append(f"{{ src_type }}.{obj_id}.{{ field_name }} references missing external {{ target_type }}.{value}")
+                {% endif %}
+                {% endfor %}
+        {% endfor %}
+
+    def _print_results(self) -> bool:
+        """Print validation results and return success status"""
+        print("\n" + "=" * 60)
+
+        if self.warnings:
+            print(f"\n {len(self.warnings)} Warning(s):")
+            for warning in self.warnings:
+                print(f"  - {warning}")
+
+        if self.errors:
+            print(f"\n✗ {len(self.errors)} Error(s):")
+            for error in self.errors:
+                print(f"  • {error}")
+            print("\n" + "=" * 60)
+            print("VALIDATION FAILED")
+            return False
+        else:
+            print("\n✓ VALIDATION PASSED")
+            print(f"All data files are valid!")
+            if self.warnings:
+                print(f"({len(self.warnings)} warnings)")
+            print("=" * 60)
+            return True
+
+def main():
+    if len(sys.argv) < 2:
+        print("Usage: python validate_data.py <file1.json> [file2.json] ...")
+        print("\nExample:")
+        print("  python validate_data.py papers.json media_posts.json")
+        sys.exit(1)
+
+    validator = DataValidator()
+    file_paths = sys.argv[1:]
+
+    success = validator.validate_files(file_paths)
+    sys.exit(0 if success else 1)
+
+if __name__ == "__main__":
+    main()

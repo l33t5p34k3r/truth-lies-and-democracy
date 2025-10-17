@@ -29,6 +29,15 @@ func get_stories(group_id:int) -> Array:
 			
 	
 func load_posts():
+	var data = DataLoader.load_data("res://Assets/papers/data.json")
+	var media_post_group: Array[GeneratedDataClasses.MediaPostGroup] = data["MediaPostGroup"]
+
+	for post_group in media_post_group:
+		for story_post in post_group.story_posts:
+			story_post.story_id
+	
+	
+	
 	var file := FileAccess.open("res://Assets/papers/media_posts.json", FileAccess.READ).get_as_text()
 	var json = JSON.new()
 	var error := json.parse(file)

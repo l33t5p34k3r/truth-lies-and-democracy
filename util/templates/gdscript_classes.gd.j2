@@ -1,0 +1,224 @@
+class_name GeneratedDataClasses
+extends RefCounted
+
+{% for type_name, type_def in types.items() %}
+class {{ type_name }}:
+	{% for field_name, field_def in type_def.fields.items() %}
+	var {{ field_name }}: {{ field_def | gdscript_type }}
+	{% endfor %}
+	
+	func _init(data: Dictionary = {}) -> void:
+		{% for field_name, field_def in type_def.fields.items() %}
+		var raw_{{ field_name }} = data.get("{{ field_name }}")
+		{% set field_type = field_def.type %}
+		{% set is_optional = 'optional' in field_def.get('constraints', []) %}
+		
+		{% if field_type == 'int' %}
+		if raw_{{ field_name }} != null:
+			{{ field_name }} = _parse_int(raw_{{ field_name }}, "{{ type_name }}.{{ field_name }}")
+		{% if not is_optional %}
+		else:
+			{{ field_name }} = {{ field_def | gdscript_default }}
+		{% endif %}
+		
+		{% elif field_type == 'float' %}
+		if raw_{{ field_name }} != null:
+			{{ field_name }} = _parse_float(raw_{{ field_name }}, "{{ type_name }}.{{ field_name }}")
+		{% if not is_optional %}
+		else:
+			{{ field_name }} = {{ field_def | gdscript_default }}
+		{% endif %}
+		
+		{% elif field_type == 'bool' %}
+		if raw_{{ field_name }} != null:
+			{{ field_name }} = _parse_bool(raw_{{ field_name }}, "{{ type_name }}.{{ field_name }}")
+		{% if not is_optional %}
+		else:
+			{{ field_name }} = {{ field_def | gdscript_default }}
+		{% endif %}
+		
+		{% elif field_type == 'string' %}
+		if raw_{{ field_name }} != null:
+			{{ field_name }} = str(raw_{{ field_name }})
+		{% if not is_optional %}
+		else:
+			{{ field_name }} = {{ field_def | gdscript_default }}
+		{% endif %}
+		
+		{% elif field_type.startswith('array<') %}
+		{% set inner_type = field_type[6:-1] %}
+		if raw_{{ field_name }} != null:
+			{% if inner_type == 'int' %}
+			{{ field_name }} = _parse_int_array(raw_{{ field_name }}, "{{ type_name }}.{{ field_name }}")
+			{% elif inner_type == 'float' %}
+			{{ field_name }} = _parse_float_array(raw_{{ field_name }}, "{{ type_name }}.{{ field_name }}")
+			{% elif inner_type == 'string' %}
+			{{ field_name }} = _parse_string_array(raw_{{ field_name }}, "{{ type_name }}.{{ field_name }}")
+			{% elif inner_type in types %}
+			if raw_{{ field_name }} is Array:
+				for item in raw_{{ field_name }}:
+					if item is Dictionary:
+						{{ field_name }}.append({{ inner_type }}.new(item))
+					else:
+						push_warning("{{ type_name }}.{{ field_name }}: Expected Dictionary for nested type")
+			{% else %}
+			if raw_{{ field_name }} is Array:
+				{{ field_name }} = raw_{{ field_name }}
+			{% endif %}
+		{% if not is_optional %}
+		else:
+			{{ field_name }} = {{ field_def | gdscript_default }}
+		{% endif %}
+		
+		{% elif field_type in types %}
+		if raw_{{ field_name }} != null:
+			if raw_{{ field_name }} is Dictionary:
+				{{ field_name }} = {{ field_type }}.new(raw_{{ field_name }})
+			else:
+				push_warning("{{ type_name }}.{{ field_name }}: Expected Dictionary for nested type")
+		
+		{% else %}
+		{{ field_name }} = raw_{{ field_name }}
+		{% endif %}
+		{% endfor %}
+	
+	func validate() -> Array[String]:
+		var errors: Array[String] = []
+		
+		{% for field_name, field_def in type_def.fields.items() %}
+		{% set constraints = field_def.get('constraints', []) %}
+		{% set field_type = field_def.type %}
+		
+		{% if 'required' in constraints %}
+		{% if field_type == 'string' %}
+		if {{ field_name }} == null or {{ field_name }}.is_empty():
+			errors.append("{{ type_name }}.{{ field_name }} is required")
+		{% elif field_type.startswith('array') %}
+		if {{ field_name }} == null or {{ field_name }}.is_empty():
+			errors.append("{{ type_name }}.{{ field_name }} is required")
+		{% else %}
+		if {{ field_name }} == null:
+			errors.append("{{ type_name }}.{{ field_name }} is required")
+		{% endif %}
+		{% endif %}
+		
+		{% for constraint in constraints %}
+		{% if constraint is mapping %}
+		{% if 'min' in constraint %}
+		if {{ field_name }} != null and {{ field_name }} < {{ constraint.min }}:
+			errors.append("{{ type_name }}.{{ field_name }} must be >= {{ constraint.min }}")
+		{% endif %}
+		
+		{% if 'max' in constraint %}
+		if {{ field_name }} != null and {{ field_name }} > {{ constraint.max }}:
+			errors.append("{{ type_name }}.{{ field_name }} must be <= {{ constraint.max }}")
+		{% endif %}
+		
+		{% if 'max_length' in constraint %}
+		{% if field_type == 'string' %}
+		if {{ field_name }} != null and {{ field_name }}.length() > {{ constraint.max_length }}:
+			errors.append("{{ type_name }}.{{ field_name }} exceeds max length of {{ constraint.max_length }}")
+		{% endif %}
+		{% endif %}
+		
+		{% if 'enum' in constraint %}
+		{% set enum_values = constraint.enum %}
+		{% if enum_values is string and enum_values in enums %}
+		{% set enum_list = enums[enum_values].values %}
+		{% else %}
+		{% set enum_list = enum_values %}
+		{% endif %}
+		if {{ field_name }} != null and not {{ field_name }} in {{ enum_list }}:
+			errors.append("{{ type_name }}.{{ field_name }} must be one of: {{ enum_list | join(', ') }}")
+		{% endif %}
+		{% endif %}
+		{% endfor %}
+		{% endfor %}
+		
+		return errors
+	
+	static func _parse_int(value: Variant, field_name: String) -> int:
+		if value is int:
+			return value
+		if value is float:
+			return int(value)
+		if value is String:
+			if value.is_valid_int():
+				return value.to_int()
+			else:
+				push_warning(field_name + ": Cannot convert '" + value + "' to int")
+				return 0
+		push_warning(field_name + ": Unexpected type for int conversion")
+		return 0
+	
+	static func _parse_float(value: Variant, field_name: String) -> float:
+		if value is float:
+			return value
+		if value is int:
+			return float(value)
+		if value is String:
+			if value.is_valid_float():
+				return value.to_float()
+			else:
+				push_warning(field_name + ": Cannot convert '" + value + "' to float")
+				return 0.0
+		push_warning(field_name + ": Unexpected type for float conversion")
+		return 0.0
+	
+	static func _parse_bool(value: Variant, field_name: String) -> bool:
+		if value is bool:
+			return value
+		if value is int:
+			return value != 0
+		if value is String:
+			var lower = value.to_lower().strip_edges()
+			return lower in ["true", "1", "yes", "y"]
+		push_warning(field_name + ": Unexpected type for bool conversion")
+		return false
+	
+	static func _parse_int_array(value: Variant, field_name: String) -> Array[int]:
+		var result: Array[int] = []
+		if value is Array:
+			for item in value:
+				result.append(_parse_int(item, field_name + "[]"))
+		elif value is String:
+			var parts = value.split(",", false)
+			for part in parts:
+				var trimmed = part.strip_edges()
+				if not trimmed.is_empty():
+					result.append(_parse_int(trimmed, field_name + "[]"))
+		else:
+			push_warning(field_name + ": Expected Array or String for array conversion")
+		return result
+	
+	static func _parse_float_array(value: Variant, field_name: String) -> Array[float]:
+		var result: Array[float] = []
+		if value is Array:
+			for item in value:
+				result.append(_parse_float(item, field_name + "[]"))
+		elif value is String:
+			var parts = value.split(",", false)
+			for part in parts:
+				var trimmed = part.strip_edges()
+				if not trimmed.is_empty():
+					result.append(_parse_float(trimmed, field_name + "[]"))
+		else:
+			push_warning(field_name + ": Expected Array or String for array conversion")
+		return result
+	
+	static func _parse_string_array(value: Variant, field_name: String) -> Array[String]:
+		var result: Array[String] = []
+		if value is Array:
+			for item in value:
+				result.append(str(item))
+		elif value is String:
+			var parts = value.split(",", false)
+			for part in parts:
+				var trimmed = part.strip_edges()
+				if not trimmed.is_empty():
+					result.append(trimmed)
+		else:
+			push_warning(field_name + ": Expected Array or String for array conversion")
+		return result
+
+{% endfor %}

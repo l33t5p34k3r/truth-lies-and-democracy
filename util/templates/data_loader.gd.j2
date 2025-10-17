@@ -1,0 +1,138 @@
+class_name DataLoader
+extends RefCounted
+
+static func load_data(json_path: String, external_data: Dictionary = {}) -> Dictionary:
+	var file = FileAccess.open(json_path, FileAccess.READ)
+	if not file:
+		push_error("Failed to open: " + json_path)
+		return {}
+
+	var json_text = file.get_as_text()
+	file.close()
+
+	var json = JSON.new()
+	var error = json.parse(json_text)
+	if error != OK:
+		push_error("JSON parse error: " + json.get_error_message())
+		return {}
+
+	var data = json.data
+	var result = {}
+	var all_objects = {}
+
+	{% for type_name, type_def in types.items() %}
+	if data.has("{{ type_name }}"):
+		var {{ type_name | lower }}_list: Array[GeneratedDataClasses.{{ type_name }}] = []
+		var {{ type_name | lower }}_by_id = {}
+		for entry in data["{{ type_name }}"]:
+			var obj = GeneratedDataClasses.{{ type_name }}.new(entry)
+			var errors = obj.validate()
+			if errors.size() > 0:
+				push_warning("Validation errors: " + str(errors))
+			{{ type_name | lower }}_list.append(obj)
+			{% set id_field = type_def | get_id_field %}
+			{% if id_field %}
+			if entry.has("{{ id_field }}"):
+				var id_val = entry["{{ id_field }}"]
+				if id_val is String:
+					{{ type_name | lower }}_by_id[id_val] = obj
+				else:
+					{{ type_name | lower }}_by_id[int(id_val)] = obj
+			{% endif %}
+		result["{{ type_name }}"] = {{ type_name | lower }}_list
+		all_objects["{{ type_name }}"] = {{ type_name | lower }}_by_id
+
+	{% endfor %}
+	var ref_errors = _validate_references(all_objects, external_data)
+	if ref_errors.size() > 0:
+		for err in ref_errors:
+			push_warning("Reference error: " + err)
+
+	return result
+
+static func _validate_references(all_objects: Dictionary, external_data: Dictionary) -> Array[String]:
+	var errors: Array[String] = []
+
+	{% for type_name, refs in references.items() %}
+	# {{ type_name }} internal references
+	if all_objects.has("{{ type_name }}"):
+		for obj in all_objects["{{ type_name }}"].values():
+			{% for src_type, field_name, target_ref, is_many, _ in refs %}
+			{% set target_type, target_field = target_ref.split('.') %}
+			{% set src_id_field = types[src_type] | get_id_field %}
+			# {{ field_name }} -> {{ target_ref }}
+			{% if is_many %}
+			if obj.{{ field_name }} != null:
+				for ref_id in obj.{{ field_name }}:
+					if not all_objects.get("{{ target_type }}", {}).has(ref_id):
+						{% if src_id_field %}
+						errors.append("{{ src_type }}." + str(obj.{{ src_id_field }}) + ".{{ field_name }} references missing {{ target_type }}." + str(ref_id))
+						{% else %}
+						errors.append("{{ src_type }}.{{ field_name }} references missing {{ target_type }}." + str(ref_id))
+						{% endif %}
+			{% else %}
+			if obj.{{ field_name }} != null:
+				if not all_objects.get("{{ target_type }}", {}).has(obj.{{ field_name }}):
+					{% if src_id_field %}
+					errors.append("{{ src_type }}." + str(obj.{{ src_id_field }}) + ".{{ field_name }} references missing {{ target_type }}." + str(obj.{{ field_name }}))
+					{% else %}
+					errors.append("{{ src_type }}.{{ field_name }} references missing {{ target_type }}." + str(obj.{{ field_name }}))
+					{% endif %}
+			{% endif %}
+			{% endfor %}
+
+	{% endfor %}
+	{% for type_name, refs in external_references.items() %}
+	# {{ type_name }} external references
+	if all_objects.has("{{ type_name }}"):
+		for obj in all_objects["{{ type_name }}"].values():
+			{% for src_type, field_name, target_ref, is_many, _ in refs %}
+			{% set target_type, target_field = target_ref.split('.') %}
+			{% set src_id_field = types[src_type] | get_id_field %}
+			# {{ field_name }} -> {{ target_ref }} (external)
+			{% if is_many %}
+			if obj.{{ field_name }} != null:
+				for ref_id in obj.{{ field_name }}:
+					if not external_data.get("{{ target_type }}", {}).has(ref_id):
+						{% if src_id_field %}
+						errors.append("{{ src_type }}." + str(obj.{{ src_id_field }}) + ".{{ field_name }} references missing external {{ target_type }}." + str(ref_id))
+						{% else %}
+						errors.append("{{ src_type }}.{{ field_name }} references missing external {{ target_type }}." + str(ref_id))
+						{% endif %}
+			{% else %}
+			if obj.{{ field_name }} != null:
+				if not external_data.get("{{ target_type }}", {}).has(obj.{{ field_name }}):
+					{% if src_id_field %}
+					errors.append("{{ src_type }}." + str(obj.{{ src_id_field }}) + ".{{ field_name }} references missing external {{ target_type }}." + str(obj.{{ field_name }}))
+					{% else %}
+					errors.append("{{ src_type }}.{{ field_name }} references missing external {{ target_type }}." + str(obj.{{ field_name }}))
+					{% endif %}
+			{% endif %}
+			{% endfor %}
+
+	{% endfor %}
+	return errors
+
+static func load_multiple_files(file_paths: Array[String]) -> Dictionary:
+	var combined = {}
+	var external_lookup = {}
+
+	for path in file_paths:
+		var data = load_data(path, external_lookup)
+		for type_name in data.keys():
+			if not combined.has(type_name):
+				combined[type_name] = []
+			combined[type_name].append_array(data[type_name])
+
+			var lookup = {}
+			for obj in data[type_name]:
+				{% for type_name, type_def in types.items() %}
+				{% set id_field = type_def | get_id_field %}
+				{% if id_field %}
+				if type_name == "{{ type_name }}" and "{{ id_field }}" in obj:
+					lookup[obj.{{ id_field }}] = obj
+				{% endif %}
+				{% endfor %}
+			external_lookup[type_name] = lookup
+
+	return combined
