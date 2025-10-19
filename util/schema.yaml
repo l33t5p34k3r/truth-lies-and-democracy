@@ -15,7 +15,6 @@ types:
         constraints:
           - required
           - references_many: Story.story_id
-          - external: true
         description: "Collection of news stories in this group"
 
   Story:
@@ -55,7 +54,6 @@ types:
           - unique
           - required
           - references: StoryGroup.group_id
-          - external: true
         description: "References the story group ID from papers.json"
 
       story_posts:
@@ -63,7 +61,6 @@ types:
         constraints:
           - required
           - references_many: StoryPosts.story_id
-          - external: true
         description: "Social media posts organized by story"
 
   StoryPosts:
@@ -73,7 +70,6 @@ types:
         constraints:
           - required
           - references: Story.story_id
-          - external: true
         description: "References the story ID from papers.json"
 
       posts:
@@ -81,7 +77,6 @@ types:
         constraints:
           - required
           - references_many: SocialMediaPost.post_id
-          - external: true
         description: "Individual social media posts for this story"
 
   SocialMediaPost:

@@ -354,8 +354,8 @@ def excel_to_json(excel_path: str, output_path: str):
 
         all_data["SocialMediaPost"] = socialmediapost_data
 
-    with open(output_path, "w") as f:
-        json.dump(all_data, f, indent=2)
+    with open(output_path, "w", encoding="utf-8") as f:
+        json.dump(all_data, f, indent=2, ensure_ascii=False)
 
     print(f"Converted {excel_path} to {output_path}")
 

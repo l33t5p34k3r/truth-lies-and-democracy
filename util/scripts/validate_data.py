@@ -93,10 +93,6 @@ class DataValidator:
 
 
 
-
-
-
-
             # Store for cross-reference validation
             id_field = entry.get("group_id")
             if id_field is not None:
@@ -218,10 +214,6 @@ class DataValidator:
 
 
 
-
-
-
-
             # Validate story_posts
             value = entry.get("story_posts")
 
@@ -230,10 +222,6 @@ class DataValidator:
 
             if value is not None and not isinstance(value, list):
                 self.errors.append(f"MediaPostGroup[{idx}].story_posts must be an array in {file_path}")
-
-
-
-
 
 
 
@@ -281,10 +269,6 @@ class DataValidator:
 
 
 
-
-
-
-
             # Validate posts
             value = entry.get("posts")
 
@@ -293,10 +277,6 @@ class DataValidator:
 
             if value is not None and not isinstance(value, list):
                 self.errors.append(f"StoryPosts[{idx}].posts must be an array in {file_path}")
-
-
-
-
 
 
 
@@ -381,42 +361,42 @@ class DataValidator:
         """Validate references between types"""
         print("\nValidating cross-references...")
 
-
-        # StoryGroup external references
+        # StoryGroup internal references
         if "StoryGroup" in self.all_objects:
             for obj_id, obj in self.all_objects["StoryGroup"].items():
-                # stories -> Story.story_id (external)
+                # stories -> Story.story_id
                 value = obj.get("stories")
                 if value:
                     for ref_id in value:
                         if ref_id not in self.all_objects.get("Story", {}):
-                            self.errors.append(f"StoryGroup.{obj_id}.stories references missing external Story.{ref_id}")
-        # MediaPostGroup external references
+                            self.errors.append(f"StoryGroup.{obj_id}.stories references missing Story.{ref_id}")
+        # MediaPostGroup internal references
         if "MediaPostGroup" in self.all_objects:
             for obj_id, obj in self.all_objects["MediaPostGroup"].items():
-                # group_id -> StoryGroup.group_id (external)
+                # group_id -> StoryGroup.group_id
                 value = obj.get("group_id")
                 if value is not None and value not in self.all_objects.get("StoryGroup", {}):
-                    self.errors.append(f"MediaPostGroup.{obj_id}.group_id references missing external StoryGroup.{value}")
-                # story_posts -> StoryPosts.story_id (external)
+                    self.errors.append(f"MediaPostGroup.{obj_id}.group_id references missing StoryGroup.{value}")
+                # story_posts -> StoryPosts.story_id
                 value = obj.get("story_posts")
                 if value:
                     for ref_id in value:
                         if ref_id not in self.all_objects.get("StoryPosts", {}):
-                            self.errors.append(f"MediaPostGroup.{obj_id}.story_posts references missing external StoryPosts.{ref_id}")
-        # StoryPosts external references
+                            self.errors.append(f"MediaPostGroup.{obj_id}.story_posts references missing StoryPosts.{ref_id}")
+        # StoryPosts internal references
         if "StoryPosts" in self.all_objects:
             for obj_id, obj in self.all_objects["StoryPosts"].items():
-                # story_id -> Story.story_id (external)
+                # story_id -> Story.story_id
                 value = obj.get("story_id")
                 if value is not None and value not in self.all_objects.get("Story", {}):
-                    self.errors.append(f"StoryPosts.{obj_id}.story_id references missing external Story.{value}")
-                # posts -> SocialMediaPost.post_id (external)
+                    self.errors.append(f"StoryPosts.{obj_id}.story_id references missing Story.{value}")
+                # posts -> SocialMediaPost.post_id
                 value = obj.get("posts")
                 if value:
                     for ref_id in value:
                         if ref_id not in self.all_objects.get("SocialMediaPost", {}):
-                            self.errors.append(f"StoryPosts.{obj_id}.posts references missing external SocialMediaPost.{ref_id}")
+                            self.errors.append(f"StoryPosts.{obj_id}.posts references missing SocialMediaPost.{ref_id}")
+
 
     def _print_results(self) -> bool:
         """Print validation results and return success status"""

@@ -13,11 +13,11 @@ config_version=5
 config/name="truth_lies_and_democracy"
 run/main_scene="uid://33frnk6f5jem"
 config/features=PackedStringArray("4.5", "GL Compatibility")
-config/icon="res://scenes/archive/icon.svg"
+config/icon="res://Scenes/archive/icon.svg"
 
 [autoload]
 
-DebugDraw="*res://scenes/archive/DebugDraw.gd"
+DebugDraw="*res://Scenes/archive/DebugDraw.gd"
 Manager="*res://Scenes/Manager.gd"
 SignalHandler="*res://Scenes/SignalHandler.gd"
 

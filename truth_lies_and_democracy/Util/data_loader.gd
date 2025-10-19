@@ -30,11 +30,8 @@ static func load_data(json_path: String, external_data: Dictionary = {}) -> Dict
 				push_warning("Validation errors: " + str(errors))
 			storygroup_list.append(obj)
 			if entry.has("group_id"):
-				var id_val = entry["group_id"]
-				if id_val is String:
-					storygroup_by_id[id_val] = obj
-				else:
-					storygroup_by_id[int(id_val)] = obj
+				var id_val:int = entry["group_id"]
+				storygroup_by_id[id_val] = obj
 		result["StoryGroup"] = storygroup_list
 		all_objects["StoryGroup"] = storygroup_by_id
 
@@ -48,11 +45,8 @@ static func load_data(json_path: String, external_data: Dictionary = {}) -> Dict
 				push_warning("Validation errors: " + str(errors))
 			story_list.append(obj)
 			if entry.has("story_id"):
-				var id_val = entry["story_id"]
-				if id_val is String:
-					story_by_id[id_val] = obj
-				else:
-					story_by_id[int(id_val)] = obj
+				var id_val:int = entry["story_id"]
+				story_by_id[id_val] = obj
 		result["Story"] = story_list
 		all_objects["Story"] = story_by_id
 
@@ -66,11 +60,8 @@ static func load_data(json_path: String, external_data: Dictionary = {}) -> Dict
 				push_warning("Validation errors: " + str(errors))
 			mediapostgroup_list.append(obj)
 			if entry.has("group_id"):
-				var id_val = entry["group_id"]
-				if id_val is String:
-					mediapostgroup_by_id[id_val] = obj
-				else:
-					mediapostgroup_by_id[int(id_val)] = obj
+				var id_val:int = entry["group_id"]
+				mediapostgroup_by_id[id_val] = obj
 		result["MediaPostGroup"] = mediapostgroup_list
 		all_objects["MediaPostGroup"] = mediapostgroup_by_id
 
@@ -84,11 +75,8 @@ static func load_data(json_path: String, external_data: Dictionary = {}) -> Dict
 				push_warning("Validation errors: " + str(errors))
 			storyposts_list.append(obj)
 			if entry.has("story_id"):
-				var id_val = entry["story_id"]
-				if id_val is String:
-					storyposts_by_id[id_val] = obj
-				else:
-					storyposts_by_id[int(id_val)] = obj
+				var id_val:int = entry["story_id"]
+				storyposts_by_id[id_val] = obj
 		result["StoryPosts"] = storyposts_list
 		all_objects["StoryPosts"] = storyposts_by_id
 
@@ -102,11 +90,8 @@ static func load_data(json_path: String, external_data: Dictionary = {}) -> Dict
 				push_warning("Validation errors: " + str(errors))
 			socialmediapost_list.append(obj)
 			if entry.has("post_id"):
-				var id_val = entry["post_id"]
-				if id_val is String:
-					socialmediapost_by_id[id_val] = obj
-				else:
-					socialmediapost_by_id[int(id_val)] = obj
+				var id_val:int = entry["post_id"]
+				socialmediapost_by_id[id_val] = obj
 		result["SocialMediaPost"] = socialmediapost_list
 		all_objects["SocialMediaPost"] = socialmediapost_by_id
 
@@ -115,59 +100,102 @@ static func load_data(json_path: String, external_data: Dictionary = {}) -> Dict
 		for err in ref_errors:
 			push_warning("Reference error: " + err)
 
+	# Resolve all references automatically
+	_resolve_all_references(result, all_objects)
+	
 	return result
 
-static func _validate_references(all_objects: Dictionary, external_data: Dictionary) -> Array[String]:
-	var errors: Array[String] = []
+static func _resolve_all_references(result: Dictionary, all_objects: Dictionary) -> void:
+	"""Automatically resolve all ID references to object references"""
+	
+	# Resolve references in StoryGroup
+	if result.has("StoryGroup"):
+		for obj in result["StoryGroup"]:
+			# Resolve stories -> Array[Story]
+			if obj.stories != null and all_objects.has("Story"):
+				for ref_id in obj.stories:
+					var resolved_obj = all_objects["Story"].get(ref_id)
+					if resolved_obj:
+						obj.stories_resolved.append(resolved_obj)
+	
+	# Resolve references in MediaPostGroup
+	if result.has("MediaPostGroup"):
+		for obj in result["MediaPostGroup"]:
+			# Resolve group_id -> StoryGroup
+			if obj.group_id != null and all_objects.has("StoryGroup"):
+				obj.group_id_resolved = all_objects["StoryGroup"].get(obj.group_id)
+			# Resolve story_posts -> Array[StoryPosts]
+			if obj.story_posts != null and all_objects.has("StoryPosts"):
+				for ref_id in obj.story_posts:
+					var resolved_obj = all_objects["StoryPosts"].get(ref_id)
+					if resolved_obj:
+						obj.story_posts_resolved.append(resolved_obj)
+	
+	# Resolve references in StoryPosts
+	if result.has("StoryPosts"):
+		for obj in result["StoryPosts"]:
+			# Resolve story_id -> Story
+			if obj.story_id != null and all_objects.has("Story"):
+				obj.story_id_resolved = all_objects["Story"].get(obj.story_id)
+			# Resolve posts -> Array[SocialMediaPost]
+			if obj.posts != null and all_objects.has("SocialMediaPost"):
+				for ref_id in obj.posts:
+					var resolved_obj = all_objects["SocialMediaPost"].get(ref_id)
+					if resolved_obj:
+						obj.posts_resolved.append(resolved_obj)
+	
 
-	# StoryGroup external references
+static func _validate_references(all_objects: Dictionary, _external_data: Dictionary) -> Array[String]:
+	var errors: Array[String] = []
+	
+	# StoryGroup internal references
 	if all_objects.has("StoryGroup"):
 		for obj in all_objects["StoryGroup"].values():
-			# stories -> Story.story_id (external)
+			# stories -> Story.story_id
 			if obj.stories != null:
 				for ref_id in obj.stories:
-					if not external_data.get("Story", {}).has(ref_id):
-						errors.append("StoryGroup." + str(obj.group_id) + ".stories references missing external Story." + str(ref_id))
-
-	# MediaPostGroup external references
+					if not all_objects.get("Story", {}).has(ref_id):
+						errors.append("StoryGroup." + str(obj.group_id) + ".stories references missing Story." + str(ref_id))
+	
+	# MediaPostGroup internal references
 	if all_objects.has("MediaPostGroup"):
 		for obj in all_objects["MediaPostGroup"].values():
-			# group_id -> StoryGroup.group_id (external)
+			# group_id -> StoryGroup.group_id
 			if obj.group_id != null:
-				if not external_data.get("StoryGroup", {}).has(obj.group_id):
-					errors.append("MediaPostGroup." + str(obj.group_id) + ".group_id references missing external StoryGroup." + str(obj.group_id))
-			# story_posts -> StoryPosts.story_id (external)
+				if not all_objects.get("StoryGroup", {}).has(obj.group_id):
+					errors.append("MediaPostGroup." + str(obj.group_id) + ".group_id references missing StoryGroup." + str(obj.group_id))
+			# story_posts -> StoryPosts.story_id
 			if obj.story_posts != null:
 				for ref_id in obj.story_posts:
-					if not external_data.get("StoryPosts", {}).has(ref_id):
-						errors.append("MediaPostGroup." + str(obj.group_id) + ".story_posts references missing external StoryPosts." + str(ref_id))
-
-	# StoryPosts external references
+					if not all_objects.get("StoryPosts", {}).has(ref_id):
+						errors.append("MediaPostGroup." + str(obj.group_id) + ".story_posts references missing StoryPosts." + str(ref_id))
+	
+	# StoryPosts internal references
 	if all_objects.has("StoryPosts"):
 		for obj in all_objects["StoryPosts"].values():
-			# story_id -> Story.story_id (external)
+			# story_id -> Story.story_id
 			if obj.story_id != null:
-				if not external_data.get("Story", {}).has(obj.story_id):
-					errors.append("StoryPosts." + str(obj.story_id) + ".story_id references missing external Story." + str(obj.story_id))
-			# posts -> SocialMediaPost.post_id (external)
+				if not all_objects.get("Story", {}).has(obj.story_id):
+					errors.append("StoryPosts." + str(obj.story_id) + ".story_id references missing Story." + str(obj.story_id))
+			# posts -> SocialMediaPost.post_id
 			if obj.posts != null:
 				for ref_id in obj.posts:
-					if not external_data.get("SocialMediaPost", {}).has(ref_id):
-						errors.append("StoryPosts." + str(obj.story_id) + ".posts references missing external SocialMediaPost." + str(ref_id))
-
+					if not all_objects.get("SocialMediaPost", {}).has(ref_id):
+						errors.append("StoryPosts." + str(obj.story_id) + ".posts references missing SocialMediaPost." + str(ref_id))
+	
 	return errors
 
 static func load_multiple_files(file_paths: Array[String]) -> Dictionary:
 	var combined = {}
 	var external_lookup = {}
-
+	
 	for path in file_paths:
 		var data = load_data(path, external_lookup)
 		for type_name in data.keys():
 			if not combined.has(type_name):
 				combined[type_name] = []
 			combined[type_name].append_array(data[type_name])
-
+			
 			var lookup = {}
 			for obj in data[type_name]:
 				if type_name == "StoryGroup" and "group_id" in obj:
@@ -181,5 +209,5 @@ static func load_multiple_files(file_paths: Array[String]) -> Dictionary:
 				if type_name == "SocialMediaPost" and "post_id" in obj:
 					lookup[obj.post_id] = obj
 			external_lookup[type_name] = lookup
-
+	
 	return combined

@@ -33,11 +33,8 @@ static func load_data(json_path: String, external_data: Dictionary = {}) -> Dict
 			{% set id_field = type_def | get_id_field %}
 			{% if id_field %}
 			if entry.has("{{ id_field }}"):
-				var id_val = entry["{{ id_field }}"]
-				if id_val is String:
-					{{ type_name | lower }}_by_id[id_val] = obj
-				else:
-					{{ type_name | lower }}_by_id[int(id_val)] = obj
+				var id_val:int = entry["{{ id_field }}"]
+				{{ type_name | lower }}_by_id[id_val] = obj
 			{% endif %}
 		result["{{ type_name }}"] = {{ type_name | lower }}_list
 		all_objects["{{ type_name }}"] = {{ type_name | lower }}_by_id
@@ -48,11 +45,58 @@ static func load_data(json_path: String, external_data: Dictionary = {}) -> Dict
 		for err in ref_errors:
 			push_warning("Reference error: " + err)
 
+	# Resolve all references automatically
+	_resolve_all_references(result, all_objects)
+	
 	return result
 
-static func _validate_references(all_objects: Dictionary, external_data: Dictionary) -> Array[String]:
-	var errors: Array[String] = []
+static func _resolve_all_references(result: Dictionary, all_objects: Dictionary) -> void:
+	"""Automatically resolve all ID references to object references"""
+	
+	{% for type_name, type_def in types.items() %}
+	{% set has_references = namespace(value=false) %}
+	{% for field_name, field_def in type_def.fields.items() %}
+	{% set constraints = field_def.get('constraints', []) %}
+	{% for constraint in constraints %}
+	{% if constraint is mapping and ('references' in constraint or 'references_many' in constraint) %}
+	{% set has_references.value = true %}
+	{% endif %}
+	{% endfor %}
+	{% endfor %}
+	{% if has_references.value %}
+	# Resolve references in {{ type_name }}
+	if result.has("{{ type_name }}"):
+		for obj in result["{{ type_name }}"]:
+			{% for field_name, field_def in type_def.fields.items() %}
+			{% set constraints = field_def.get('constraints', []) %}
+			{% for constraint in constraints %}
+			{% if constraint is mapping %}
+			{% if 'references' in constraint %}
+			{% set ref = constraint['references'] %}
+			{% set ref_type = ref.split('.')[0] %}
+			# Resolve {{ field_name }} -> {{ ref_type }}
+			if obj.{{ field_name }} != null and all_objects.has("{{ ref_type }}"):
+				obj.{{ field_name }}_resolved = all_objects["{{ ref_type }}"].get(obj.{{ field_name }})
+			{% elif 'references_many' in constraint %}
+			{% set ref = constraint['references_many'] %}
+			{% set ref_type = ref.split('.')[0] %}
+			# Resolve {{ field_name }} -> Array[{{ ref_type }}]
+			if obj.{{ field_name }} != null and all_objects.has("{{ ref_type }}"):
+				for ref_id in obj.{{ field_name }}:
+					var resolved_obj = all_objects["{{ ref_type }}"].get(ref_id)
+					if resolved_obj:
+						obj.{{ field_name }}_resolved.append(resolved_obj)
+			{% endif %}
+			{% endif %}
+			{% endfor %}
+			{% endfor %}
+	
+	{% endif %}
+	{% endfor %}
 
+static func _validate_references(all_objects: Dictionary, _external_data: Dictionary) -> Array[String]:
+	var errors: Array[String] = []
+	
 	{% for type_name, refs in references.items() %}
 	# {{ type_name }} internal references
 	if all_objects.has("{{ type_name }}"):
@@ -80,7 +124,7 @@ static func _validate_references(all_objects: Dictionary, external_data: Diction
 					{% endif %}
 			{% endif %}
 			{% endfor %}
-
+	
 	{% endfor %}
 	{% for type_name, refs in external_references.items() %}
 	# {{ type_name }} external references
@@ -93,7 +137,7 @@ static func _validate_references(all_objects: Dictionary, external_data: Diction
 			{% if is_many %}
 			if obj.{{ field_name }} != null:
 				for ref_id in obj.{{ field_name }}:
-					if not external_data.get("{{ target_type }}", {}).has(ref_id):
+					if not _external_data.get("{{ target_type }}", {}).has(ref_id):
 						{% if src_id_field %}
 						errors.append("{{ src_type }}." + str(obj.{{ src_id_field }}) + ".{{ field_name }} references missing external {{ target_type }}." + str(ref_id))
 						{% else %}
@@ -101,7 +145,7 @@ static func _validate_references(all_objects: Dictionary, external_data: Diction
 						{% endif %}
 			{% else %}
 			if obj.{{ field_name }} != null:
-				if not external_data.get("{{ target_type }}", {}).has(obj.{{ field_name }}):
+				if not _external_data.get("{{ target_type }}", {}).has(obj.{{ field_name }}):
 					{% if src_id_field %}
 					errors.append("{{ src_type }}." + str(obj.{{ src_id_field }}) + ".{{ field_name }} references missing external {{ target_type }}." + str(obj.{{ field_name }}))
 					{% else %}
@@ -109,21 +153,21 @@ static func _validate_references(all_objects: Dictionary, external_data: Diction
 					{% endif %}
 			{% endif %}
 			{% endfor %}
-
+	
 	{% endfor %}
 	return errors
 
 static func load_multiple_files(file_paths: Array[String]) -> Dictionary:
 	var combined = {}
 	var external_lookup = {}
-
+	
 	for path in file_paths:
 		var data = load_data(path, external_lookup)
 		for type_name in data.keys():
 			if not combined.has(type_name):
 				combined[type_name] = []
 			combined[type_name].append_array(data[type_name])
-
+			
 			var lookup = {}
 			for obj in data[type_name]:
 				{% for type_name, type_def in types.items() %}
@@ -134,5 +178,5 @@ static func load_multiple_files(file_paths: Array[String]) -> Dictionary:
 				{% endif %}
 				{% endfor %}
 			external_lookup[type_name] = lookup
-
+	
 	return combined
