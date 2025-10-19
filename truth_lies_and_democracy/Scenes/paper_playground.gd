@@ -17,14 +17,6 @@ var papers_need_to_be_signed: Array[Paper] = []
 var paper_container = Node2D.new()
 
 
-func load_papers():
-	var file = FileAccess.open("res://Assets/papers/papers.json", FileAccess.READ)
-	var raw = file.get_as_text()
-	var json = JSON.new()
-	json.parse(raw)
-	var papers = json.data
-
-	spawn_papers(papers)
 
 
 func _ready():
@@ -34,26 +26,25 @@ func _ready():
 	load_papers()
 
 
-func spawn_papers(papers : Array):
+func load_papers():
+	spawn_papers(DataLoader.StoryGroup_array)
+	
+func spawn_papers(papers : Array[GeneratedDataClasses.StoryGroup]):
 	var container = Node2D.new()
 	container.name = "PaperContainer"
 	add_child(container)
 	
-	for paper_set:Dictionary in papers:
-		if paper_set["group_id"] != str(Manager.current_round):
+	for paper_set:GeneratedDataClasses.StoryGroup in papers:
+		if paper_set.group_id != Manager.current_round:
 			continue
 			
-		for story:Dictionary in paper_set["stories"]:
+		for story:GeneratedDataClasses.Story in paper_set.stories_resolved:
 		
 			var paper :Paper= paper_scene.instantiate()
 			
-			var paper_headline : String = story["news_headline"]
-			var paper_content : String = story["news_content"]
-			var paper_is_fake : bool = story["news_fake"]
-			
-			paper.paper_headline = paper_headline
-			paper.paper_content = paper_content
-			paper.paper_is_fake = paper_is_fake
+			paper.paper_headline = story.news_headline
+			paper.paper_content = story.news_content
+			paper.paper_is_fake = story.news_fake
 			
 			paper.paper_color = Color(
 				randf_range(0.9, 1.0),

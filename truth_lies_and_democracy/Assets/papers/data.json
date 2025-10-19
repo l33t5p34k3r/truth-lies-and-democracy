@@ -1,0 +1,151 @@
+{
+  "StoryGroup": [
+	{
+	  "group_id": 1,
+	  "stories": [
+		1,
+		2,
+		3
+	  ]
+	}
+  ],
+  "Story": [
+	{
+	  "story_id": 1,
+	  "news_headline": "City Launches Rooftop Garden Initiative to Combat Urban Heat",
+	  "news_content": "In response to rising summer temperatures and poor air quality, the city council has approved funding for rooftop gardens on public buildings. Officials say the initiative will reduce heat islands, improve biodiversity, and provide fresh produce to local communities.",
+	  "news_fake": false
+	},
+	{
+	  "story_id": 2,
+	  "news_headline": "Study Finds Social Media Use Linked to Increased Anxiety in Teens",
+	  "news_content": "A new report from the National Health Institute shows a strong correlation between excessive social media use and rising anxiety levels among teenagers. Experts are calling for digital literacy programs and mental health support in schools.",
+	  "news_fake": false
+	},
+	{
+	  "story_id": 3,
+	  "news_headline": "Scientists Warn Trees May Be Secretly Communicating with Aliens",
+	  "news_content": "A fringe research group claims that certain tree species emit signals that could be interpreted as alien communication. While mainstream scientists dismiss the theory, the group insists their data shows 'non-terrestrial patterns' in tree root networks.",
+	  "news_fake": true
+	}
+  ],
+  "MediaPostGroup": [
+	{
+	  "group_id": 1,
+	  "story_posts": [
+		1,
+		2,
+		3
+	  ]
+	}
+  ],
+  "StoryPosts": [
+	{
+	  "story_id": 1,
+	  "posts": [
+		1,
+		2,
+		3,
+		4,
+		5
+	  ]
+	},
+	{
+	  "story_id": 2,
+	  "posts": [
+		6,
+		7,
+		8,
+		9,
+		10
+	  ]
+	},
+	{
+	  "story_id": 3,
+	  "posts": [
+		11,
+		12,
+		13,
+		14,
+		15
+	  ]
+	}
+  ],
+  "SocialMediaPost": [
+	{
+	  "post_id": 1,
+	  "user_name": "GreenThumbMike",
+	  "content_text": "Finally some actual progress on climate action! Would love to volunteer for the rooftop garden project if they need help 🌱"
+	},
+	{
+	  "post_id": 2,
+	  "user_name": "TaxpayerSteve",
+	  "content_text": "great another way to waste our money. how about fixing the potholes first???"
+	},
+	{
+	  "post_id": 3,
+	  "user_name": "UrbanPlanner_Sara",
+	  "content_text": "This is actually brilliant policy. Cities like Singapore have been doing this for years with measurable results in temperature reduction and stormwater management. Good to see evidence-based solutions being implemented."
+	},
+	{
+	  "post_id": 4,
+	  "user_name": "dave_2real",
+	  "content_text": "cool now i can grow tomatoes on city hall lmao"
+	},
+	{
+	  "post_id": 5,
+	  "user_name": "ClimateSkeptic99",
+	  "content_text": "Heat islands are natural. This is just virtue signaling by the council to look environmentally conscious before elections."
+	},
+	{
+	  "post_id": 6,
+	  "user_name": "worried_mom_of_3",
+	  "content_text": "I've been saying this for YEARS. My daughter is on her phone 6 hours a day and her grades are tanking. We need to take this seriously."
+	},
+	{
+	  "post_id": 7,
+	  "user_name": "GenZVoice",
+	  "content_text": "maybe the problem isn't the apps, maybe it's the world you created for us??? just a thought 💀"
+	},
+	{
+	  "post_id": 8,
+	  "user_name": "Dr_Martinez_PhD",
+	  "content_text": "Important to note correlation ≠ causation. Teens with existing anxiety may seek social media as coping mechanism. We need longitudinal studies before jumping to policy conclusions."
+	},
+	{
+	  "post_id": 9,
+	  "user_name": "nostalgic_millennial",
+	  "content_text": "we really had it better with MSN messenger and flip phones huh"
+	},
+	{
+	  "post_id": 10,
+	  "user_name": "TechBroKevin",
+	  "content_text": "Or maybe teach kids resilience instead of blaming technology? Social media is a tool. The problem is parenting."
+	},
+	{
+	  "post_id": 11,
+	  "user_name": "conspiracy_rabbit_hole",
+	  "content_text": "THEY'RE FINALLY ADMITTING IT!!! I've been researching tree frequencies for 10 years and everyone called me crazy. WHO'S LAUGHING NOW"
+	},
+	{
+	  "post_id": 12,
+	  "user_name": "ActualBotanist",
+	  "content_text": "This is embarrassingly bad science. Trees DO communicate via mycorrhizal networks but calling it 'alien signals' is peak pseudoscience clickbait. Please stop sharing this garbage."
+	},
+	{
+	  "post_id": 13,
+	  "user_name": "meme_lord_420",
+	  "content_text": "my guy really said the trees are texting aliens 💀💀💀 bro what are they even talking about? \"hey ET the soil pH is looking rough today\""
+	},
+	{
+	  "post_id": 14,
+	  "user_name": "open_minded_seeker",
+	  "content_text": "I mean... we don't know everything about the universe. Maybe we shouldn't dismiss this so quickly? Ancient cultures always knew trees were special 🌳✨"
+	},
+	{
+	  "post_id": 15,
+	  "user_name": "ScienceTeacher_Julie",
+	  "content_text": "Class, this is a perfect example of why media literacy matters. Notice how the article itself says 'fringe group' and 'mainstream scientists dismiss' - they're telling you it's fake news IN the fake news. Read critically!"
+	}
+  ]
+}

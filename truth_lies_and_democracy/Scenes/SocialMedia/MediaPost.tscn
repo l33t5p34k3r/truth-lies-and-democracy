@@ -45,13 +45,13 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.1584723, 0.15847233, 0.15847224, 1)
 theme_override_font_sizes/font_size = 16
-text = "User01asdadsadasdadasdasd"
+text = "elp 🌱"
 horizontal_alignment = 2
 
 [node name="PostContent" type="RichTextLabel" parent="MarginContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Cool story my bro"
+text = "elp 🌱"
 fit_content = true
 scroll_active = false
