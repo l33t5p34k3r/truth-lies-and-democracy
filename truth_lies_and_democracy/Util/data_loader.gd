@@ -1,7 +1,15 @@
 class_name DataLoader
 extends RefCounted
 
-static func load_data(json_path: String, external_data: Dictionary = {}) -> Dictionary:
+
+static var StoryGroup_array:Array[GeneratedDataClasses.StoryGroup] = []
+static var Story_array:Array[GeneratedDataClasses.Story] = []
+static var MediaPostGroup_array:Array[GeneratedDataClasses.MediaPostGroup] = []
+static var StoryPosts_array:Array[GeneratedDataClasses.StoryPosts] = []
+static var SocialMediaPost_array:Array[GeneratedDataClasses.SocialMediaPost] = []
+
+static func _load_data(json_path: String, external_data: Dictionary = {}) -> Dictionary:
+	""" [WARN] Do not use this function directly! """
 	var file = FileAccess.open(json_path, FileAccess.READ)
 	if not file:
 		push_error("Failed to open: " + json_path)
@@ -24,11 +32,12 @@ static func load_data(json_path: String, external_data: Dictionary = {}) -> Dict
 		var storygroup_list: Array[GeneratedDataClasses.StoryGroup] = []
 		var storygroup_by_id = {}
 		for entry in data["StoryGroup"]:
-			var obj = GeneratedDataClasses.StoryGroup.new(entry)
+			var obj := GeneratedDataClasses.StoryGroup.new(entry)
 			var errors = obj.validate()
 			if errors.size() > 0:
 				push_warning("Validation errors: " + str(errors))
 			storygroup_list.append(obj)
+			StoryGroup_array.append(obj)
 			if entry.has("group_id"):
 				var id_val:int = entry["group_id"]
 				storygroup_by_id[id_val] = obj
@@ -39,11 +48,12 @@ static func load_data(json_path: String, external_data: Dictionary = {}) -> Dict
 		var story_list: Array[GeneratedDataClasses.Story] = []
 		var story_by_id = {}
 		for entry in data["Story"]:
-			var obj = GeneratedDataClasses.Story.new(entry)
+			var obj := GeneratedDataClasses.Story.new(entry)
 			var errors = obj.validate()
 			if errors.size() > 0:
 				push_warning("Validation errors: " + str(errors))
 			story_list.append(obj)
+			Story_array.append(obj)
 			if entry.has("story_id"):
 				var id_val:int = entry["story_id"]
 				story_by_id[id_val] = obj
@@ -54,11 +64,12 @@ static func load_data(json_path: String, external_data: Dictionary = {}) -> Dict
 		var mediapostgroup_list: Array[GeneratedDataClasses.MediaPostGroup] = []
 		var mediapostgroup_by_id = {}
 		for entry in data["MediaPostGroup"]:
-			var obj = GeneratedDataClasses.MediaPostGroup.new(entry)
+			var obj := GeneratedDataClasses.MediaPostGroup.new(entry)
 			var errors = obj.validate()
 			if errors.size() > 0:
 				push_warning("Validation errors: " + str(errors))
 			mediapostgroup_list.append(obj)
+			MediaPostGroup_array.append(obj)
 			if entry.has("group_id"):
 				var id_val:int = entry["group_id"]
 				mediapostgroup_by_id[id_val] = obj
@@ -69,11 +80,12 @@ static func load_data(json_path: String, external_data: Dictionary = {}) -> Dict
 		var storyposts_list: Array[GeneratedDataClasses.StoryPosts] = []
 		var storyposts_by_id = {}
 		for entry in data["StoryPosts"]:
-			var obj = GeneratedDataClasses.StoryPosts.new(entry)
+			var obj := GeneratedDataClasses.StoryPosts.new(entry)
 			var errors = obj.validate()
 			if errors.size() > 0:
 				push_warning("Validation errors: " + str(errors))
 			storyposts_list.append(obj)
+			StoryPosts_array.append(obj)
 			if entry.has("story_id"):
 				var id_val:int = entry["story_id"]
 				storyposts_by_id[id_val] = obj
@@ -84,11 +96,12 @@ static func load_data(json_path: String, external_data: Dictionary = {}) -> Dict
 		var socialmediapost_list: Array[GeneratedDataClasses.SocialMediaPost] = []
 		var socialmediapost_by_id = {}
 		for entry in data["SocialMediaPost"]:
-			var obj = GeneratedDataClasses.SocialMediaPost.new(entry)
+			var obj := GeneratedDataClasses.SocialMediaPost.new(entry)
 			var errors = obj.validate()
 			if errors.size() > 0:
 				push_warning("Validation errors: " + str(errors))
 			socialmediapost_list.append(obj)
+			SocialMediaPost_array.append(obj)
 			if entry.has("post_id"):
 				var id_val:int = entry["post_id"]
 				socialmediapost_by_id[id_val] = obj
@@ -107,7 +120,7 @@ static func load_data(json_path: String, external_data: Dictionary = {}) -> Dict
 
 static func _resolve_all_references(result: Dictionary, all_objects: Dictionary) -> void:
 	"""Automatically resolve all ID references to object references"""
-	
+
 	# Resolve references in StoryGroup
 	if result.has("StoryGroup"):
 		for obj in result["StoryGroup"]:
@@ -185,12 +198,14 @@ static func _validate_references(all_objects: Dictionary, _external_data: Dictio
 	
 	return errors
 
-static func load_multiple_files(file_paths: Array[String]) -> Dictionary:
+static var full_data:Dictionary = {}
+
+static func load_multiple_files(file_paths: Array[String]) -> void:
 	var combined = {}
 	var external_lookup = {}
 	
 	for path in file_paths:
-		var data = load_data(path, external_lookup)
+		var data = _load_data(path, external_lookup)
 		for type_name in data.keys():
 			if not combined.has(type_name):
 				combined[type_name] = []
@@ -210,4 +225,4 @@ static func load_multiple_files(file_paths: Array[String]) -> Dictionary:
 					lookup[obj.post_id] = obj
 			external_lookup[type_name] = lookup
 	
-	return combined
+	full_data = combined

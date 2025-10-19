@@ -97,6 +97,8 @@ func funding_from_parties() -> int:
 	return total_funding
 
 
+func _enter_tree() -> void:
+	DataLoader.load_multiple_files(["res://Assets/papers/data.json"])
 
 
 # bunch of stats

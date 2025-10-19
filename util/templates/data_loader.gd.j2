@@ -1,7 +1,13 @@
 class_name DataLoader
 extends RefCounted
 
-static func load_data(json_path: String, external_data: Dictionary = {}) -> Dictionary:
+
+{% for type_name, type_def in types.items() %}
+static var {{ type_name }}_array:Array[GeneratedDataClasses.{{ type_name }}] = []
+{% endfor %}
+
+static func _load_data(json_path: String, external_data: Dictionary = {}) -> Dictionary:
+	""" [WARN] Do not use this function directly! """
 	var file = FileAccess.open(json_path, FileAccess.READ)
 	if not file:
 		push_error("Failed to open: " + json_path)
@@ -25,11 +31,12 @@ static func load_data(json_path: String, external_data: Dictionary = {}) -> Dict
 		var {{ type_name | lower }}_list: Array[GeneratedDataClasses.{{ type_name }}] = []
 		var {{ type_name | lower }}_by_id = {}
 		for entry in data["{{ type_name }}"]:
-			var obj = GeneratedDataClasses.{{ type_name }}.new(entry)
+			var obj := GeneratedDataClasses.{{ type_name }}.new(entry)
 			var errors = obj.validate()
 			if errors.size() > 0:
 				push_warning("Validation errors: " + str(errors))
 			{{ type_name | lower }}_list.append(obj)
+			{{ type_name }}_array.append(obj)
 			{% set id_field = type_def | get_id_field %}
 			{% if id_field %}
 			if entry.has("{{ id_field }}"):
@@ -52,7 +59,7 @@ static func load_data(json_path: String, external_data: Dictionary = {}) -> Dict
 
 static func _resolve_all_references(result: Dictionary, all_objects: Dictionary) -> void:
 	"""Automatically resolve all ID references to object references"""
-	
+
 	{% for type_name, type_def in types.items() %}
 	{% set has_references = namespace(value=false) %}
 	{% for field_name, field_def in type_def.fields.items() %}
@@ -157,12 +164,14 @@ static func _validate_references(all_objects: Dictionary, _external_data: Dictio
 	{% endfor %}
 	return errors
 
-static func load_multiple_files(file_paths: Array[String]) -> Dictionary:
+static var full_data:Dictionary = {}
+
+static func load_multiple_files(file_paths: Array[String]) -> void:
 	var combined = {}
 	var external_lookup = {}
 	
 	for path in file_paths:
-		var data = load_data(path, external_lookup)
+		var data = _load_data(path, external_lookup)
 		for type_name in data.keys():
 			if not combined.has(type_name):
 				combined[type_name] = []
@@ -179,4 +188,4 @@ static func load_multiple_files(file_paths: Array[String]) -> Dictionary:
 				{% endfor %}
 			external_lookup[type_name] = lookup
 	
-	return combined
+	full_data = combined
