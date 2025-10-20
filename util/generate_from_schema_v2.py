@@ -44,6 +44,12 @@ class SchemaGenerator:
                             is_external = any(c == 'external' or (isinstance(c, dict) and 'external' in c) for c in constraints)
                             target = (type_name, field_name, ref, False, is_external)
 
+                            if field_def["type"].startswith("array<"):
+                                print(f"In: {type_name}")
+                                print(f"[ERROR] 'references' expects single target, not array!")
+                                print(field_def)
+                                exit(1)
+
                             if is_external:
                                 self.external_references.setdefault(type_name, []).append(target)
                             else:
@@ -53,6 +59,12 @@ class SchemaGenerator:
                             ref = constraint['references_many']
                             is_external = any(c == 'external' or (isinstance(c, dict) and 'external' in c) for c in constraints)
                             target = (type_name, field_name, ref, True, is_external)
+
+                            if not field_def["type"].startswith("array<"):
+                                print(f"In: {type_name}")
+                                print(f"[ERROR] 'references_many' expects array, not single target!")
+                                print(field_def)
+                                exit(1)
 
                             if is_external:
                                 self.external_references.setdefault(type_name, []).append(target)
@@ -84,9 +96,6 @@ class SchemaGenerator:
 
     def generate_data_loader(self, output_path: Path):
         template = self.env.get_template('data_loader.gd.j2')
-        print(self.types)
-        print(self.references)
-        print(self.external_references)
         content = template.render(
             types=self.types,
             references=self.references,
