@@ -3,7 +3,7 @@ name: Convert Excel
 on:
   push:
     paths:
-      - util\data.xlsx  # Trigger only if this file changes
+      - util/data.xlsx  # Trigger only if this file changes
 
   workflow_dispatch:
 
