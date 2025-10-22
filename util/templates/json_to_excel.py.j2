@@ -10,7 +10,7 @@ def format_value(value, field_type: str):
             return ", ".join(str(item) for item in value)
         return str(value)
     elif field_type == "bool":
-        return "true" if value else "false"
+        return "TRUE" if value else "FALSE"
     else:
         return value
 
@@ -24,7 +24,7 @@ def json_to_excel(json_path: str, excel_path: str, output_path: str):
     if "{{ type_name }}" in wb.sheetnames and "{{ type_name }}" in json_data:
         ws = wb["{{ type_name }}"]
         headers = [cell.value for cell in ws[1]]
-        
+
         field_types = {
             {% for field_name, field_def in type_def.fields.items() %}
             "{{ field_name }}": "{{ field_def.type }}",

@@ -75,7 +75,7 @@ autowrap_mode = 3
 [node name="RichTextLabel" type="RichTextLabel" parent="Content/Control"]
 layout_mode = 0
 offset_left = 2.0
-offset_top = 88.0
+offset_top = 114.0
 offset_right = 273.0
 offset_bottom = 348.0
 mouse_filter = 2

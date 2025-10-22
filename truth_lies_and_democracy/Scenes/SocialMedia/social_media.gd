@@ -12,8 +12,14 @@ func _ready() -> void:
 			
 	
 func load_posts():
+	var active_stories:Array[int] = []
+	for story_group in DataLoader.StoryGroup_array:
+		if story_group.group_id == Manager.current_round:
+			active_stories = story_group.stories
 	for post_group in DataLoader.MediaPostGroup_array:
 		for story_post in post_group.story_posts_resolved:
+			if not story_post.story_id in active_stories:
+				continue
 			
 			var new_story_header :StoryPost = STORY_POST.instantiate()
 			new_story_header.text_story = story_post.story_id_resolved.news_headline
@@ -29,3 +35,7 @@ func load_posts():
 				
 	
 	
+
+
+func _on_button_4_pressed() -> void:
+	get_tree().change_scene_to_file("res://Scenes/paper_playground.tscn")

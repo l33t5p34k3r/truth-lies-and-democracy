@@ -10,7 +10,7 @@ def format_value(value, field_type: str):
             return ", ".join(str(item) for item in value)
         return str(value)
     elif field_type == "bool":
-        return "true" if value else "false"
+        return "TRUE" if value else "FALSE"
     else:
         return value
 
@@ -23,7 +23,7 @@ def json_to_excel(json_path: str, excel_path: str, output_path: str):
     if "StoryGroup" in wb.sheetnames and "StoryGroup" in json_data:
         ws = wb["StoryGroup"]
         headers = [cell.value for cell in ws[1]]
-        
+
         field_types = {
             "group_id": "int",
             "stories": "array<int>",
@@ -39,7 +39,7 @@ def json_to_excel(json_path: str, excel_path: str, output_path: str):
     if "Story" in wb.sheetnames and "Story" in json_data:
         ws = wb["Story"]
         headers = [cell.value for cell in ws[1]]
-        
+
         field_types = {
             "story_id": "int",
             "news_headline": "string",
@@ -57,7 +57,7 @@ def json_to_excel(json_path: str, excel_path: str, output_path: str):
     if "MediaPostGroup" in wb.sheetnames and "MediaPostGroup" in json_data:
         ws = wb["MediaPostGroup"]
         headers = [cell.value for cell in ws[1]]
-        
+
         field_types = {
             "group_id": "int",
             "story_posts": "array<int>",
@@ -73,7 +73,7 @@ def json_to_excel(json_path: str, excel_path: str, output_path: str):
     if "StoryPosts" in wb.sheetnames and "StoryPosts" in json_data:
         ws = wb["StoryPosts"]
         headers = [cell.value for cell in ws[1]]
-        
+
         field_types = {
             "story_id": "int",
             "posts": "array<int>",
@@ -89,7 +89,7 @@ def json_to_excel(json_path: str, excel_path: str, output_path: str):
     if "SocialMediaPost" in wb.sheetnames and "SocialMediaPost" in json_data:
         ws = wb["SocialMediaPost"]
         headers = [cell.value for cell in ws[1]]
-        
+
         field_types = {
             "post_id": "int",
             "user_name": "string",
