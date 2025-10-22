@@ -22,8 +22,8 @@ func load_posts():
 			for post in story_post.posts_resolved:
 				var new_post_node :MediaPost = MEDIA_POST.instantiate()
 				
-				new_post_node.text_username = post["user_name"]
-				new_post_node.text_content = post["content_text"]
+				new_post_node.text_username = post.user_name
+				new_post_node.text_content = post.content_text
 				
 				content.add_child(new_post_node)
 				

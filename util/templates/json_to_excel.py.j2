@@ -1,0 +1,50 @@
+#!/usr/bin/env python3
+import openpyxl
+import json
+from pathlib import Path
+import sys
+
+def format_value(value, field_type: str):
+    if field_type.startswith("array<"):
+        if isinstance(value, list):
+            return ", ".join(str(item) for item in value)
+        return str(value)
+    elif field_type == "bool":
+        return "true" if value else "false"
+    else:
+        return value
+
+def json_to_excel(json_path: str, excel_path: str, output_path: str):
+    with open(json_path, "r", encoding="utf-8") as f:
+        json_data = json.load(f)
+
+    wb = openpyxl.load_workbook(excel_path)
+
+    {% for type_name, type_def in types.items() %}
+    if "{{ type_name }}" in wb.sheetnames and "{{ type_name }}" in json_data:
+        ws = wb["{{ type_name }}"]
+        headers = [cell.value for cell in ws[1]]
+        
+        field_types = {
+            {% for field_name, field_def in type_def.fields.items() %}
+            "{{ field_name }}": "{{ field_def.type }}",
+            {% endfor %}
+        }
+
+        for row_idx, entry in enumerate(json_data["{{ type_name }}"], start=3):
+            for col_idx, header in enumerate(headers, start=1):
+                if header in entry and header in field_types:
+                    value = entry[header]
+                    formatted_value = format_value(value, field_types[header])
+                    ws.cell(row=row_idx, column=col_idx, value=formatted_value)
+
+    {% endfor %}
+    wb.save(output_path)
+    print(f"Populated {output_path} with data from {json_path}")
+
+if __name__ == "__main__":
+    if len(sys.argv) != 4:
+        print("Usage: python json_to_excel.py <input.json> <template.xlsx> <output.xlsx>")
+        sys.exit(1)
+
+    json_to_excel(sys.argv[1], sys.argv[2], sys.argv[3])

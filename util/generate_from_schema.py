@@ -81,6 +81,7 @@ class SchemaGenerator:
         self.generate_data_loader(output_path_godot / "data_loader.gd")
         self.generate_excel_template(output_path / "data_template.xlsx")
         self.generate_excel_converter(output_path / "excel_to_json.py")
+        self.generate_json_converter(output_path / "json_to_excel.py")
         self.generate_validator(output_path / "validate_data.py")
 
         print(f"Generated files in {output_path} and {output_path_godot}")
@@ -110,6 +111,15 @@ class SchemaGenerator:
         )
         output_path.write_text(content, "utf-8")
         output_path.chmod(0o755)
+
+    def generate_json_converter(self, output_path: Path):
+        template = self.env.get_template('json_to_excel.py.j2')
+        content = template.render(
+            types=self.types
+        )
+        output_path.write_text(content, "utf-8")
+        output_path.chmod(0o755)
+
 
     def generate_validator(self, output_path: Path):
         template = self.env.get_template('validator.py.j2')
