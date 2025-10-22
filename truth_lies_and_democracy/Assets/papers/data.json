@@ -1,151 +1,459 @@
 {
   "StoryGroup": [
-	{
-	  "group_id": 1,
-	  "stories": [
-		1,
-		2,
-		3
-	  ]
-	}
+    {
+      "group_id": 1,
+      "stories": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "group_id": 2,
+      "stories": [
+        4,
+        5,
+        6
+      ]
+    },
+    {
+      "group_id": 3,
+      "stories": [
+        7,
+        8,
+        9
+      ]
+    }
   ],
   "Story": [
-	{
-	  "story_id": 1,
-	  "news_headline": "City Launches Rooftop Garden Initiative to Combat Urban Heat",
-	  "news_content": "In response to rising summer temperatures and poor air quality, the city council has approved funding for rooftop gardens on public buildings. Officials say the initiative will reduce heat islands, improve biodiversity, and provide fresh produce to local communities.",
-	  "news_fake": false
-	},
-	{
-	  "story_id": 2,
-	  "news_headline": "Study Finds Social Media Use Linked to Increased Anxiety in Teens",
-	  "news_content": "A new report from the National Health Institute shows a strong correlation between excessive social media use and rising anxiety levels among teenagers. Experts are calling for digital literacy programs and mental health support in schools.",
-	  "news_fake": false
-	},
-	{
-	  "story_id": 3,
-	  "news_headline": "Scientists Warn Trees May Be Secretly Communicating with Aliens",
-	  "news_content": "A fringe research group claims that certain tree species emit signals that could be interpreted as alien communication. While mainstream scientists dismiss the theory, the group insists their data shows 'non-terrestrial patterns' in tree root networks.",
-	  "news_fake": true
-	}
+    {
+      "story_id": 1,
+      "news_headline": "City Launches Rooftop Garden Initiative to Combat Urban Heat",
+      "news_content": "In response to rising summer temperatures and poor air quality, the city council has approved funding for rooftop gardens on public buildings. Officials say the initiative will reduce heat islands, improve biodiversity, and provide fresh produce to local communities.",
+      "news_fake": false
+    },
+    {
+      "story_id": 2,
+      "news_headline": "Study Finds Social Media Use Linked to Increased Anxiety in Teens",
+      "news_content": "A new report from the National Health Institute shows a strong correlation between excessive social media use and rising anxiety levels among teenagers. Experts are calling for digital literacy programs and mental health support in schools.",
+      "news_fake": false
+    },
+    {
+      "story_id": 3,
+      "news_headline": "Scientists Warn Trees May Be Secretly Communicating with Aliens",
+      "news_content": "A fringe research group claims that certain tree species emit signals that could be interpreted as alien communication. While mainstream scientists dismiss the theory, the group insists their data shows 'non-terrestrial patterns' in tree root networks.",
+      "news_fake": true
+    },
+    {
+      "story_id": 4,
+      "news_headline": "New Underground Park System Uses Recycled Water to Cool Downtown District",
+      "news_content": "City planners have unveiled an innovative network of subterranean green spaces that utilize treated greywater for irrigation. The project aims to lower ambient temperatures by up to 5 degrees while creating recreational areas for residents in densely populated neighborhoods.",
+      "news_fake": false
+    },
+    {
+      "story_id": 5,
+      "news_headline": "Vertical Farms on Highway Overpasses Could Feed 50,000 Residents",
+      "news_content": "Engineers propose converting underutilized highway infrastructure into hydroponic farming installations. The pilot program would transform concrete surfaces into productive agricultural space while reducing transportation emissions from food supply chains.",
+      "news_fake": false
+    },
+    {
+      "story_id": 6,
+      "news_headline": "City Pigeons Genetically Modified to Purify Air, Mayor Claims",
+      "news_content": "In a controversial press conference, the mayor announced that local pigeons have been secretly bioengineered to filter pollutants through their respiratory systems. Scientists immediately questioned the feasibility and ethics of the alleged program, which city officials refuse to provide documentation for.",
+      "news_fake": true
+    },
+    {
+      "story_id": 7,
+      "news_headline": "Schools Introduce 'Phone-Free Fridays' to Boost Student Engagement",
+      "news_content": "Following research on digital distractions and mental well-being, several school districts are implementing weekly phone-free days. Early results show improved classroom participation and reduced peer conflict, though some parents express concerns about emergency communication.",
+      "news_fake": false
+    },
+    {
+      "story_id": 8,
+      "news_headline": "Gaming Apps Now Required to Include Mental Health Check-Ins for Young Users",
+      "news_content": "New regulations mandate that gaming platforms serving users under 18 must incorporate periodic wellness prompts and connect players to counseling resources. The law responds to growing evidence linking excessive gaming with depression and social isolation in adolescents.",
+      "news_fake": false
+    },
+    {
+      "story_id": 9,
+      "news_headline": "Teens Developing Telepathic Abilities from Smartphone Radiation, Report Suggests",
+      "news_content": "An unverified study circulating online claims that prolonged smartphone use may be activating dormant psychic centers in teenage brains. The paper, published by an unaccredited institute, has been widely criticized for cherry-picked data and lack of peer review.",
+      "news_fake": true
+    }
   ],
   "MediaPostGroup": [
-	{
-	  "group_id": 1,
-	  "story_posts": [
-		1,
-		2,
-		3
-	  ]
-	}
+    {
+      "group_id": 1,
+      "story_posts": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "group_id": 2,
+      "story_posts": [
+        4,
+        5,
+        6
+      ]
+    },
+    {
+      "group_id": 3,
+      "story_posts": [
+        7,
+        8,
+        9
+      ]
+    }
   ],
   "StoryPosts": [
-	{
-	  "story_id": 1,
-	  "posts": [
-		1,
-		2,
-		3,
-		4,
-		5
-	  ]
-	},
-	{
-	  "story_id": 2,
-	  "posts": [
-		6,
-		7,
-		8,
-		9,
-		10
-	  ]
-	},
-	{
-	  "story_id": 3,
-	  "posts": [
-		11,
-		12,
-		13,
-		14,
-		15
-	  ]
-	}
+    {
+      "story_id": 1,
+      "posts": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "story_id": 2,
+      "posts": [
+        6,
+        7,
+        8,
+        9,
+        10
+      ]
+    },
+    {
+      "story_id": 3,
+      "posts": [
+        11,
+        12,
+        13,
+        14,
+        15
+      ]
+    },
+    {
+      "story_id": 4,
+      "posts": [
+        16,
+        17,
+        18,
+        19,
+        20,
+        21
+      ]
+    },
+    {
+      "story_id": 5,
+      "posts": [
+        22,
+        23,
+        24,
+        25,
+        26,
+        27
+      ]
+    },
+    {
+      "story_id": 6,
+      "posts": [
+        28,
+        29,
+        30,
+        31,
+        32,
+        33
+      ]
+    },
+    {
+      "story_id": 7,
+      "posts": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ]
+    },
+    {
+      "story_id": 8,
+      "posts": [
+        40,
+        41,
+        42,
+        43,
+        44
+      ]
+    },
+    {
+      "story_id": 9,
+      "posts": [
+        45,
+        46,
+        47,
+        48,
+        49,
+        50
+      ]
+    }
   ],
   "SocialMediaPost": [
-	{
-	  "post_id": 1,
-	  "user_name": "GreenThumbMike",
-	  "content_text": "Finally some actual progress on climate action! Would love to volunteer for the rooftop garden project if they need help 🌱"
-	},
-	{
-	  "post_id": 2,
-	  "user_name": "TaxpayerSteve",
-	  "content_text": "great another way to waste our money. how about fixing the potholes first???"
-	},
-	{
-	  "post_id": 3,
-	  "user_name": "UrbanPlanner_Sara",
-	  "content_text": "This is actually brilliant policy. Cities like Singapore have been doing this for years with measurable results in temperature reduction and stormwater management. Good to see evidence-based solutions being implemented."
-	},
-	{
-	  "post_id": 4,
-	  "user_name": "dave_2real",
-	  "content_text": "cool now i can grow tomatoes on city hall lmao"
-	},
-	{
-	  "post_id": 5,
-	  "user_name": "ClimateSkeptic99",
-	  "content_text": "Heat islands are natural. This is just virtue signaling by the council to look environmentally conscious before elections."
-	},
-	{
-	  "post_id": 6,
-	  "user_name": "worried_mom_of_3",
-	  "content_text": "I've been saying this for YEARS. My daughter is on her phone 6 hours a day and her grades are tanking. We need to take this seriously."
-	},
-	{
-	  "post_id": 7,
-	  "user_name": "GenZVoice",
-	  "content_text": "maybe the problem isn't the apps, maybe it's the world you created for us??? just a thought 💀"
-	},
-	{
-	  "post_id": 8,
-	  "user_name": "Dr_Martinez_PhD",
-	  "content_text": "Important to note correlation ≠ causation. Teens with existing anxiety may seek social media as coping mechanism. We need longitudinal studies before jumping to policy conclusions."
-	},
-	{
-	  "post_id": 9,
-	  "user_name": "nostalgic_millennial",
-	  "content_text": "we really had it better with MSN messenger and flip phones huh"
-	},
-	{
-	  "post_id": 10,
-	  "user_name": "TechBroKevin",
-	  "content_text": "Or maybe teach kids resilience instead of blaming technology? Social media is a tool. The problem is parenting."
-	},
-	{
-	  "post_id": 11,
-	  "user_name": "conspiracy_rabbit_hole",
-	  "content_text": "THEY'RE FINALLY ADMITTING IT!!! I've been researching tree frequencies for 10 years and everyone called me crazy. WHO'S LAUGHING NOW"
-	},
-	{
-	  "post_id": 12,
-	  "user_name": "ActualBotanist",
-	  "content_text": "This is embarrassingly bad science. Trees DO communicate via mycorrhizal networks but calling it 'alien signals' is peak pseudoscience clickbait. Please stop sharing this garbage."
-	},
-	{
-	  "post_id": 13,
-	  "user_name": "meme_lord_420",
-	  "content_text": "my guy really said the trees are texting aliens 💀💀💀 bro what are they even talking about? \"hey ET the soil pH is looking rough today\""
-	},
-	{
-	  "post_id": 14,
-	  "user_name": "open_minded_seeker",
-	  "content_text": "I mean... we don't know everything about the universe. Maybe we shouldn't dismiss this so quickly? Ancient cultures always knew trees were special 🌳✨"
-	},
-	{
-	  "post_id": 15,
-	  "user_name": "ScienceTeacher_Julie",
-	  "content_text": "Class, this is a perfect example of why media literacy matters. Notice how the article itself says 'fringe group' and 'mainstream scientists dismiss' - they're telling you it's fake news IN the fake news. Read critically!"
-	}
+    {
+      "post_id": 1,
+      "user_name": "GreenThumbMike",
+      "content_text": "Finally some actual progress on climate action! Would love to volunteer for the rooftop garden project if they need help 🌱"
+    },
+    {
+      "post_id": 2,
+      "user_name": "TaxpayerSteve",
+      "content_text": "great another way to waste our money. how about fixing the potholes first???"
+    },
+    {
+      "post_id": 3,
+      "user_name": "UrbanPlanner_Sara",
+      "content_text": "This is actually brilliant policy. Cities like Singapore have been doing this for years with measurable results in temperature reduction and stormwater management. Good to see evidence-based solutions being implemented."
+    },
+    {
+      "post_id": 4,
+      "user_name": "dave_2real",
+      "content_text": "cool now i can grow tomatoes on city hall lmao"
+    },
+    {
+      "post_id": 5,
+      "user_name": "ClimateSkeptic99",
+      "content_text": "Heat islands are natural. This is just virtue signaling by the council to look environmentally conscious before elections."
+    },
+    {
+      "post_id": 6,
+      "user_name": "worried_mom_of_3",
+      "content_text": "I've been saying this for YEARS. My daughter is on her phone 6 hours a day and her grades are tanking. We need to take this seriously."
+    },
+    {
+      "post_id": 7,
+      "user_name": "GenZVoice",
+      "content_text": "maybe the problem isn't the apps, maybe it's the world you created for us??? just a thought 💀"
+    },
+    {
+      "post_id": 8,
+      "user_name": "Dr_Martinez_PhD",
+      "content_text": "Important to note correlation ≠ causation. Teens with existing anxiety may seek social media as coping mechanism. We need longitudinal studies before jumping to policy conclusions."
+    },
+    {
+      "post_id": 9,
+      "user_name": "nostalgic_millennial",
+      "content_text": "we really had it better with MSN messenger and flip phones huh"
+    },
+    {
+      "post_id": 10,
+      "user_name": "TechBroKevin420",
+      "content_text": "Or maybe teach kids resilience instead of blaming technology? Social media is a tool. The problem is parenting."
+    },
+    {
+      "post_id": 11,
+      "user_name": "conspiracy_rabbit_hole",
+      "content_text": "THEY'RE FINALLY ADMITTING IT!!! I've been researching tree frequencies for 10 years and everyone called me crazy. WHO'S LAUGHING NOW"
+    },
+    {
+      "post_id": 12,
+      "user_name": "ActualBotanist",
+      "content_text": "This is embarrassingly bad science. Trees DO communicate via mycorrhizal networks but calling it 'alien signals' is peak pseudoscience clickbait. Please stop sharing this garbage."
+    },
+    {
+      "post_id": 13,
+      "user_name": "meme_lord_420",
+      "content_text": "my guy really said the trees are texting aliens 💀💀💀 bro what are they even talking about? \"hey ET the soil pH is looking rough today\""
+    },
+    {
+      "post_id": 14,
+      "user_name": "open_minded_seeker",
+      "content_text": "I mean... we don't know everything about the universe. Maybe we shouldn't dismiss this so quickly? Ancient cultures always knew trees were special 🌳✨"
+    },
+    {
+      "post_id": 15,
+      "user_name": "ScienceTeacher_Julie",
+      "content_text": "Class, this is a perfect example of why media literacy matters. Notice how the article itself says 'fringe group' and 'mainstream scientists dismiss' - they're telling you it's fake news IN the fake news. Read critically!"
+    },
+    {
+      "post_id": 16,
+      "user_name": "UrbanExplorer_22",
+      "content_text": "Underground parks?? This is actually genius. Getting green space without sacrificing surface area is exactly what dense cities need. 🌳"
+    },
+    {
+      "post_id": 17,
+      "user_name": "TaxpayerTodd",
+      "content_text": "Cool concept but how much is this costing us? Would like to see the budget breakdown before celebrating. 💸"
+    },
+    {
+      "post_id": 18,
+      "user_name": "SarahRunsDaily",
+      "content_text": "Been running in 95 degree heat all summer. If this actually drops temps by 5 degrees I'm here for it 🏃‍♀️🔥"
+    },
+    {
+      "post_id": 19,
+      "user_name": "DungeonMasterDave",
+      "content_text": "Finally, a real-life dungeon I can explore that doesn't require a d20 roll! Do I need to bring torches or is there lighting? ⚔️🌿"
+    },
+    {
+      "post_id": 20,
+      "user_name": "DowntownDweller",
+      "content_text": "This would be amazing for my neighborhood. Walking outside feels like an oven right now. When does construction start?"
+    },
+    {
+      "post_id": 21,
+      "user_name": "MolePersonMemes",
+      "content_text": "us mole people have been saying this for YEARS but nobody listens until the surface dwellers figure it out themselves 🙄"
+    },
+    {
+      "post_id": 22,
+      "user_name": "LocalfoodLisa",
+      "content_text": "Vertical farms on highways is the kind of innovative thinking we need! Shorter supply chains = fresher food and less emissions 🥬✨"
+    },
+    {
+      "post_id": 23,
+      "user_name": "EngineerDad",
+      "content_text": "The structural engineering challenges here are massive. Highway overpasses aren't designed to support that kind of sustained weight and irrigation systems. 🏗️"
+    },
+    {
+      "post_id": 24,
+      "user_name": "FarmersMarketFan",
+      "content_text": "Great idea in theory but what about the car exhaust? Crops growing directly above traffic doesn't sound safe to eat 😬"
+    },
+    {
+      "post_id": 25,
+      "user_name": "TrafficJamTerry",
+      "content_text": "can't wait to be stuck in traffic watching tomatoes grow above me. really adds to the existential dread of my commute 🍅🚗💀"
+    },
+    {
+      "post_id": 26,
+      "user_name": "GrandmaGreenThumb",
+      "content_text": "In my day we just grew vegetables in our yards like normal people but sure let's put them over the highway 🤷‍♀️"
+    },
+    {
+      "post_id": 27,
+      "user_name": "SpidermanCosplayer",
+      "content_text": "Finally a good reason to climb highway infrastructure. For the... harvest. Definitely for the harvest. 🕷️"
+    },
+    {
+      "post_id": 28,
+      "user_name": "ScienceTeacher_Jay",
+      "content_text": "This is completely absurd. You can't just genetically modify pigeons to filter air. That's not how biology works. 🤦‍♂️"
+    },
+    {
+      "post_id": 29,
+      "user_name": "ConspiracyCarl",
+      "content_text": "THEY'VE BEEN DOING SECRET EXPERIMENTS ON THE BIRDS! I knew something was up when I saw those weird markings on pigeons last month 🕊️👁️"
+    },
+    {
+      "post_id": 30,
+      "user_name": "NewsJunkieNina",
+      "content_text": "The mayor's office refusing to provide documentation tells you everything you need to know. This is either fake or seriously unethical."
+    },
+    {
+      "post_id": 31,
+      "user_name": "PigeonFancier2000",
+      "content_text": "My pigeon Gerald has been coughing a lot lately. Should I be concerned? Is he filtering too much pollution? 😰🐦"
+    },
+    {
+      "post_id": 32,
+      "user_name": "MemeLordMike",
+      "content_text": "So we're just casually doing genetic experiments on city pigeons now? What's next, super intelligent squirrels? 🐿️🧬"
+    },
+    {
+      "post_id": 33,
+      "user_name": "BirdsArentReal_Bot",
+      "content_text": "this just proves what we've been saying all along. birds = government drones. now they're admitting to the modifications. wake up sheeple!!! 🤖"
+    },
+    {
+      "post_id": 34,
+      "user_name": "MomOf3Teens",
+      "content_text": "Phone-Free Fridays sound great until there's an emergency and I can't reach my kid. Not sure how I feel about this. 😟"
+    },
+    {
+      "post_id": 35,
+      "user_name": "HighSchoolTeacher_Ray",
+      "content_text": "We started this last month and the difference is night and day. Kids are actually talking to each other at lunch again. 📚✨"
+    },
+    {
+      "post_id": 36,
+      "user_name": "TechSavvyTeen",
+      "content_text": "I get why they're doing this but taking away phones entirely feels extreme. Maybe just limit use instead of banning?"
+    },
+    {
+      "post_id": 37,
+      "user_name": "PrincipalJohnson",
+      "content_text": "Seeing students engage in face-to-face conversations and actually participate in class has been incredible. This policy is staying. 👏"
+    },
+    {
+      "post_id": 38,
+      "user_name": "ConcernedDad_Steve",
+      "content_text": "What if there's a school emergency? Kids need to be able to contact parents immediately. This policy needs exceptions."
+    },
+    {
+      "post_id": 39,
+      "user_name": "StudentCouncilPrez",
+      "content_text": "Honestly it's been kind of nice? I didn't realize how much I was missing until I wasn't glued to my screen all day 📱➡️📖"
+    },
+    {
+      "post_id": 40,
+      "user_name": "GamerDad_Mike",
+      "content_text": "Good. My son games 6+ hours daily and I've watched his mood deteriorate. Maybe these check-ins will actually help. 🎮😔"
+    },
+    {
+      "post_id": 41,
+      "user_name": "ProGamer_Alex",
+      "content_text": "This is just going to be annoying pop-ups that everyone clicks through without reading. Not solving the actual problem."
+    },
+    {
+      "post_id": 42,
+      "user_name": "MentalHealthAdvocate",
+      "content_text": "Connecting kids directly to counseling resources through the apps they're already using is actually brilliant. Removes stigma and barriers. 💚"
+    },
+    {
+      "post_id": 43,
+      "user_name": "AppDeveloper_Nina",
+      "content_text": "The implementation challenges here are huge. How do you make check-ins meaningful without being intrusive or easy to bypass? 🤔"
+    },
+    {
+      "post_id": 44,
+      "user_name": "TeenGamer_2009",
+      "content_text": "Great now I have to lie to a wellness prompt just to keep playing. This is so dumb 🙄"
+    },
+    {
+      "post_id": 45,
+      "user_name": "PhysicsProfDr_Lee",
+      "content_text": "Smartphone radiation doesn't work like this. It's non-ionizing and can't alter brain structure. This study is complete pseudoscience. 🤦‍♂️"
+    },
+    {
+      "post_id": 46,
+      "user_name": "WorriedMom_Janet",
+      "content_text": "Is this real?? My daughter has been on her phone constantly and now I'm freaking out about what it's doing to her brain 😰"
+    },
+    {
+      "post_id": 47,
+      "user_name": "FactCheckFred",
+      "content_text": "The 'institute' that published this doesn't exist in any academic database. It's a fake study designed to go viral. Don't fall for it. ❌"
+    },
+    {
+      "post_id": 48,
+      "user_name": "ParanormalPatty",
+      "content_text": "I KNEW IT! My niece said she could sense when people were texting her before her phone buzzed. This explains everything! 🧠✨"
+    },
+    {
+      "post_id": 49,
+      "user_name": "SkepticalScientist",
+      "content_text": "Cherry-picked data, no peer review, unaccredited source. This is misinformation 101. Please stop sharing this."
+    },
+    {
+      "post_id": 50,
+      "user_name": "Teen_Redditor",
+      "content_text": "if this were real I'd be able to read minds by now with how much I'm on my phone lol 😂"
+    }
   ]
 }
