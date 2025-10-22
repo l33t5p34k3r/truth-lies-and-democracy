@@ -1,13 +1,13 @@
-name: Convert Excel 
+name: Convert Excel
 
 on:
   push:
     paths:
-      - truth_lies_and_democracy/Assets/papers/papers.xlsx  # Trigger only if this file changes
+      - util\data.xlsx  # Trigger only if this file changes
 
   workflow_dispatch:
 
-    
+
 permissions:
     contents: write
 
@@ -22,10 +22,10 @@ jobs:
         uses: actions/setup-python@v4
 
       - name: Run script
-        run: python3 ${{ github.workspace}}/util/convert_to_json.py
+        run: python3 ${{ github.workspace}}/util/scripts/excel_to_json.py util/data.xlsx truth_lies_and_democracy/Assets/papers/data.json
 
       - name: commit json file
         uses: EndBug/add-and-commit@v9
         with:
             message: "converted excel to json"
-            add: truth_lies_and_democracy/Assets/papers/papers.json
+            add: truth_lies_and_democracy/Assets/papers/data.json
