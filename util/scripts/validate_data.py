@@ -57,7 +57,7 @@ class DataValidator:
             return
 
         type_objects = {}
-        seen_ids = set()
+        seen_group_id = set()
 
         for idx, entry in enumerate(entries):
             if not isinstance(entry, dict):
@@ -77,6 +77,11 @@ class DataValidator:
                     entry["group_id"] = value
                 except (ValueError, TypeError):
                     self.errors.append(f"StoryGroup[{idx}].group_id must be an integer in {file_path}")
+
+            if value is not None:
+                if value in seen_group_id:
+                    self.errors.append(f"StoryGroup[{idx}].group_id '{value}' is not unique in {file_path}")
+                seen_group_id.add(value)
 
 
             # Validate stories
@@ -108,7 +113,7 @@ class DataValidator:
             return
 
         type_objects = {}
-        seen_ids = set()
+        seen_story_id = set()
 
         for idx, entry in enumerate(entries):
             if not isinstance(entry, dict):
@@ -128,6 +133,11 @@ class DataValidator:
                     entry["story_id"] = value
                 except (ValueError, TypeError):
                     self.errors.append(f"Story[{idx}].story_id must be an integer in {file_path}")
+
+            if value is not None:
+                if value in seen_story_id:
+                    self.errors.append(f"Story[{idx}].story_id '{value}' is not unique in {file_path}")
+                seen_story_id.add(value)
 
 
             # Validate news_headline
@@ -173,6 +183,7 @@ class DataValidator:
                     self.errors.append(f"Story[{idx}].news_fake must be a boolean in {file_path}")
 
 
+
             # Store for cross-reference validation
             id_field = entry.get("story_id")
             if id_field is not None:
@@ -188,7 +199,7 @@ class DataValidator:
             return
 
         type_objects = {}
-        seen_ids = set()
+        seen_group_id = set()
 
         for idx, entry in enumerate(entries):
             if not isinstance(entry, dict):
@@ -209,6 +220,10 @@ class DataValidator:
                 except (ValueError, TypeError):
                     self.errors.append(f"MediaPostGroup[{idx}].group_id must be an integer in {file_path}")
 
+            if value is not None:
+                if value in seen_group_id:
+                    self.errors.append(f"MediaPostGroup[{idx}].group_id '{value}' is not unique in {file_path}")
+                seen_group_id.add(value)
 
 
 
@@ -243,7 +258,6 @@ class DataValidator:
             return
 
         type_objects = {}
-        seen_ids = set()
 
         for idx, entry in enumerate(entries):
             if not isinstance(entry, dict):
@@ -298,7 +312,7 @@ class DataValidator:
             return
 
         type_objects = {}
-        seen_ids = set()
+        seen_post_id = set()
 
         for idx, entry in enumerate(entries):
             if not isinstance(entry, dict):
@@ -318,6 +332,11 @@ class DataValidator:
                     entry["post_id"] = value
                 except (ValueError, TypeError):
                     self.errors.append(f"SocialMediaPost[{idx}].post_id must be an integer in {file_path}")
+
+            if value is not None:
+                if value in seen_post_id:
+                    self.errors.append(f"SocialMediaPost[{idx}].post_id '{value}' is not unique in {file_path}")
+                seen_post_id.add(value)
 
 
             # Validate user_name

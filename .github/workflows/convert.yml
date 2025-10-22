@@ -24,6 +24,9 @@ jobs:
       - name: Run script
         run: python3 ${{ github.workspace}}/util/scripts/excel_to_json.py util/data.xlsx truth_lies_and_democracy/Assets/papers/data.json
 
+      - name: Run verifier script
+        run: python3 ${{ github.workspace}}/util/scripts/validate_data.py truth_lies_and_democracy/Assets/papers/data.json
+
       - name: commit json file
         uses: EndBug/add-and-commit@v9
         with:

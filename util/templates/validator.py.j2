@@ -52,7 +52,12 @@ class DataValidator:
             return
 
         type_objects = {}
-        seen_ids = set()
+        {% for field_name, field_def in type_def.fields.items() %}
+        {% set constraints = field_def.get('constraints', []) %}
+        {% if 'unique' in constraints %}
+        seen_{{ field_name }} = set()
+        {% endif %}
+        {% endfor %}
 
         for idx, entry in enumerate(entries):
             if not isinstance(entry, dict):
@@ -106,15 +111,15 @@ class DataValidator:
                 self.errors.append(f"{{ type_name }}[{idx}].{{ field_name }} must be an array in {file_path}")
             {% endif %}
 
-            {% for constraint in constraints %}
-            {% if constraint is mapping %}
-            {% if 'unique' in constraint %}
+            {% if 'unique' in constraints %}
             if value is not None:
-                if value in seen_ids:
+                if value in seen_{{ field_name }}:
                     self.errors.append(f"{{ type_name }}[{idx}].{{ field_name }} '{value}' is not unique in {file_path}")
-                seen_ids.add(value)
+                seen_{{ field_name }}.add(value)
             {% endif %}
 
+            {% for constraint in constraints %}
+            {% if constraint is mapping %}
             {% if 'min' in constraint %}
             if value is not None and value < {{ constraint.min }}:
                 self.errors.append(f"{{ type_name }}[{idx}].{{ field_name }} must be >= {{ constraint.min }} in {file_path}")
