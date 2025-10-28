@@ -23,6 +23,12 @@
         8,
         9
       ]
+    },
+    {
+      "group_id": 4,
+      "stories": [
+        10
+      ]
     }
   ],
   "Story": [
@@ -78,6 +84,12 @@
       "story_id": 9,
       "news_headline": "Teens Developing Telepathic Abilities from Smartphone Radiation, Report Suggests",
       "news_content": "An unverified study circulating online claims that prolonged smartphone use may be activating dormant psychic centers in teenage brains. The paper, published by an unaccredited institute, has been widely criticized for cherry-picked data and lack of peer review.",
+      "news_fake": true
+    },
+    {
+      "story_id": 10,
+      "news_headline": "Die ZA fordert Aufnahme des Kryptotokens als staatliche Zweitwährung. ",
+      "news_content": "Die Spitzenkandidatin der Partei ZUKUNFT Adrias fordert in Ihrer letzten Pressekonferenz dazu auf, denn Kryptotoken(tm) als alternative, digitale Währung einzuführen. Dadurch soll das Bezahlen im Internet einfacher, anonymer und sicherer zu werden. Die AWP kritisiert, dass die Kursstabilität zu labil ist für eine staatliche Währung. ",
       "news_fake": true
     }
   ],
