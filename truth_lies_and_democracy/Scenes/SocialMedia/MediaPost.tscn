@@ -1,7 +1,12 @@
-[gd_scene load_steps=3 format=3 uid="uid://cy85dub7l2p5n"]
+[gd_scene load_steps=8 format=3 uid="uid://cy85dub7l2p5n"]
 
 [ext_resource type="Script" uid="uid://cn7sp4dsrruub" path="res://Scenes/SocialMedia/media_post.gd" id="1_ssp5j"]
 [ext_resource type="Texture2D" uid="uid://h54f6lgmpqne" path="res://Assets/textures/TEST_image_News_mini.png" id="1_xm7se"]
+[ext_resource type="Texture2D" uid="uid://c1v7pvxknf286" path="res://Assets/textures/ui/Grey/Default/arrow_basic_n_small.png" id="3_s3vt7"]
+[ext_resource type="Texture2D" uid="uid://vmo2e3cd6wdf" path="res://Assets/textures/ui/Green/Default/arrow_basic_n_small.png" id="4_e51fu"]
+[ext_resource type="Texture2D" uid="uid://ctapoyxg7dsyy" path="res://Assets/textures/ui/Grey/Default/arrow_basic_s_small.png" id="5_j1eyk"]
+[ext_resource type="Texture2D" uid="uid://phkcyu0iet8x" path="res://Assets/textures/ui/Red/Default/arrow_basic_s_small.png" id="6_my3p4"]
+[ext_resource type="Texture2D" uid="uid://bg6pbysj0r8rg" path="res://Assets/textures/ui/Red/Default/icon_cross.png" id="7_j1eyk"]
 
 [node name="Post" type="PanelContainer"]
 anchors_preset = 14
@@ -48,6 +53,44 @@ theme_override_font_sizes/font_size = 16
 text = "elp 🌱"
 horizontal_alignment = 2
 
+[node name="ButtonSeparator" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="UpvoteButton" type="TextureButton" parent="MarginContainer/HBoxContainer/ButtonSeparator"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+tooltip_text = "Upvote this post."
+toggle_mode = true
+texture_normal = ExtResource("3_s3vt7")
+texture_pressed = ExtResource("4_e51fu")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="DownvoteButton" type="TextureButton" parent="MarginContainer/HBoxContainer/ButtonSeparator"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+tooltip_text = "Downvote this post."
+toggle_mode = true
+texture_normal = ExtResource("5_j1eyk")
+texture_pressed = ExtResource("6_my3p4")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="BlockButton" type="TextureButton" parent="MarginContainer/HBoxContainer/ButtonSeparator"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+tooltip_text = "Report this post and remove it immediately."
+toggle_mode = true
+texture_normal = ExtResource("7_j1eyk")
+ignore_texture_size = true
+stretch_mode = 5
+
 [node name="PostContent" type="RichTextLabel" parent="MarginContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -55,3 +98,7 @@ size_flags_horizontal = 3
 text = "elp 🌱"
 fit_content = true
 scroll_active = false
+
+[connection signal="pressed" from="MarginContainer/HBoxContainer/ButtonSeparator/UpvoteButton" to="." method="_on_upvote_button_pressed"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/ButtonSeparator/DownvoteButton" to="." method="_on_downvote_button_pressed"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/ButtonSeparator/BlockButton" to="." method="_on_block_button_pressed"]
