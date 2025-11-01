@@ -6,15 +6,16 @@
 [ext_resource type="Texture2D" uid="uid://vmo2e3cd6wdf" path="res://Assets/textures/ui/Green/Default/arrow_basic_n_small.png" id="4_e51fu"]
 [ext_resource type="Texture2D" uid="uid://ctapoyxg7dsyy" path="res://Assets/textures/ui/Grey/Default/arrow_basic_s_small.png" id="5_j1eyk"]
 [ext_resource type="Texture2D" uid="uid://phkcyu0iet8x" path="res://Assets/textures/ui/Red/Default/arrow_basic_s_small.png" id="6_my3p4"]
-[ext_resource type="Texture2D" uid="uid://bg6pbysj0r8rg" path="res://Assets/textures/ui/Red/Default/icon_cross.png" id="7_j1eyk"]
+[ext_resource type="Texture2D" uid="uid://b07tnqs3x6tuk" path="res://Assets/textures/ui/Grey/Default/icon_cross.png" id="7_e51fu"]
 
 [node name="Post" type="PanelContainer"]
+clip_contents = true
 anchors_preset = 14
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_top = -57.5
-offset_bottom = 57.5
+offset_top = -58.5
+offset_bottom = 58.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_type_variation = &"FlatPanelOutline"
@@ -87,7 +88,7 @@ custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
 tooltip_text = "Report this post and remove it immediately."
 toggle_mode = true
-texture_normal = ExtResource("7_j1eyk")
+texture_normal = ExtResource("7_e51fu")
 ignore_texture_size = true
 stretch_mode = 5
 

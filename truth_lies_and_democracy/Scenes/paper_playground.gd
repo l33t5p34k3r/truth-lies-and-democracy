@@ -7,6 +7,10 @@ extends Node2D
 
 @onready var confirm_button: Button = $CanvasLayer/Control/confirm2Button
 @onready var first_confirm_button: Button = $CanvasLayer/Control/confirm1Button
+@onready var button_control: Control = $CanvasLayer/Control
+@onready var draw_button: Button = $CanvasLayer/Control/Draw
+@onready var stamp_button: Button = $CanvasLayer/Control/StampButton
+@onready var stamp: Stamp = %Stamp
 
 
 var paper_array: Array[Paper] = []
@@ -17,13 +21,20 @@ var papers_need_to_be_signed: Array[Paper] = []
 var paper_container = Node2D.new()
 
 
+var mouse_mode:Manager.MOUSE_MODE = Manager.MOUSE_MODE.DRAGGING
+
+
 
 
 func _ready():
+	set_mouse_cursor()
 	%SignPrompt.visible = false
 	confirm_button.visible = false
 	first_confirm_button.visible = false
 	load_papers()
+	
+	# connect control nodes
+	cursor_connect_children(button_control)
 
 
 func load_papers():
@@ -63,13 +74,20 @@ func spawn_papers(papers : Array[GeneratedDataClasses.StoryGroup]):
 			container.add_child(paper)
 			paper_array.append(paper)
 			paper.got_stamped.connect(on_paper_stamped)
+			paper.drag_started.connect(on_paper_drag_started)
+			paper.drag_stopped.connect(on_paper_drag_stopped)
 
 
 func on_paper_stamped() -> void:
 	if not first_confirm_button.visible and not confirm_button.visible:
 		first_confirm_button.visible = true
 
-#
+func on_paper_drag_started() -> void:
+	Manager.set_mouse_cursor(Manager.MOUSE_MODE.DRAGGING_ACTIVE)
+	
+func on_paper_drag_stopped() -> void:
+	Manager.set_mouse_cursor(Manager.MOUSE_MODE.DRAGGING)
+	
 
 func _on_confirm_button_pressed() -> void:
 	get_tree().change_scene_to_file("res://Scenes/report/ProgressReview.tscn")
@@ -81,15 +99,25 @@ func _on_first_confirm_button_pressed() -> void:
 	papers_need_to_be_signed.clear()
 	for paper in paper_array:
 		if paper.is_stamped:
-			paper.enable_drawing()
+			paper.enable_document_signing()
 			papers_need_to_be_signed.append(paper)
 	
 	%SignPrompt.visible = true
+	var tween = get_tree().create_tween().bind_node(self)
+	tween.tween_callback(add_sign_hint).set_delay(15)
 	%DocuSignTimer.start()
 	
 	first_confirm_button.visible = false	
 
-
+func add_sign_hint():
+	# check if there are unsigned papers
+	var any_unsigned = false
+	for paper in paper_array:
+		if paper.is_stamped and not paper.is_signed:
+			any_unsigned = true
+	if not any_unsigned:
+		return
+	%SignPromptLabel.text += "\nHint: Make sure it's a proper signature, not just a small dot!"
 
 
 # slight delay on check
@@ -106,3 +134,49 @@ func _on_docu_sign_timer_timeout() -> void:
 
 func _on_escape_pressed() -> void:
 	get_tree().change_scene_to_file("res://Scenes/SocialMedia/SocialMedia.tscn")
+
+
+#TODO: this could be moved into a singleton or so
+func cursor_connect_children(node: Node):
+	if node is BaseButton:
+		node.mouse_entered.connect(_on_control_mouse_entered)
+		node.mouse_exited.connect(_on_control_mouse_exited)
+	
+	for child in node.get_children():
+		cursor_connect_children(child)
+
+func _on_control_mouse_entered():
+	Manager.set_mouse_cursor(Manager.MOUSE_MODE.POINTING)
+
+func _on_control_mouse_exited():
+	set_mouse_cursor()
+	
+
+func _on_draw_toggled(toggled_on: bool) -> void:
+	if toggled_on:
+		mouse_mode = Manager.MOUSE_MODE.DRAWING
+		on_drag_allow_change(false)
+		on_drawing_allow_change(true)
+		draw_button.text = "Disable Drawing"
+	else:
+		mouse_mode = Manager.MOUSE_MODE.DRAGGING
+		on_drag_allow_change(true)
+		on_drawing_allow_change(false)
+		draw_button.text = "Enable Drawing"
+	set_mouse_cursor()
+
+func on_drawing_allow_change(new_drawing_enabled:bool) -> void:
+	for paper in paper_array:
+		paper.on_drawing_allow_change(new_drawing_enabled)
+		
+func on_drag_allow_change(new_drag_enabled:bool) -> void:
+	for paper in paper_array:
+		paper.on_drag_allow_change(new_drag_enabled)
+
+# TODO: custom mouse cursor per scene? or can we more generically work with interactables and UI?
+func set_mouse_cursor():
+	Manager.set_mouse_cursor(mouse_mode)
+
+
+func _on_stamp_pressed() -> void:
+	stamp.on_stamp_pressed()

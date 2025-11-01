@@ -1,14 +1,3 @@
-# Main scene structure:
-# Desktop (Node2D)
-# ├── Camera2D
-# ├── Background (ColorRect or TextureRect)
-# ├── PaperContainer (Node2D)
-# │   ├── Paper1 (RigidBody2D)
-# │   ├── Paper2 (RigidBody2D)
-# │   └── Paper3 (RigidBody2D)
-# └── DragHandler (Node2D)
-
-# Paper.gd - Script for individual paper documents
 class_name Paper
 extends RigidBody2D
 
@@ -18,6 +7,9 @@ extends RigidBody2D
 @export var topmost_provider:Node = null
 
 signal got_stamped
+
+signal drag_started
+signal drag_stopped
 
 var paper_headline : String = ""
 var paper_content : String = ""
@@ -30,7 +22,9 @@ var paper_is_fake : bool = false
 @onready var draw_collision_shape_2d: CollisionShape2D = $Area2D/CollisionShape2D
 @onready var stamp_mask: Polygon2D = $Content/StampMask
 @onready var content: Node2D = $Content
+@onready var drag_component: Node2D = $DragComponent
 
+#TODO: move drawing from paper to it's own component (to reuse for e.g. stickynotes)
 var drawing_enabled:bool = false
 var is_signed:bool = false
 var points_drawn:float = 0.0
@@ -62,6 +56,15 @@ func _ready():
 	add_news_content()
 	setup_drawing_surface()
 
+func on_drag_allow_change(new_drag_enabled:bool) -> void:
+	drag_component.on_drag_allow_change(new_drag_enabled)
+
+func on_drawing_allow_change(new_drawing_enabled:bool) -> void:
+	if new_drawing_enabled:
+		enable_drawing()
+	else:
+		disable_drawing()
+
 func add_news_content():
 
 	
@@ -84,7 +87,7 @@ func create_headline_style():
 
 func _on_area_input_event(_viewport, event, _shape_idx):
 
-	if drawing_enabled and event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT:
+	if drawing_enabled and event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 			if event.pressed and topmost_provider.is_topmost_body_at_position(event.global_position):
 				var pos = to_local(event.global_position) - texture_rect.position
 				start_drawing(pos)
@@ -92,7 +95,7 @@ func _on_area_input_event(_viewport, event, _shape_idx):
 				stop_drawing()
 	elif event is InputEventMouseMotion:
 		if is_drawing:
-			if not Input.is_action_pressed("stamp_down"):
+			if not Input.is_action_pressed("drawing"):
 				is_drawing = false
 			else:
 				var pos = to_local(event.global_position) - texture_rect.position
@@ -219,10 +222,18 @@ func clear_drawing():
 	drawing_image.fill(Color.WHITE)
 	update_texture()
 
-func enable_drawing():
+func enable_document_signing():
 	$Content/SignBox.visible = true
 	$Content/SignLabel.visible = true
+	points_drawn = 0.0
+	is_signed = false
+	
+func enable_drawing():
 	drawing_enabled = true
+	stop_drawing()
+
+func disable_drawing():
+	drawing_enabled = false
 	stop_drawing()
 
 # does all the stamping

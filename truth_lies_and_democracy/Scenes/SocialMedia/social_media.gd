@@ -8,8 +8,9 @@ const STORY_POST = preload("uid://b7037uk7lkt5v")
 
 
 func _ready() -> void:
+	Manager.set_mouse_cursor(Manager.MOUSE_MODE.NONE)
 	load_posts()
-			
+	cursor_connect_children(self)
 	
 func load_posts():
 	var active_stories:Array[int] = []
@@ -39,3 +40,18 @@ func load_posts():
 
 func _on_button_4_pressed() -> void:
 	get_tree().change_scene_to_file("res://Scenes/paper_playground.tscn")
+
+
+func cursor_connect_children(node: Node):
+	if node is BaseButton:
+		node.mouse_entered.connect(_on_control_mouse_entered)
+		node.mouse_exited.connect(_on_control_mouse_exited)
+	
+	for child in node.get_children():
+		cursor_connect_children(child)
+
+func _on_control_mouse_entered():
+	Manager.set_mouse_cursor(Manager.MOUSE_MODE.POINTING)
+
+func _on_control_mouse_exited():
+	Manager.set_mouse_cursor(Manager.MOUSE_MODE.NONE)

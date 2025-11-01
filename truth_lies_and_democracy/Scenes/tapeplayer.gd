@@ -11,7 +11,7 @@ func _process(_delta):
 		playingTape.playTape()
 	
 	for tape in tapeArray:
-		pull_object_towards_target(tape, self.global_position, 9000 * _delta, 999999999)
+		pull_object_towards_target(tape, self.global_position, 35000 * _delta, 999999999)
 		if tape.global_position.distance_to(self.global_position) <= 30:
 			playingTape = tape
 
@@ -29,9 +29,9 @@ func pull_object_towards_target(
 	physics_body: RigidBody2D,
 	target_position: Vector2,
 	pull_strength: float,
-	max_distance: float = 100.0,
-	damping_radius: float = 20.0,
-	snap_threshold: float = 1.0
+	_max_distance: float = 100.0,
+	damping_radius: float = 25.0,
+	snap_threshold: float = 10.0
 ):
 	var current_position = physics_body.global_position
 	var to_target = target_position - current_position
@@ -45,11 +45,7 @@ func pull_object_towards_target(
 
 	var direction = to_target.normalized()
 
-	# Smooth falloff using quadratic curve
-	var distance_factor = clamp((1.0 - distance / max_distance), 0.0, 1.0)
-	distance_factor = distance_factor * distance_factor  # Quadratic easing
-
-	var pull_force = direction * pull_strength * distance_factor
+	var pull_force = direction * pull_strength
 
 	# Predictive damping when close
 	if distance < damping_radius:
@@ -63,7 +59,6 @@ func pull_object_towards_target(
 	if pull_force.length() > max_force:
 		pull_force = pull_force.normalized() * max_force
 
-	physics_body.sleeping = false  # Ensure it's awake
 	physics_body.apply_central_force(pull_force)
 
 

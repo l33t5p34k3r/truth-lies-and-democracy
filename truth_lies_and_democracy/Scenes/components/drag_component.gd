@@ -3,10 +3,10 @@ extends Node2D
 @export var target_node : RigidBody2D = null
 @export var click_target_node : Area2D =  null
 
-var glob_pos = Vector2.ZERO
 var is_being_dragged = false
 var drag_offset = Vector2.ZERO
 var boundary_rect = Rect2(Vector2.ZERO, Vector2.ZERO)
+var drag_disabled: bool = false
 
 var normal_scale = Vector2(1.0, 1.0)
 var hover_scale = Vector2(1.2, 1.2)
@@ -37,6 +37,15 @@ func _process(_delta):
 		rotate_to_zero()
 
 
+func on_drag_allow_change(new_drag_enabled:bool) -> void:
+	if new_drag_enabled:
+		drag_disabled = false
+	else:
+		drag_disabled = true
+		# check if we are being dragged
+		if is_being_dragged:
+			stop_drag()
+
 func _physics_process(_delta: float) -> void:
 	if is_being_dragged:
 		var target_position = get_global_mouse_position() + drag_offset
@@ -61,6 +70,11 @@ func _physics_process(_delta: float) -> void:
 
 
 func start_drag(mouse_pos: Vector2):
+	if drag_disabled:
+		return
+	if not is_being_dragged:
+		if target_node.has_signal("drag_started"):
+			target_node.drag_started.emit()
 	is_being_dragged = true
 	currently_dragging_body = target_node
 	drag_offset = global_position - mouse_pos
@@ -88,6 +102,10 @@ func rotate_to_zero():
 		target_node.apply_torque(damping_torque)
 
 func stop_drag():
+	if is_being_dragged:
+		# TODO: not quite the nicest way, this check happens a lot...
+		if target_node.has_signal("drag_stopped"):
+			target_node.drag_stopped.emit()
 	is_being_dragged = false
 	currently_dragging_body = null
 	bring_to_top()
@@ -127,7 +145,6 @@ func apply_boundary_constraints():
 
 func _on_area_input_event(_viewport, event, _shape_idx):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed and is_topmost_body_at_position(event.global_position):
-		glob_pos = global_position
 		start_drag(event.global_position)
 
 func _on_HoverArea_mouse_entered():

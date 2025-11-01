@@ -31,7 +31,7 @@ texture_margin_left = 5.0
 texture_margin_top = 5.0
 texture_margin_right = 5.0
 texture_margin_bottom = 5.0
-modulate_color = Color(0, 1, 0.7529412, 1)
+modulate_color = Color(0.50008625, 0.92617726, 0.9977564, 1)
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_e8oqa"]
 load_path = "res://.godot/imported/button_rectangle_flat.png-157aed89f17130b8b611f9f222fe5e88.ctex"
@@ -46,7 +46,7 @@ texture_margin_left = 5.0
 texture_margin_top = 5.0
 texture_margin_right = 5.0
 texture_margin_bottom = 5.0
-modulate_color = Color(0, 1, 0.7529412, 1)
+modulate_color = Color(0.30107954, 0.95803505, 0.98757035, 1)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_wc5tk"]
 content_margin_left = 8.0

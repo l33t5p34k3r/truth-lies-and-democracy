@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://cnroehowses8g" path="res://Scenes/components/drag_component.tscn" id="4_eqa7r"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o2wq0"]
-size = Vector2(170, 102)
+size = Vector2(96, 52)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_eqa7r"]
 size = Vector2(170, 102)
@@ -15,6 +15,7 @@ size = Vector2(170, 102)
 collision_layer = 2
 collision_mask = 2
 input_pickable = true
+mass = 0.633
 gravity_scale = 0.0
 script = ExtResource("1_cgxy3")
 

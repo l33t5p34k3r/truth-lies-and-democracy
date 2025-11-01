@@ -22,12 +22,11 @@ func _on_area_2d_area_exited(area: Area2D) -> void:
 	if area is OverlapArea:
 		overlapping_paper.erase(area.root_node)
 
-func _input(event):
-	if is_enabled and event.is_action_pressed("stamp_down"):
-		if overlapping_paper:
-			$AudioStreamPlayer.play()
-			var stamp_texture = $Sprite2D.texture
-			for node in overlapping_paper:
-				#var contact_local_pos = node.to_local(global_position)
-				var contact_local_pos = node.content.to_local(global_position)
-				node.add_stamp_sprite(stamp_texture, contact_local_pos)
+func on_stamp_pressed():
+	if overlapping_paper:
+		$AudioStreamPlayer.play()
+		var stamp_texture = $Sprite2D.texture
+		for node in overlapping_paper:
+			#var contact_local_pos = node.to_local(global_position)
+			var contact_local_pos = node.content.to_local(global_position)
+			node.add_stamp_sprite(stamp_texture, contact_local_pos)

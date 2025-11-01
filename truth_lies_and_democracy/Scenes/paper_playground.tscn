@@ -18,12 +18,6 @@ paper_textures = Array[Texture2D]([ExtResource("2_vqhyn")])
 [node name="Pen" parent="." instance=ExtResource("5_jpj0y")]
 visible = false
 
-[node name="Label" type="Label" parent="."]
-offset_right = 40.0
-offset_bottom = 23.0
-theme = ExtResource("6_qspym")
-text = "Right click to draw on paper"
-
 [node name="Stamp" parent="." instance=ExtResource("5_jpj0y")]
 unique_name_in_owner = true
 position = Vector2(980, 499)
@@ -56,6 +50,7 @@ anchor_bottom = 1.0
 offset_top = -44.0
 offset_right = 188.0
 grow_vertical = 0
+focus_mode = 0
 theme_type_variation = &"LargeButton"
 text = "Confirm Choice!"
 
@@ -67,19 +62,10 @@ anchor_bottom = 1.0
 offset_top = -44.0
 offset_right = 195.0
 grow_vertical = 0
+focus_mode = 0
 theme = ExtResource("6_qspym")
 theme_type_variation = &"LargeButton"
 text = "Confirm Choice?"
-
-[node name="SignPrompt" type="Label" parent="CanvasLayer/Control"]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = -1.0
-offset_top = 52.0
-offset_right = 241.0
-offset_bottom = 75.0
-theme_type_variation = &"LargeLabel"
-text = "Please sign the stamped paper!"
 
 [node name="Escape" type="Button" parent="CanvasLayer/Control"]
 layout_mode = 1
@@ -90,7 +76,58 @@ offset_top = -18.5
 offset_right = 87.0
 offset_bottom = 18.5
 grow_vertical = 2
+focus_mode = 0
 text = "Escape?"
+
+[node name="Draw" type="Button" parent="CanvasLayer/Control"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -1.0
+offset_top = 43.0
+offset_right = 86.0
+offset_bottom = 85.0
+grow_vertical = 2
+focus_mode = 0
+toggle_mode = true
+text = "Enable Drawing"
+
+[node name="StampButton" type="Button" parent="CanvasLayer/Control"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 889.0
+offset_top = 106.0
+offset_right = 1070.0
+offset_bottom = 173.0
+grow_vertical = 2
+focus_mode = 0
+text = "Stamp as True"
+
+[node name="SignPrompt" type="PanelContainer" parent="CanvasLayer/Control"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 442.0
+offset_top = 1.0
+offset_right = 802.0
+offset_bottom = 69.0
+
+[node name="SignPromptLabel" type="Label" parent="CanvasLayer/Control/SignPrompt"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"LargeLabel"
+text = "Please sign the stamped paper!"
+
+[node name="QuickTip" type="PanelContainer" parent="CanvasLayer/Control"]
+layout_mode = 0
+offset_right = 36.0
+offset_bottom = 36.0
+
+[node name="QuickTipLabel" type="Label" parent="CanvasLayer/Control/QuickTip"]
+layout_mode = 2
+text = "Move paper below \"stamp\" to use stamp."
 
 [node name="DocuSignTimer" type="Timer" parent="."]
 unique_name_in_owner = true
@@ -98,4 +135,6 @@ unique_name_in_owner = true
 [connection signal="pressed" from="CanvasLayer/Control/confirm2Button" to="." method="_on_confirm_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/Control/confirm1Button" to="." method="_on_first_confirm_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/Control/Escape" to="." method="_on_escape_pressed"]
+[connection signal="toggled" from="CanvasLayer/Control/Draw" to="." method="_on_draw_toggled"]
+[connection signal="pressed" from="CanvasLayer/Control/StampButton" to="." method="_on_stamp_pressed"]
 [connection signal="timeout" from="DocuSignTimer" to="." method="_on_docu_sign_timer_timeout"]

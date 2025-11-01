@@ -12,6 +12,22 @@ const PARTIES:Array[String] = [
 	"PARTY4"
 ]
 
+enum MOUSE_MODE { NONE, DRAGGING, DRAGGING_ACTIVE, DRAWING, POINTING}
+const MOUSE_ICONS := {
+	MOUSE_MODE.NONE: preload("res://Assets/textures/Cursor/Outline/Default/cursor_none.png"),
+	MOUSE_MODE.DRAGGING: preload("res://Assets/textures/Cursor/Outline/Default/hand_open.png"),
+	MOUSE_MODE.DRAGGING_ACTIVE: preload("res://Assets/textures/Cursor/Outline/Default/hand_closed.png"),
+	MOUSE_MODE.DRAWING: preload("res://Assets/textures/Cursor/Outline/Default/drawing_pencil.png"),
+	MOUSE_MODE.POINTING: preload("res://Assets/textures/Cursor/Outline/Default/hand_point.png")
+}
+const MOUSE_HOTSPOTS := {
+	MOUSE_MODE.NONE: Vector2(9,6),
+	MOUSE_MODE.DRAGGING: Vector2(7,7),
+	MOUSE_MODE.DRAGGING_ACTIVE: Vector2(7,7),
+	MOUSE_MODE.DRAWING: Vector2(7,7),
+	MOUSE_MODE.POINTING: Vector2(7,5)
+}
+
 var currently_selected_paper:int = -1
 
 var current_round = 1
@@ -97,8 +113,13 @@ func funding_from_parties() -> int:
 	return total_funding
 
 
+func set_mouse_cursor(variant:MOUSE_MODE):
+	# TODO: set it up to use the actual built-in mouse types? (i.e. not just arrow)
+	Input.set_custom_mouse_cursor(MOUSE_ICONS[variant], Input.CursorShape.CURSOR_ARROW, MOUSE_HOTSPOTS[variant])
+
 func _enter_tree() -> void:
 	DataLoader.load_multiple_files(["res://Assets/papers/data.json"])
+	set_mouse_cursor(MOUSE_MODE.NONE)
 
 
 # bunch of stats

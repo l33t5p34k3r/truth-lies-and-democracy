@@ -8,7 +8,7 @@
 size = Vector2(225, 135)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_qhqgy"]
-radius = 345.009
+radius = 267.49997
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dqkch"]
 size = Vector2(564, 339)
@@ -29,7 +29,6 @@ scale = Vector2(0.4, 0.4)
 texture = ExtResource("2_g2els")
 
 [node name="InputArea2D" type="Area2D" parent="."]
-visible = false
 collision_layer = 0
 collision_mask = 2
 
@@ -38,7 +37,6 @@ scale = Vector2(0.4, 0.4)
 shape = SubResource("CircleShape2D_qhqgy")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
 position = Vector2(0, -0.5)
 scale = Vector2(0.4, 0.4)
 shape = SubResource("RectangleShape2D_dqkch")
