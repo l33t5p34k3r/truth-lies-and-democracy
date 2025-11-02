@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="truth_lies_and_democracy"
-run/main_scene="uid://33frnk6f5jem"
+run/main_scene="uid://ck1pveiwhidrw"
 config/features=PackedStringArray("4.5", "GL Compatibility")
 config/icon="res://Scenes/archive/icon.svg"
 
@@ -40,6 +40,7 @@ drag_components="This node is responsible for dragging"
 draw_components=""
 drag_managers="listens to drag components"
 draw_managers=""
+scene_managers=""
 
 [gui]
 

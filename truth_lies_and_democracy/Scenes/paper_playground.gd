@@ -11,38 +11,53 @@ extends Node2D
 @onready var draw_button: Button = $CanvasLayer/Control/Draw
 @onready var stamp_button: Button = $CanvasLayer/Control/StampButton
 @onready var stamp: Stamp = %Stamp
+@onready var paper_container: Node2D = $PaperContainer
 
 
 var paper_array: Array[Paper] = []
 var approved_paper: Array[Paper] = []
 
 var papers_need_to_be_signed: Array[Paper] = []
-var paper_container = Node2D.new()
 
 
 var mouse_mode:Manager.MOUSE_MODE = Manager.MOUSE_MODE.DRAGGING
 
 
 
+func make_inactive():
+	%CanvasLayer.visible = false
+	%CanvasLayer.process_mode = Node.PROCESS_MODE_DISABLED
+
+# called when switching back to this scene
+func make_active():
+	%CanvasLayer.visible = true
+	%CanvasLayer.process_mode = Node.PROCESS_MODE_INHERIT
+	set_mouse_cursor()
+	load_papers()
+	# default mode is dragging
+	draw_button.button_pressed = false
+	cursor_connect_children(button_control)
+
 
 func _ready():
-	set_mouse_cursor()
 	%SignPrompt.visible = false
 	confirm_button.visible = false
 	first_confirm_button.visible = false
-	load_papers()
-	
-	# connect control nodes
-	cursor_connect_children(button_control)
+
+	make_active()
 
 
 func load_papers():
 	spawn_papers(DataLoader.StoryGroup_array)
 	
+var last_loaded_round:int = -1
 func spawn_papers(papers : Array[GeneratedDataClasses.StoryGroup]):
-	var container = Node2D.new()
-	container.name = "PaperContainer"
-	add_child(container)
+	if last_loaded_round == Manager.current_round:
+		return
+	else:
+		for child in paper_container.get_children():
+			child.queue_free()
+	last_loaded_round = Manager.current_round
 	
 	for paper_set:GeneratedDataClasses.StoryGroup in papers:
 		if paper_set.group_id != Manager.current_round:
@@ -70,7 +85,7 @@ func spawn_papers(papers : Array[GeneratedDataClasses.StoryGroup]):
 			
 			paper.rotation = randf_range(-0.3, 0.3)
 			
-			container.add_child(paper)
+			paper_container.add_child(paper)
 			paper_array.append(paper)
 			paper.got_stamped.connect(on_paper_stamped)
 
@@ -80,15 +95,15 @@ func on_paper_stamped() -> void:
 		first_confirm_button.visible = true
 
 func _on_drag_started():
-	Manager.set_mouse_cursor(Manager.MOUSE_MODE.DRAGGING)
+	Manager.set_mouse_cursor(Manager.MOUSE_MODE.DRAGGING_ACTIVE)
 
 
 func _on_drag_stopped():
-	Manager.set_mouse_cursor(Manager.MOUSE_MODE.DRAGGING_ACTIVE)
+	Manager.set_mouse_cursor(Manager.MOUSE_MODE.DRAGGING)
 	
 
 func _on_confirm_button_pressed() -> void:
-	get_tree().change_scene_to_file("res://Scenes/report/ProgressReview.tscn")
+	Manager.change_scene_to(Manager.SCENE.REVIEW)
 
 
 func _on_first_confirm_button_pressed() -> void:
@@ -131,14 +146,15 @@ func _on_docu_sign_timer_timeout() -> void:
 
 
 func _on_escape_pressed() -> void:
-	get_tree().change_scene_to_file("res://Scenes/SocialMedia/SocialMedia.tscn")
+	Manager.change_scene_to(Manager.SCENE.SOCIALMEDIA)
 
 
 #TODO: this could be moved into a singleton or so
 func cursor_connect_children(node: Node):
 	if node is BaseButton:
-		node.mouse_entered.connect(_on_control_mouse_entered)
-		node.mouse_exited.connect(_on_control_mouse_exited)
+		if not node.is_connected("mouse_entered", _on_control_mouse_entered):
+			node.mouse_entered.connect(_on_control_mouse_entered)
+			node.mouse_exited.connect(_on_control_mouse_exited)
 	
 	for child in node.get_children():
 		cursor_connect_children(child)
@@ -152,6 +168,7 @@ func _on_control_mouse_exited():
 	
 
 func _on_draw_toggled(toggled_on: bool) -> void:
+	print("toggled_on is now: ", toggled_on)
 	if toggled_on:
 		mouse_mode = Manager.MOUSE_MODE.DRAWING
 		on_drag_allow_change(false)

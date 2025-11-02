@@ -16,7 +16,7 @@ size = Vector2(288, 360)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_322pb"]
 size = Vector2(271, 348)
 
-[node name="Paper" type="RigidBody2D" node_paths=PackedStringArray("topmost_provider", "draw_component")]
+[node name="Paper" type="RigidBody2D"]
 collision_layer = 0
 collision_mask = 0
 input_pickable = true
@@ -24,8 +24,6 @@ gravity_scale = 0.0
 inertia = 1.76
 linear_damp = 12.051
 script = ExtResource("1_c7gsp")
-topmost_provider = NodePath("DragComponent")
-draw_component = NodePath("DrawComponent")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-0.5, -0.5)
@@ -77,7 +75,7 @@ autowrap_mode = 3
 [node name="RichTextLabel" type="RichTextLabel" parent="Content/Control"]
 layout_mode = 0
 offset_left = 2.0
-offset_top = 114.0
+offset_top = 135.0
 offset_right = 273.0
 offset_bottom = 348.0
 mouse_filter = 2

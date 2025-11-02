@@ -18,7 +18,7 @@ var pencil_size := 3.0
 var drawing_enabled:bool = false
 var is_signed:bool = false
 var points_drawn:float = 0.0
-var points_drawn_threshold:float = 20.0
+var points_drawn_threshold:float = 30.0
 
 
 

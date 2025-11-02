@@ -136,3 +136,21 @@ var money_spent_on_detection_tools:int = 0
 var times_fallen_for_fake_images:int = 0
 
 var total_money_earned:int = 0
+
+# TODO: split UI stuff (mouse etc) into a different singleton class
+# TODO: split scene stuff into a different singleton?
+
+enum SCENE {
+	DESKTOP,
+	SOCIALMEDIA,
+	REVIEW
+}
+
+const scene_resource :Dictionary[SCENE, Resource]= {
+	SCENE.DESKTOP: preload("res://Scenes/paper_playground.tscn"),
+	SCENE.SOCIALMEDIA: preload("res://Scenes/SocialMedia/SocialMedia.tscn"),
+	SCENE.REVIEW: preload("res://Scenes/report/ProgressReview.tscn")
+}
+
+func change_scene_to(scene:SCENE):
+	get_tree().call_group("scene_managers", "switch_scene", scene)

@@ -29,6 +29,7 @@ position = Vector2(1111, 297)
 position = Vector2(1099, 93)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+unique_name_in_owner = true
 
 [node name="Control" type="Control" parent="CanvasLayer"]
 layout_mode = 3
