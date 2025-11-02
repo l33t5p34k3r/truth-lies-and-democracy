@@ -73,8 +73,7 @@ func start_drag(mouse_pos: Vector2):
 	if drag_disabled:
 		return
 	if not is_being_dragged:
-		if target_node.has_signal("drag_started"):
-			target_node.drag_started.emit()
+		get_tree().call_group("drag_managers", "_on_drag_started")
 	is_being_dragged = true
 	currently_dragging_body = target_node
 	drag_offset = global_position - mouse_pos
@@ -103,9 +102,9 @@ func rotate_to_zero():
 
 func stop_drag():
 	if is_being_dragged:
-		# TODO: not quite the nicest way, this check happens a lot...
-		if target_node.has_signal("drag_stopped"):
-			target_node.drag_stopped.emit()
+		get_tree().call_group("drag_managers", "_on_drag_stopped")
+		# we could also pass the paper that caused the drag:
+		# get_tree().call_group("drag_managers", "_on_drag_stopped", get_parent())
 	is_being_dragged = false
 	currently_dragging_body = null
 	bring_to_top()

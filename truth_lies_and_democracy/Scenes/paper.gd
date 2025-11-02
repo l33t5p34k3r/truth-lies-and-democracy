@@ -4,12 +4,8 @@ extends RigidBody2D
 @export var paper_texture: Texture2D
 @export var paper_color: Color = Color.WHITE
 
-@export var topmost_provider:Node = null
-
 signal got_stamped
 
-signal drag_started
-signal drag_stopped
 
 var paper_headline : String = ""
 var paper_content : String = ""
@@ -18,29 +14,16 @@ var paper_is_fake : bool = false
 @onready var sprite_2d: Sprite2D = $Content/Sprite2D
 @onready var text_label: Label = $Content/Control/Label
 @onready var text_rich_text_label: RichTextLabel = $Content/Control/RichTextLabel
-@onready var texture_rect: TextureRect = $Content/SignTextureRect
-@onready var draw_collision_shape_2d: CollisionShape2D = $Area2D/CollisionShape2D
+@onready var draw_collision_shape_2d: CollisionShape2D = $DrawArea/CollisionShape2D
 @onready var stamp_mask: Polygon2D = $Content/StampMask
 @onready var content: Node2D = $Content
-@onready var drag_component: Node2D = $DragComponent
 
-#TODO: move drawing from paper to it's own component (to reuse for e.g. stickynotes)
-var drawing_enabled:bool = false
-var is_signed:bool = false
-var points_drawn:float = 0.0
-var points_drawn_threshold:float = 20.0
 
 # to make papers slightly drag each other
 var overlapping_papers: Array[Paper] = []
 
 var paper_size: Vector2
 
-var drawing_texture: ImageTexture
-var drawing_image: Image
-var is_drawing := false
-var last_draw_position: Vector2
-var pencil_color := Color.BLACK
-var pencil_size := 3.0
 
 
 # checks if paper has been stampged
@@ -54,20 +37,8 @@ func _ready():
 	
 	paper_size = sprite_2d.texture.get_size() * sprite_2d.scale.x
 	add_news_content()
-	setup_drawing_surface()
-
-func on_drag_allow_change(new_drag_enabled:bool) -> void:
-	drag_component.on_drag_allow_change(new_drag_enabled)
-
-func on_drawing_allow_change(new_drawing_enabled:bool) -> void:
-	if new_drawing_enabled:
-		enable_drawing()
-	else:
-		disable_drawing()
 
 func add_news_content():
-
-	
 	# Headline
 	var headline = text_label
 	headline.text = paper_headline
@@ -85,22 +56,7 @@ func create_headline_style():
 	return style
 	
 
-func _on_area_input_event(_viewport, event, _shape_idx):
 
-	if drawing_enabled and event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-			if event.pressed and topmost_provider.is_topmost_body_at_position(event.global_position):
-				var pos = to_local(event.global_position) - texture_rect.position
-				start_drawing(pos)
-			else:
-				stop_drawing()
-	elif event is InputEventMouseMotion:
-		if is_drawing:
-			if not Input.is_action_pressed("drawing"):
-				is_drawing = false
-			else:
-				var pos = to_local(event.global_position) - texture_rect.position
-				draw_to_position(pos)
-			
 
 # override parent function
 func is_position_inside_body(pos: Vector2) -> bool:
@@ -123,27 +79,6 @@ func _on_area_exit(area):
 	if other_paper is Paper and overlapping_papers.has(other_paper):
 		overlapping_papers.erase(other_paper)
 
-#TODO: add to drag_component and think if its useful there
-#func apply_paper_drag(drag_velocity: Vector2, drag_source_pos: Vector2):
-	##if is_being_dragged:  # Don't affect papers being actively dragged
-		##return
-	#
-	#var drag_strength = 0.45  # How much the other paper gets dragged
-	#var distance = global_position.distance_to(drag_source_pos)
-	#var max_distance = 350.0
-	#
-	## Reduce effect based on distance
-	#var distance_factor = max(0.0, 1.0 - (distance / max_distance))
-	#var final_strength = drag_strength * distance_factor
-	#
-	## Apply gentle impulse in direction of drag
-	#var drag_impulse = drag_velocity * final_strength * 0.05
-	#apply_central_impulse(drag_impulse)
-
-func _on_area_2d_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
-	_on_area_input_event(viewport, event, shape_idx)
-
-
 
 func _on_overlap_area_area_entered(area: Area2D) -> void:
 	_on_area_overlap(area)
@@ -152,89 +87,9 @@ func _on_overlap_area_area_entered(area: Area2D) -> void:
 func _on_overlap_area_area_exited(area: Area2D) -> void:
 	_on_area_exit(area)
 	
-func setup_drawing_surface():
-	#texture_rect = TextureRect.new()
-	#add_child(texture_rect)
-	texture_rect.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	
-	#var paper_size = Vector2i(800, 600)
-	var draw_paper_size = draw_collision_shape_2d.shape.get_rect().size
-	drawing_image = Image.create(draw_paper_size.x, draw_paper_size.y, false, Image.FORMAT_RGBA8)
-	#drawing_image.fill(Color.WHITE)
-	
-	drawing_texture = ImageTexture.new()
-	drawing_texture.set_image(drawing_image)
-	texture_rect.texture = drawing_texture
-
-func start_drawing(target_position: Vector2):
-	is_drawing = true
-	last_draw_position = target_position
-	draw_point(target_position)
-
-func stop_drawing():
-	is_drawing = false
-
-func draw_to_position(target_position: Vector2):
-	draw_line_between_points(last_draw_position, target_position)
-	points_drawn += (target_position - last_draw_position).length()
-	if points_drawn > points_drawn_threshold:
-		is_signed = true
-	last_draw_position = target_position
-
-func draw_point(target_position: Vector2):
-	var image_pos = Vector2i(int(target_position.x), int(target_position.y))
-	draw_circle_on_image(image_pos, pencil_size, pencil_color)
-	update_texture()
-
-func draw_line_between_points(from: Vector2, to: Vector2):
-	var distance = from.distance_to(to)
-	var steps = max(1, int(distance / 2))
-	
-	for i in range(steps + 1):
-		var t = float(i) / float(steps) if steps > 0 else 0.0
-		var pos = from.lerp(to, t)
-		var image_pos = Vector2i(int(pos.x), int(pos.y))
-		draw_circle_on_image(image_pos, pencil_size, pencil_color)
-	
-	update_texture()
-
-func draw_circle_on_image(center: Vector2i, radius: float, color: Color):
-	var image_size = drawing_image.get_size()
-	var radius_int = int(radius)
-	
-	for y in range(-radius_int, radius_int + 1):
-		for x in range(-radius_int, radius_int + 1):
-			if x * x + y * y <= radius * radius:
-				var pixel_pos = center + Vector2i(x, y)
-				if pixel_pos.x >= 0 and pixel_pos.x < image_size.x and pixel_pos.y >= 0 and pixel_pos.y < image_size.y:
-					drawing_image.set_pixelv(pixel_pos, color)
-
-func update_texture():
-	drawing_texture.update(drawing_image)
-
-func set_pencil_color(color: Color):
-	pencil_color = color
-
-func set_pencil_size(size: float):
-	pencil_size = clamp(size, 1.0, 20.0)
-
-func clear_drawing():
-	drawing_image.fill(Color.WHITE)
-	update_texture()
-
 func enable_document_signing():
 	$Content/SignBox.visible = true
 	$Content/SignLabel.visible = true
-	points_drawn = 0.0
-	is_signed = false
-	
-func enable_drawing():
-	drawing_enabled = true
-	stop_drawing()
-
-func disable_drawing():
-	drawing_enabled = false
-	stop_drawing()
 
 # does all the stamping
 func add_stamp_sprite(texture: Texture2D, stamp_position: Vector2):

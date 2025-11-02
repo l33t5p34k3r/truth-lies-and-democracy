@@ -2,5 +2,5 @@
 
 [ext_resource type="Script" uid="uid://bcdym5xoufn0b" path="res://Scenes/components/drag_component.gd" id="1_nh2ot"]
 
-[node name="DragComponent" type="Node2D"]
+[node name="DragComponent" type="Node2D" groups=["drag_components"]]
 script = ExtResource("1_nh2ot")

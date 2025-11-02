@@ -34,6 +34,13 @@ window/size/viewport_height=720
 
 enabled=PackedStringArray()
 
+[global_group]
+
+drag_components="This node is responsible for dragging"
+draw_components=""
+drag_managers="listens to drag components"
+draw_managers=""
+
 [gui]
 
 theme/custom="uid://bqh1uqu1vqqoh"

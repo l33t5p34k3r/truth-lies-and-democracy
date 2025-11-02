@@ -17,7 +17,6 @@ var paper_array: Array[Paper] = []
 var approved_paper: Array[Paper] = []
 
 var papers_need_to_be_signed: Array[Paper] = []
-
 var paper_container = Node2D.new()
 
 
@@ -74,19 +73,18 @@ func spawn_papers(papers : Array[GeneratedDataClasses.StoryGroup]):
 			container.add_child(paper)
 			paper_array.append(paper)
 			paper.got_stamped.connect(on_paper_stamped)
-			paper.drag_started.connect(on_paper_drag_started)
-			paper.drag_stopped.connect(on_paper_drag_stopped)
 
 
 func on_paper_stamped() -> void:
 	if not first_confirm_button.visible and not confirm_button.visible:
 		first_confirm_button.visible = true
 
-func on_paper_drag_started() -> void:
-	Manager.set_mouse_cursor(Manager.MOUSE_MODE.DRAGGING_ACTIVE)
-	
-func on_paper_drag_stopped() -> void:
+func _on_drag_started():
 	Manager.set_mouse_cursor(Manager.MOUSE_MODE.DRAGGING)
+
+
+func _on_drag_stopped():
+	Manager.set_mouse_cursor(Manager.MOUSE_MODE.DRAGGING_ACTIVE)
 	
 
 func _on_confirm_button_pressed() -> void:
@@ -96,7 +94,9 @@ func _on_confirm_button_pressed() -> void:
 func _on_first_confirm_button_pressed() -> void:
 	%Stamp.is_enabled = false
 	%Stamp.visible = false
+	%StampButton.visible = false
 	papers_need_to_be_signed.clear()
+	get_tree().call_group("draw_components", "reset_sign_stats")
 	for paper in paper_array:
 		if paper.is_stamped:
 			paper.enable_document_signing()
@@ -110,24 +110,22 @@ func _on_first_confirm_button_pressed() -> void:
 	first_confirm_button.visible = false	
 
 func add_sign_hint():
-	# check if there are unsigned papers
-	var any_unsigned = false
-	for paper in paper_array:
-		if paper.is_stamped and not paper.is_signed:
-			any_unsigned = true
-	if not any_unsigned:
+	if all_stamped_papers_signed():
 		return
 	%SignPromptLabel.text += "\nHint: Make sure it's a proper signature, not just a small dot!"
 
+func all_stamped_papers_signed() -> bool:
+	var all_relevant_papers_signed := true
+	var draw_components:Array[DrawComponent]
+	draw_components.assign(get_tree().get_nodes_in_group("draw_components"))
+	for component in draw_components:
+		if not component.is_signed and component.get_parent() in papers_need_to_be_signed:
+			all_relevant_papers_signed = false
+	return all_relevant_papers_signed
 
 # slight delay on check
 func _on_docu_sign_timer_timeout() -> void:
-	var all_relevant_papers_signed := true
-	for paper in papers_need_to_be_signed:
-		if not paper.is_signed:
-			all_relevant_papers_signed = false
-	
-	if all_relevant_papers_signed:
+	if all_stamped_papers_signed():
 		confirm_button.visible = true
 		%DocuSignTimer.stop()
 
@@ -150,6 +148,7 @@ func _on_control_mouse_entered():
 
 func _on_control_mouse_exited():
 	set_mouse_cursor()
+
 	
 
 func _on_draw_toggled(toggled_on: bool) -> void:
@@ -166,12 +165,10 @@ func _on_draw_toggled(toggled_on: bool) -> void:
 	set_mouse_cursor()
 
 func on_drawing_allow_change(new_drawing_enabled:bool) -> void:
-	for paper in paper_array:
-		paper.on_drawing_allow_change(new_drawing_enabled)
+	get_tree().call_group("draw_components", "on_draw_allow_change", new_drawing_enabled)
 		
 func on_drag_allow_change(new_drag_enabled:bool) -> void:
-	for paper in paper_array:
-		paper.on_drag_allow_change(new_drag_enabled)
+	get_tree().call_group("drag_components", "on_drag_allow_change", new_drag_enabled)
 
 # TODO: custom mouse cursor per scene? or can we more generically work with interactables and UI?
 func set_mouse_cursor():
