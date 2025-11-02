@@ -1,6 +1,9 @@
 class_name Stamp
 extends Node2D
 
+@onready var stamp_particles: GPUParticles2D = $StampParticles
+
+
 var dragging := false
 
 var is_enabled := true
@@ -23,8 +26,10 @@ func _on_area_2d_area_exited(area: Area2D) -> void:
 		overlapping_paper.erase(area.root_node)
 
 func on_stamp_pressed():
+	# stamp should always work, just not always succeed
+	$AudioStreamPlayer.play()
 	if overlapping_paper:
-		$AudioStreamPlayer.play()
+		stamp_particles.restart()
 		var stamp_texture = $Sprite2D.texture
 		for node in overlapping_paper:
 			#var contact_local_pos = node.to_local(global_position)

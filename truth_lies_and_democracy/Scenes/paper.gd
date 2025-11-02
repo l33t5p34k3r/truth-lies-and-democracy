@@ -37,6 +37,8 @@ func _ready():
 	
 	paper_size = sprite_2d.texture.get_size() * sprite_2d.scale.x
 	add_news_content()
+	
+
 
 func add_news_content():
 	# Headline

@@ -1,14 +1,49 @@
-[gd_scene load_steps=5 format=3 uid="uid://dcevhfveknkjq"]
+[gd_scene load_steps=8 format=3 uid="uid://dcevhfveknkjq"]
 
 [ext_resource type="Script" uid="uid://bal5eh341y1ep" path="res://Scenes/stamp.gd" id="1_djlf7"]
 [ext_resource type="Texture2D" uid="uid://dr51jflh2f4c8" path="res://Assets/textures/Approved.png" id="1_l2w4f"]
 [ext_resource type="AudioStream" uid="uid://cgrnbhd0nwfic" path="res://Assets/sounds/stamp-102627.mp3" id="3_11415"]
+
+[sub_resource type="Curve" id="Curve_11415"]
+_data = [Vector2(0, 0.72822297), 0.0, 0.0, 0, 0, Vector2(0.4043849, 0.40831876), -1.6332635, -1.6332635, 0, 0, Vector2(1, 0), -0.7815782, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_mi2dc"]
+curve = SubResource("Curve_11415")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_t2r38"]
+lifetime_randomness = 0.05
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(87.725, 28.5, 1)
+angle_min = -102.09999
+angle_max = 120.90001
+angular_velocity_min = -248.00002
+angular_velocity_max = 331.33997
+radial_velocity_min = 101.18997
+radial_velocity_max = 171.57997
+gravity = Vector3(0, 0, 0)
+scale_min = 5.5
+scale_max = 11.599999
+color = Color(0.043137256, 1, 0.17254902, 1)
+alpha_curve = SubResource("CurveTexture_mi2dc")
+hue_variation_min = -0.04000002
+hue_variation_max = 0.039999977
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6mb4n"]
 size = Vector2(181, 67)
 
 [node name="Stamp" type="Node2D"]
 script = ExtResource("1_djlf7")
+
+[node name="StampParticles" type="GPUParticles2D" parent="."]
+emitting = false
+amount = 40
+lifetime = 0.66
+one_shot = true
+explosiveness = 0.95
+randomness = 0.07
+process_material = SubResource("ParticleProcessMaterial_t2r38")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_l2w4f")

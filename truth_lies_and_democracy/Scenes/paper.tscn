@@ -1,11 +1,40 @@
-[gd_scene load_steps=10 format=3 uid="uid://1sxa4t2y7xkv"]
+[gd_scene load_steps=14 format=3 uid="uid://1sxa4t2y7xkv"]
 
 [ext_resource type="Script" uid="uid://bq64warrfgu6a" path="res://Scenes/paper.gd" id="1_c7gsp"]
 [ext_resource type="Texture2D" uid="uid://c5hyeon2lcw0a" path="res://Assets/textures/1-04851-00_BL_Notebook_Paper_Punch_G.jpg" id="2_322pb"]
+[ext_resource type="Texture2D" uid="uid://de3kjhj01c0hm" path="res://Assets/textures/explosions/Particles/greyCloud4.png" id="2_rbh5l"]
 [ext_resource type="Script" uid="uid://bibcynwo6jjjq" path="res://Scenes/overlap_area.gd" id="3_322pb"]
 [ext_resource type="PackedScene" uid="uid://cnroehowses8g" path="res://Scenes/components/drag_component.tscn" id="4_yox0v"]
 [ext_resource type="PackedScene" uid="uid://dr638i8p0fsnt" path="res://Scenes/components/infobox_component.tscn" id="5_4sl6c"]
 [ext_resource type="PackedScene" uid="uid://b26earbj4iyfy" path="res://Scenes/components/draw_component.tscn" id="6_p33b3"]
+
+[sub_resource type="Curve" id="Curve_puqn1"]
+_data = [Vector2(0, 0.44428062), 0.0, 0.0, 0, 0, Vector2(0.5267703, 0.15725803), -0.423609, 0.0, 0, 0, Vector2(1, 0), -0.53877145, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_ogisd"]
+curve = SubResource("Curve_puqn1")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ml2gi"]
+lifetime_randomness = 0.14
+particle_flag_disable_z = true
+emission_shape = 2
+emission_sphere_radius = 119.65
+angle_min = 1.0728835e-05
+angle_max = 100.80001
+spread = 180.0
+angular_velocity_min = -121.88001
+angular_velocity_max = 123.85998
+radial_velocity_min = 145.58998
+radial_velocity_max = 294.79996
+gravity = Vector3(0, 0, 0)
+scale_min = 0.5
+scale_over_velocity_min = 132.42
+scale_over_velocity_max = 191.78
+color = Color(3.3484466, 3.3484466, 3.3484466, 1)
+alpha_curve = SubResource("CurveTexture_ogisd")
+hue_variation_min = -0.020000022
+hue_variation_max = 0.019999977
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_c7gsp"]
 radius = 9.61769
@@ -24,6 +53,14 @@ gravity_scale = 0.0
 inertia = 1.76
 linear_damp = 12.051
 script = ExtResource("1_c7gsp")
+
+[node name="DustEffect" type="GPUParticles2D" parent="."]
+emitting = false
+texture = ExtResource("2_rbh5l")
+lifetime = 0.28
+one_shot = true
+explosiveness = 0.95
+process_material = SubResource("ParticleProcessMaterial_ml2gi")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-0.5, -0.5)
@@ -96,9 +133,10 @@ scale = Vector2(0.996564, 0.99726)
 texture = ExtResource("2_322pb")
 polygon = PackedVector2Array(-144, -182, 145, -182, 146, 183, -145, 183)
 
-[node name="DragComponent" parent="." node_paths=PackedStringArray("target_node", "click_target_node") instance=ExtResource("4_yox0v")]
+[node name="DragComponent" parent="." node_paths=PackedStringArray("target_node", "click_target_node", "drag_stop_particles") instance=ExtResource("4_yox0v")]
 target_node = NodePath("..")
 click_target_node = NodePath("../DrawArea")
+drag_stop_particles = NodePath("../DustEffect")
 
 [node name="InfoboxComponent" parent="." node_paths=PackedStringArray("target_click_node", "target_data_node", "drag_component") instance=ExtResource("5_4sl6c")]
 target_click_node = NodePath("../DrawArea")

@@ -6,6 +6,7 @@ var is_fake_root = {}
 var active_scene := Manager.SCENE.DESKTOP
 
 # each main scene must provide a "make_active"and "make_inactive" function
+# TODO: we might want to remove + re-add scenes on a round change, since so many things need to change/reset...
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:

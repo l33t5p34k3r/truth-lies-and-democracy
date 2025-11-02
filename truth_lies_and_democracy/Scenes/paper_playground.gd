@@ -15,7 +15,6 @@ extends Node2D
 
 
 var paper_array: Array[Paper] = []
-var approved_paper: Array[Paper] = []
 
 var papers_need_to_be_signed: Array[Paper] = []
 
@@ -40,12 +39,24 @@ func make_active():
 
 
 func _ready():
-	%SignPrompt.visible = false
-	confirm_button.visible = false
-	first_confirm_button.visible = false
+	reset_between_rounds()
 
 	make_active()
 
+# TODO: maybe just call this from main? Or destroy + re-add scenes?
+func reset_between_rounds():
+	paper_array.clear()
+	papers_need_to_be_signed.clear()
+	
+	%Stamp.is_enabled = true
+	%Stamp.visible = true
+	%StampButton.visible = true
+	%DocuSignTimer.stop()
+	%SignPrompt.visible = false
+	confirm_button.visible = false
+	first_confirm_button.visible = false
+	for child in paper_container.get_children():
+		child.queue_free()
 
 func load_papers():
 	spawn_papers(DataLoader.StoryGroup_array)
@@ -54,9 +65,8 @@ var last_loaded_round:int = -1
 func spawn_papers(papers : Array[GeneratedDataClasses.StoryGroup]):
 	if last_loaded_round == Manager.current_round:
 		return
-	else:
-		for child in paper_container.get_children():
-			child.queue_free()
+		
+	reset_between_rounds()
 	last_loaded_round = Manager.current_round
 	
 	for paper_set:GeneratedDataClasses.StoryGroup in papers:

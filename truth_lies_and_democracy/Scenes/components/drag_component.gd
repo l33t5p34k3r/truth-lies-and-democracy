@@ -3,6 +3,9 @@ extends Node2D
 @export var target_node : RigidBody2D = null
 @export var click_target_node : Area2D =  null
 
+# note: can be null
+@export var drag_stop_particles:GPUParticles2D = null
+
 var is_being_dragged = false
 var drag_offset = Vector2.ZERO
 var boundary_rect = Rect2(Vector2.ZERO, Vector2.ZERO)
@@ -103,6 +106,8 @@ func rotate_to_zero():
 func stop_drag():
 	if is_being_dragged:
 		get_tree().call_group("drag_managers", "_on_drag_stopped")
+		if drag_stop_particles:
+			drag_stop_particles.restart()
 		# we could also pass the paper that caused the drag:
 		# get_tree().call_group("drag_managers", "_on_drag_stopped", get_parent())
 	is_being_dragged = false
