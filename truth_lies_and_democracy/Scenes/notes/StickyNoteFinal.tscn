@@ -1,0 +1,34 @@
+[gd_scene load_steps=6 format=3 uid="uid://c27xwxxxipikn"]
+
+[ext_resource type="Script" uid="uid://cxtrlakm8kbi6" path="res://Scenes/notes/sticky_note_final.gd" id="1_bpaj3"]
+[ext_resource type="PackedScene" uid="uid://b26earbj4iyfy" path="res://Scenes/components/draw_component.tscn" id="2_5sric"]
+[ext_resource type="PackedScene" uid="uid://cnroehowses8g" path="res://Scenes/components/drag_component.tscn" id="2_qw810"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_5sric"]
+radius = 1.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yk8hu"]
+size = Vector2(100, 100)
+
+[node name="StickyNoteFinal" type="RigidBody2D"]
+script = ExtResource("1_bpaj3")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_5sric")
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+color = Color(0.9999998, 0.892254, 0.37811926, 1)
+polygon = PackedVector2Array(-50, -50, -50, 50, 50, 50, 50, -50)
+
+[node name="DrawArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DrawArea"]
+shape = SubResource("RectangleShape2D_yk8hu")
+
+[node name="DrawComponent" parent="." node_paths=PackedStringArray("topmost_provider", "draw_area") instance=ExtResource("2_5sric")]
+topmost_provider = NodePath("../DragComponent")
+draw_area = NodePath("../DrawArea")
+
+[node name="DragComponent" parent="." node_paths=PackedStringArray("target_node", "click_target_node") instance=ExtResource("2_qw810")]
+target_node = NodePath("..")
+click_target_node = NodePath("../DrawArea")

@@ -1,3 +1,5 @@
+@icon("res://Assets/icons/hand_open.svg")
+class_name DragComponent
 extends Node2D
 
 @export var target_node : RigidBody2D = null
@@ -201,7 +203,6 @@ func is_topmost_body_at_position(pos: Vector2) -> bool:
 			topmost_body = body
 	
 	return topmost_body == target_node
-	
 
 func is_position_inside_body(_pos: Vector2) -> bool:
 	# implement this in the child class!

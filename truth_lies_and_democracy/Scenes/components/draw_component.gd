@@ -1,3 +1,4 @@
+@icon("res://Assets/icons/drawing_pencil.svg")
 class_name DrawComponent
 extends Node2D
 
@@ -12,7 +13,7 @@ var drawing_image: Image
 var is_drawing := false
 var last_draw_position: Vector2
 var pencil_color := Color.BLACK
-var pencil_size := 3.0
+var pencil_size := 2.0
 
 
 var drawing_enabled:bool = false

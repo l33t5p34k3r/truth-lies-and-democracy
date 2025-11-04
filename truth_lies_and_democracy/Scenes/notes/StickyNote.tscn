@@ -1,0 +1,70 @@
+[gd_scene load_steps=8 format=3 uid="uid://8k3ckgspkagh"]
+
+[ext_resource type="Script" uid="uid://m2r6sedrhm3w" path="res://Scenes/notes/sticky_note.gd" id="1_y5atx"]
+[ext_resource type="PackedScene" uid="uid://b26earbj4iyfy" path="res://Scenes/components/draw_component.tscn" id="2_ri5fg"]
+[ext_resource type="PackedScene" uid="uid://cnroehowses8g" path="res://Scenes/components/drag_component.tscn" id="3_e7t36"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_e7t36"]
+radius = 1.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_e7t36"]
+size = Vector2(100, 100)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ri5fg"]
+size = Vector2(110, 34)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ntcmu"]
+
+[node name="StickyNote" type="RigidBody2D"]
+script = ExtResource("1_y5atx")
+
+[node name="NoteHolder" type="Polygon2D" parent="."]
+color = Color(0.47816715, 0.42465717, 0.16305302, 1)
+polygon = PackedVector2Array(-55, -60, 55, -60, 55, -45, -55, -45)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_e7t36")
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+color = Color(0.9999998, 0.892254, 0.37811926, 1)
+polygon = PackedVector2Array(-50, -50, -50, 50, 50, 50, 50, -50)
+
+[node name="DrawArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DrawArea"]
+shape = SubResource("RectangleShape2D_e7t36")
+
+[node name="DrawComponent" parent="." node_paths=PackedStringArray("topmost_provider", "draw_area") instance=ExtResource("2_ri5fg")]
+topmost_provider = NodePath("../DragComponent")
+draw_area = NodePath("../DrawArea")
+
+[node name="DragComponent" parent="." node_paths=PackedStringArray("target_node", "click_target_node") instance=ExtResource("3_e7t36")]
+target_node = NodePath("..")
+click_target_node = NodePath("../DrawArea")
+
+[node name="DragArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DragArea"]
+position = Vector2(0, -67)
+shape = SubResource("RectangleShape2D_ri5fg")
+
+[node name="DetachArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetachArea"]
+position = Vector2(40, 40)
+shape = SubResource("RectangleShape2D_ntcmu")
+
+[node name="DetachHighlighter" type="Polygon2D" parent="DetachArea"]
+unique_name_in_owner = true
+position = Vector2(-43, 20)
+color = Color(1, 1, 1, 0)
+polygon = PackedVector2Array(73, 10, 73, 30, 93, 30, 93, 10)
+
+[node name="Line2D" type="Line2D" parent="DetachArea"]
+points = PackedVector2Array(30, 50, 30, 30, 50, 30)
+width = 2.0
+default_color = Color(0, 0, 0, 0.4862745)
+
+[connection signal="input_event" from="DetachArea" to="." method="_on_detach_area_input_event"]
+[connection signal="mouse_entered" from="DetachArea" to="." method="_on_detach_area_mouse_entered"]
+[connection signal="mouse_exited" from="DetachArea" to="." method="_on_detach_area_mouse_exited"]
