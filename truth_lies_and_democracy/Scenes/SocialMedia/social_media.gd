@@ -50,6 +50,11 @@ func load_posts():
 				
 	
 	
+	var temp_text := Manager.load_compressed_text("res://Assets/papers/test.wav")
+	var new_post_node2 :MediaPost = MEDIA_POST.instantiate()
+	new_post_node2.text_username = "Coolguy"
+	new_post_node2.text_content = temp_text
+	content.add_child(new_post_node2)
 
 
 func _on_button_4_pressed() -> void:

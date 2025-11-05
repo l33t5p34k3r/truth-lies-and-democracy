@@ -152,5 +152,24 @@ const scene_resource :Dictionary[SCENE, Resource]= {
 	SCENE.REVIEW: preload("res://Scenes/report/ProgressReview.tscn")
 }
 
+
+func load_compressed_text(file_path: String) -> String:
+	var file = FileAccess.open(file_path, FileAccess.READ)
+	if file == null:
+		push_error("Failed to open file: " + file_path)
+		return ""
+
+	var compressed_data = file.get_buffer(file.get_length())
+	file.close()
+
+	var decompressed_data = compressed_data.decompress_dynamic(-1, FileAccess.COMPRESSION_GZIP)
+	if decompressed_data.is_empty():
+		push_error("Failed to decompress data")
+		return ""
+	
+	return decompressed_data.get_string_from_utf8()
+
+
+
 func change_scene_to(scene:SCENE):
 	get_tree().call_group("scene_managers", "switch_scene", scene)
