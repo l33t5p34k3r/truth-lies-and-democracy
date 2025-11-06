@@ -120,11 +120,13 @@ modulate_color = Color(0.86898494, 0.86898494, 0.8689847, 1)
 
 [sub_resource type="SystemFont" id="SystemFont_slk4v"]
 font_names = PackedStringArray("Noto Color Emoji")
+multichannel_signed_distance_field = true
 
 [sub_resource type="SystemFont" id="SystemFont_7ev38"]
 fallbacks = Array[Font]([SubResource("SystemFont_slk4v")])
 font_names = PackedStringArray("Sans-Serif")
 hinting = 2
+multichannel_signed_distance_field = true
 
 [resource]
 default_font = SubResource("SystemFont_7ev38")

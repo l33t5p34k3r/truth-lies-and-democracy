@@ -1,0 +1,55 @@
+[gd_scene load_steps=6 format=3 uid="uid://0tmmyruookbq"]
+
+[ext_resource type="Script" uid="uid://droq4abvr5km6" path="res://Scenes/watch.gd" id="1_wrxlp"]
+[ext_resource type="Script" uid="uid://bcdym5xoufn0b" path="res://Scenes/components/drag_component.gd" id="2_cy7nr"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_cy7nr"]
+radius = 37.01351
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_7bhln"]
+radius = 37.01351
+
+[sub_resource type="SystemFont" id="SystemFont_cy7nr"]
+font_names = PackedStringArray("Lucida Console")
+multichannel_signed_distance_field = true
+
+[node name="Watch" type="RigidBody2D"]
+script = ExtResource("1_wrxlp")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_cy7nr")
+
+[node name="MinuteLine" type="Line2D" parent="."]
+position = Vector2(1.2941178, 0)
+scale = Vector2(2.2941177, 1)
+points = PackedVector2Array(0, 0, 15, 0)
+width = 2.0
+default_color = Color(0, 0, 0, 1)
+
+[node name="HourLine" type="Line2D" parent="."]
+position = Vector2(1.4166667, 0)
+scale = Vector2(2.4166667, 1)
+points = PackedVector2Array(0, 0, 10, 0)
+width = 3.0
+default_color = Color(0, 0, 0, 1)
+
+[node name="DragComponent" type="Node2D" parent="." node_paths=PackedStringArray("target_node", "click_target_node")]
+script = ExtResource("2_cy7nr")
+target_node = NodePath("..")
+click_target_node = NodePath("../Area2D")
+metadata/_custom_type_script = "uid://bcdym5xoufn0b"
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_7bhln")
+
+[node name="Label" type="Label" parent="."]
+offset_left = -10.0
+offset_top = -34.0
+offset_right = 9.0
+offset_bottom = -21.0
+theme_override_fonts/font = SubResource("SystemFont_cy7nr")
+theme_override_font_sizes/font_size = 12
+text = "12"
+horizontal_alignment = 1

@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://33frnk6f5jem"]
+[gd_scene load_steps=9 format=3 uid="uid://33frnk6f5jem"]
 
 [ext_resource type="Script" uid="uid://bo2tkdvc0iknc" path="res://Scenes/paper_playground.gd" id="1_onxtm"]
 [ext_resource type="Texture2D" uid="uid://c5hyeon2lcw0a" path="res://Assets/textures/1-04851-00_BL_Notebook_Paper_Punch_G.jpg" id="2_vqhyn"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://m40a1i47l0c8" path="res://Scenes/tape.tscn" id="5_w7qgv"]
 [ext_resource type="Theme" uid="uid://bqh1uqu1vqqoh" path="res://Assets/Themes/default.tres" id="6_qspym"]
 [ext_resource type="PackedScene" uid="uid://8k3ckgspkagh" path="res://Scenes/notes/StickyNote.tscn" id="7_jgf48"]
+[ext_resource type="PackedScene" uid="uid://0tmmyruookbq" path="res://Scenes/watch.tscn" id="8_nnput"]
 
 [node name="PaperPlayground" type="Node2D" groups=["drag_managers", "draw_managers"]]
 script = ExtResource("1_onxtm")
@@ -137,6 +138,9 @@ unique_name_in_owner = true
 
 [node name="StickyNote" parent="." instance=ExtResource("7_jgf48")]
 position = Vector2(1200, 652)
+
+[node name="Watch" parent="." instance=ExtResource("8_nnput")]
+position = Vector2(59, 557)
 
 [connection signal="pressed" from="CanvasLayer/Control/confirm2Button" to="." method="_on_confirm_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/Control/confirm1Button" to="." method="_on_first_confirm_button_pressed"]

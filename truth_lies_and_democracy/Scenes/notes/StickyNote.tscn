@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://cnroehowses8g" path="res://Scenes/components/drag_component.tscn" id="3_e7t36"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_e7t36"]
-radius = 1.0
+radius = 0.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e7t36"]
 size = Vector2(100, 100)
@@ -16,6 +16,8 @@ size = Vector2(110, 34)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ntcmu"]
 
 [node name="StickyNote" type="RigidBody2D"]
+collision_layer = 0
+collision_mask = 0
 script = ExtResource("1_y5atx")
 
 [node name="NoteHolder" type="Polygon2D" parent="."]
