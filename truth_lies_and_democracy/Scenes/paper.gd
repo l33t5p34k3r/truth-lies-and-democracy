@@ -13,7 +13,7 @@ var paper_is_fake : bool = false
 
 @onready var sprite_2d: Sprite2D = $Content/Sprite2D
 @onready var text_label: Label = $Content/Control/Label
-@onready var text_rich_text_label: RichTextLabel = $Content/Control/RichTextLabel
+@onready var text_rich_text_label: RichTextLabel = %RichTextLabel
 @onready var draw_collision_shape_2d: CollisionShape2D = $DrawArea/CollisionShape2D
 @onready var stamp_mask: Polygon2D = $Content/StampMask
 @onready var content: Node2D = $Content
